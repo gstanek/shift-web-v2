@@ -1,0 +1,1 @@
+"use strict";angular.module("myApp.user",["ui.router"]).config(["$stateProvider","$urlRouterProvider",function(a,b){a.state("user",{url:"/user",templateUrl:"views/user/user.html",controller:"UserCtrl"})}]).controller("UserCtrl",[function(){}]);

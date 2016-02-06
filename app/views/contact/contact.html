@@ -1,0 +1,48 @@
+<div class="row">
+  <p>Questions? Interest? Concerns? We'd love to hear from you.</p>
+  <p>Please fill out the below form and we'll get back to you as soon as we can!</p>
+</div>
+
+
+<form class="row" name="helpForm" >
+  <div class="form-group has-feedback" show-errors >
+    <label for="name">Name </label>
+    <input type="text" class="form-control" name="name" ng-model="helpFormModel.name" class="form-control"  placeholder="Name"
+           validation-no-special-chars="true"/> <!-- required="required" -->
+    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="helpForm.name.$touched && !helpForm.name.$error.required"></span>
+    <span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="helpForm.name.$touched && helpForm.name.$error.required"></span>
+    <span class="help-block text-danger" >Please let us know your name</span> <!-- ng-if="helpForm.name.$error.required && helpForm.name.$touched" -->
+  </div>
+
+  <div class="form-group has-feedback" show-errors >
+    <label for="email">E-mail Address</label>
+    <input type="email" class="form-control" name="email" ng-model="helpFormModel.email" class="form-control" required="required" placeholder="Email" />
+    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="helpForm.email.$touched && helpForm.email.$error.pattern && !helpForm.email.$error.required"></span>
+    <span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="(helpForm.email.$touched && helpForm.email.$error.pattern) || (helpForm.email.$touched && helpForm.email.$error.required)"></span>
+    <span class="help-block text-danger" ng-if="helpForm.email.$error.required && helpForm.email.$touched">Email address is required</span>
+    <span class="help-block text-danger" ng-if="!helpForm.email.$error.required && helpForm.email.$touched && !helpForm.email.$error.pattern">Email address entered is not valid</span>
+  </div>
+
+  <div class="form-group has-feedback" show-errors >
+    <label for="subject">What is the nature of your request?</label>
+    <input type="subject" class="form-control" name="subject" ng-model="helpFormModel.subject" class="form-control" required="required" placeholder="Subject" />
+    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="helpForm.subject.$touched && !helpForm.subject.$error.pattern && !helpForm.subject.$error.required"></span>
+    <span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="(helpForm.subject.$touched && helpForm.subject.$error.pattern) || (helpForm.subject.$touched && helpForm.subject.$error.required)"></span>
+    <span class="help-block text-danger" ng-if="helpForm.subject.$error.required && helpForm.subject.$touched">A subject helps us organize our requests.  Please provide one!</span>
+  </div>
+
+  <div class="form-group has-feedback" show-errors >
+    <label for="comments">Description</label>
+    <textarea name="description" class="form-control" ng-model="helpFormModel.description" class="form-control" required="required"></textarea>
+    <span class="help-block text-danger" ng-if="helpForm.description.$error.required && helpForm.description.$touched">Description is required</span>
+  </div>
+
+  <div class="form-group">
+    <button type="submit" class="btn btn-default">Submit</button>
+    <div class="form-group">
+</form>
+
+<p>
+  Showing of 'interpolate' filter:
+  {{ 'Current version is v%VERSION%.' | interpolate }}
+</p>
