@@ -72,7 +72,7 @@
                     <div class="row">
                         <div class="col-xs-12" >
                             <label for="Autocomplete2">Business Address</label>
-                            <input type="text" id="Autocomplete2" ng-model="autocomplete" class="form-control" ng-autocomplete options="options" details="details" address="address"/>
+                            <input type="text" id="Autocomplete2" ng-model="autocomplete" class="form-control" ng-autocomplete options="options" details="details" address="address" addressFound="addressFound"/>
                         </div>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                                 <label for="addressLine1">Address Line 1</label>
                             </div>
                             <div class="col-xs-10" >
-                                <input type="text" ng-disabled="!address.route" id="addressLine1" ng-model="address.addressLine1"  class="form-control" />
+                                <input type="text" ng-disabled="!details" id="addressLine1" ng-model="address.addressLine1"  class="form-control" />
                             </div>
                         </div>
                         <div class="row">
@@ -91,7 +91,7 @@
                                 <label for="addressLine2">Address Line 2</label>
                             </div>
                             <div class="col-xs-10" >
-                                <input type="text" ng-disabled="!address.route" id="addressLine2" ng-model="address.addressLine2"  class="form-control" />
+                                <input type="text" ng-disabled="!details" id="addressLine2" ng-model="address.addressLine2"  class="form-control" />
                             </div>
                         </div>
                         <div class="row">
@@ -99,7 +99,7 @@
                                 <label for="city">City</label>
                             </div>
                             <div class="col-xs-10" >
-                                <input type="text" ng-disabled="!address.route" id="city" ng-model="address.city"  class="form-control" />
+                                <input type="text" ng-disabled="!details" id="city" ng-model="address.city"  class="form-control" />
                             </div>
                         </div>
                         <div class="row">
@@ -107,7 +107,7 @@
                                 <label for="state">State</label>
                             </div>
                             <div class="col-xs-10" >
-                                <input type="text" ng-disabled="!address.route" id="state" ng-model="address.state"  class="form-control" />
+                                <input type="text" ng-disabled="!details" id="state" ng-model="address.state"  class="form-control" />
                             </div>
                         </div>
                         <div class="row">
@@ -115,7 +115,7 @@
                                 <label for="postalCode">Postal Code</label>
                             </div>
                             <div class="col-xs-10" >
-                                <input type="text" ng-disabled="!address.route" id="postalCode" ng-model="address.postalCode"  class="form-control" />
+                                <input type="text" ng-disabled="!details" id="postalCode" ng-model="address.postalCode"  class="form-control" />
                             </div>
                         </div>
                     </div>

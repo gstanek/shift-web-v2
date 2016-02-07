@@ -86,7 +86,7 @@ angular.module('myApp.realmService', ['LocalStorageModule', 'myApp.personaServic
     this.getRealmName = function() {
         var realm = this.getLocalActiveRealm();
         if(realm) {
-            console.log('in realm block:' + realm + '.');
+            console.log('in realm block:' + JSON.stringify(realm));
             if(realm.name) {
                 return realm.name;
             }

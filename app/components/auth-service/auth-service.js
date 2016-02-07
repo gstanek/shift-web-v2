@@ -46,18 +46,6 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
         }
     };
 
-    var initialUser = {
-        userID: '123456',
-        email: 'gabe.stanek@gmail.com'
-    };
-    var userWithCompany = {
-        userID: '123456',
-        realmID: '8900',
-        personaID: '56789',
-        email: 'gabe.stanek@gmail.com'
-    };
-
-
     this.isAuthenticated = function() {
         var activeUser = userService.getActiveUser();
         if(activeUser == null) {
@@ -81,11 +69,13 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
 
     this.signup = function(credentials) {
         //TODO SERVICE_LAYER Do signup request here
+        console.log('signup service credentials=' + JSON.stringify(credentials))
 
 
         //TODO If signup success
         if(true) {
             //TODO replace with userID from response
+            user = {};
             user.id = '23134543';
             user.email = credentials.email;
             userService.setActiveUser(user);
@@ -99,7 +89,7 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
 
     this.login = function(credentials) {
         //TODO SERVICE_LAYER Do login request here
-        var user =
+
         user.email = credentials.email;
 
 

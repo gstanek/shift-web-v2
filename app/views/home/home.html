@@ -25,9 +25,8 @@
         <form name="signUpForm"
               class="form-horizontal"
               target="blankpage" method="get"
-              ng-controller="HomeCtrl"
-              ng-submit="signup(credentials)"
-              novalidate>
+              ng-controller="HomeCtrl" ng-submit="signup()" novalidate>
+
 
             <div class="form-group has-feedback" show-errors>
                 <label class="col-sm-4 control-label" for="email">Email:</label>
@@ -61,7 +60,6 @@
             <div class="form-group">
                 <div class="col-sm-offset-4 col-sm-8">
                     <button class="btn btn-primary" type="submit" id="submit">Sign Up</button>
-                    <!--<button type="submit" ng-click="signup(credentials)" class="btn btn-primary">Sign up</button>-->
                 </div>
             </div>
 

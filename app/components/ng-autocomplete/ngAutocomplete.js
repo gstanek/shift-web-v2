@@ -93,10 +93,9 @@ angular.module( "myApp.ngAutocomplete", [])
 
                 scope.details = result;
                 console.log('IN PLACE CHANGED EVENT');
-
                 if(scope.details) {
                   //console.log('IN scope.details');
-                  //console.log(JSON.stringify(scope.details));
+                  console.log(JSON.stringify(scope.details));
                   if(scope.details.address_components) {
                     for (var i = 0; i < scope.details.address_components.length; i++) {
                       //console.log('IN for');

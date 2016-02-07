@@ -13,19 +13,17 @@ angular.module('myApp.home', ['ui.router', 'myApp.authService'])
 
   .controller('HomeCtrl', ['$scope', '$state', 'authService', function($scope, $state, authService) {
       $scope.isActiveUser = authService.isAuthenticated();
-      $scope.credentials = {
-          email: '',
-          password: ''
-      };
+      $scope.credentials = {};
       $scope.showpassword = false;
       $scope.signup = function() {
+          //console.log('credentials=' + JSON.stringify($scope.credentials));
           if($scope.signUpForm.$valid) {
               var signUpSuccess = authService.signup($scope.credentials);
               if(signUpSuccess) {
                   $state.go('persona');
               }
               else {
-                  alert('Something went wrong during the signup process.  Please try again.  IF the problem persists, please check back later.');
+                  alert('Something went wrong during the signup process.  Please try again.  If the problem persists, please check back later.');
               }
           }
           else {

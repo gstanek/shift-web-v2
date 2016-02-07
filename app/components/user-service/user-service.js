@@ -23,31 +23,42 @@ angular.module('myApp.userService', ['LocalStorageModule'])
     };
     var user = {
         userID: '123456',
-        firstName: 'Gabe',
-        lastName: 'Stanek',
-        preferredName: 'G-Money',
-        email: 'gabe.stanek@gmail.com',
+        firstName: '',
+        lastName: '',
+        preferredName: '',
+        email: '',
         persona: {
             personaID: '56789',
             roles: ['user', 'admin'],
             realm: {
                 realmID: '8900',
-                realmName: 'Joe\'s Pizza'
-            },
-            shifts : [shift1, shift2]
+                realmName: ''
+            }
         }
     };
 
+    this.updateUser = function(user) {
+        // TODO SERVICE_LAYER
 
+        // TODO either do this first, and update again to previous value if service call failed.
+        if(true) {
+            this.setActiveUser(user);
+        }
+
+    }
 
     this.getBestDisplayName = function() {
-        if(user.preferredName != null) {
+        user = this.getActiveUser();
+        if(!user) {
+            return '';
+        }
+        else if(user.preferredName) {
             return user.preferredName;
         }
-        else if(user.firstName != null) {
+        else if(user.firstName) {
             return user.firstName;
         }
-        else if(user.email != null) {
+        else if(user.email) {
             return user.email;
         }
         else {
@@ -90,6 +101,7 @@ angular.module('myApp.userService', ['LocalStorageModule'])
     };
 
     this.setActiveUser = function(user) {
+        console.log('set active user =' + JSON.stringify(user));
         localStorageService.set('user', user)
         $rootScope.$broadcast('USER_CHANGE_EVENT', user);
     };

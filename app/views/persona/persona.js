@@ -61,9 +61,10 @@ angular.module('myApp.persona', ['ui.router', 'myApp.realmService', 'myApp.ngAut
     $scope.result = '';
     $scope.options = {
         watchEnter: true,
-        types:'geocode'
+        types:'address'
     };
     $scope.address = {};
+    $scope.addressFound = '';
     // End Autofill address logic
 
 

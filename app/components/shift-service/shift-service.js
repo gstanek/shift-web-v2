@@ -21,6 +21,14 @@ angular.module('myApp.shiftService', ['LocalStorageModule'])
         realmID: '8900',
         userID: '123456'
     };
+    var shift3 = {
+        shiftID: '1618',
+        starttime: '02/05/16 01:30:00',
+        endtime: '02/05/16 04:30:00',
+        available: false,
+        realmID: '8900',
+        userID: '123456'
+    };
     var user = {
         userID: '123456',
         firstName: 'Gabe',
