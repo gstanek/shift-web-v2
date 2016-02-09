@@ -347,8 +347,15 @@ module.exports = function (grunt) {
             'bower_components/angular/angular.min.js',
             'bower_components/bootstrap/dist/fonts/*',
             'bower_components/bootstrap/dist/css/bootstrap.min.css',
+            'bower_components/bootstrap/dist/js/bootstrap.min.js',
             'bower_components/satellizer/satellizer.min.js',
-            'bower_components/angular-local-storage/dist/angular-local-storage.min.js'
+            'bower_components/angular-local-storage/dist/angular-local-storage.min.js',
+            'bower_components/jquery/dist/jquery.min.js',
+            'bower_components/moment/min/moment-with-locales.min.js',
+            'bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
+            'bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.templates.js',
+            'bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css'
+
           ]
         }, {
           expand: true,

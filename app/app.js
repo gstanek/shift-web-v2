@@ -17,7 +17,8 @@ angular.module('myApp', [
     'myApp.realmService',
     'myApp.personaService',
     'myApp.shiftService',
-    'myApp.ngAutocomplete'
+    'myApp.ngAutocomplete',
+    'ui.bootstrap.datetimepicker'
 ])
 .config(['$stateProvider', '$urlRouterProvider', 'localStorageServiceProvider', function($stateProvider, $urlRouterProvider, localStorageServiceProvider) {
     $urlRouterProvider.otherwise("/home");

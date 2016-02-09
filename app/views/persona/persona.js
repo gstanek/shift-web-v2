@@ -11,13 +11,29 @@ angular.module('myApp.persona', ['ui.router', 'myApp.realmService', 'myApp.ngAut
       });
 }])
 
-.controller('PersonaCtrl', ['$scope', 'authService', 'realmService', '$http', function($scope, authService, realmService, $http) {
+.controller('PersonaCtrl', ['$scope', '$http', 'authService', 'realmService', 'userService', 'shiftService',
+    function($scope, $http, authService, realmService, userService, shiftService) {
+
+
+    // COMMON
 
     $scope.$on('REALM_CHANGE_EVENT', function() {
         $scope.isActiveRealm = realmService.isActiveRealm();
     });
 
     $scope.isActiveRealm = realmService.isActiveRealm();
+    $scope.isShiftPresent = function() {
+        var user = userService.getActiveUser();
+        var shifts = shiftService.getShiftsByPersonaID(user.id + '-' + user.realmID);
+        if(shifts) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+
+    //// NEW REALM LOGIC
 
     // Employee/Manager/Owner Picker Logic
     $scope.radioModel = 'employee';
@@ -29,33 +45,20 @@ angular.module('myApp.persona', ['ui.router', 'myApp.realmService', 'myApp.ngAut
             }
         });
     });
+    // END Picker logic
     $scope.newRealmFormModel = {
         name : '',
         address : '',
         manager : ''
     };
-
     $scope.createRealm = function() {
-        console.log('In create Realm Service');
         var realm = {
             name : $scope.newRealmFormModel.name,
             manager : $scope.newRealmFormModel.manager,
             address : $scope.address
         };
-        console.log('Realm to create:' + JSON.stringify(realm));
         realmService.createRealm(realm);
     };
-
-    // When Realm and User Exists
-    $scope.reclaim = function(shiftID) {
-        console.log('in reclaim ' + shiftID);
-    }
-    $scope.markAvailable = function(shiftID) {
-        console.log('in markAvailable ' + shiftID);
-    }
-    $scope.delete = function(shiftID) {
-        console.log('in delete ' + shiftID);
-    }
 
     // Start Autofill address logic
     $scope.result = '';
@@ -66,6 +69,55 @@ angular.module('myApp.persona', ['ui.router', 'myApp.realmService', 'myApp.ngAut
     $scope.address = {};
     $scope.addressFound = '';
     // End Autofill address logic
+
+    //// NEW SHIFT ENTRY LOGIC
+
+    $scope.companyName = realmService.getRealmName();
+    $scope.newShiftForm = {
+        dateStartTime : '',
+        dateEndTime : '',
+        comments : ''
+    };
+    $scope.createShift = function() {
+        console.log('In createShift Function.  newShiftForm Data: ' + JSON.stringify($scope.newShiftForm));
+
+    };
+
+    $scope.beforeRenderStartDate = function($view, $dates, $leftDate, $upDate, $rightDate) {
+        if ($scope.dateRangeEnd) {
+            var activeDate = moment($scope.dateRangeEnd);
+            for (var i = 0; i < $dates.length; i++) {
+                if ($dates[i].localDateValue() >= activeDate.valueOf()) $dates[i].selectable = false;
+            }
+        }
+    }
+
+    $scope.beforeRenderEndDate = function($view, $dates, $leftDate, $upDate, $rightDate) {
+        if ($scope.dateRangeStart) {
+            var activeDate = moment($scope.dateRangeStart).subtract(1, $view).add(1, 'minute');
+            for (var i = 0; i < $dates.length; i++) {
+                if ($dates[i].localDateValue() <= activeDate.valueOf()) {
+                    $dates[i].selectable = false;
+                }
+            }
+        }
+    }
+
+
+
+    //// ACTIVE SHIFTS LOGIC AND REALM
+
+    $scope.reclaim = function(shiftID) {
+        console.log('in reclaim ' + shiftID);
+    }
+    $scope.markAvailable = function(shiftID) {
+        console.log('in markAvailable ' + shiftID);
+    }
+    $scope.delete = function(shiftID) {
+        console.log('in delete ' + shiftID);
+    }
+
+
 
 
 }]);

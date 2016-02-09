@@ -1,5 +1,5 @@
 <div ng-controller='PersonaCtrl'>
-    <div ng-if="isActiveRealm">
+    <div ng-if="isActiveRealm && isShiftPresent()">
         <h3>Your Available Shifts</h3>
         <div class="table-responsive">
             <table class="table">
@@ -47,6 +47,50 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
+    </div>
+    <div ng-if="isActiveRealm && !isShiftPresent()">
+        <h3>Add a Shift for {{companyName}}</h3>
+        <form class="row" name="newShiftForm"
+              ng-controller="PersonaCtrl"
+              ng-submit="createShift()">
+            <div class="dropdown form-group">
+                <label for="shiftStartTime">Start Time</label>
+                <a class="dropdown-toggle" id="dropdown1" role="button" data-toggle="dropdown" data-target="#" href="#">
+                    <div class="input-group date">
+                        <input id="shiftStartTime" ng-required="true" type="text" class="form-control" data-ng-model="dateRangeStart">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <datetimepicker data-ng-model="dateRangeStart" data-datetimepicker-config="{ dropdownSelector: '#dropdown1'}" data-before-render="beforeRenderStartDate($view, $dates, $leftDate, $upDate, $rightDate)"/>
+                </ul>
+            </div>
+            <div class="dropdown form-group">
+                <label for="shiftEndTime">End Time</label>
+                <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="#">
+                    <div class="input-group date">
+                        <input id="shiftEndTime" ng-required="true" type="text" class="form-control" data-ng-model="dateRangeEnd">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <datetimepicker data-ng-model="dateRangeEnd" data-datetimepicker-config="{ dropdownSelector: '#dropdown2'}" data-before-render="beforeRenderEndDate($view, $dates, $leftDate, $upDate, $rightDate)"/>
+                </ul>
+            </div>
+            <div class="form-group has-feedback" show-errors>
+                <label for="comments">Comments</label>
+                <input id="comments" class="form-control" ng-model="newShiftForm.comments" class="form-control" />
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-default">Save Shift</button>
+            </div>
+        </form>
+        <div class="row">
+            <p>Start Time: {{dateRangeStart}}</p>
+            <p>End Time: {{dateRangeEnd}}</p>
+            <p>Comments: {{data.comments}}</p>
+
         </div>
     </div>
     <div ng-if="isActiveRealm == false">
@@ -130,4 +174,6 @@
             </form>
         </div>
     </div>
+
+
 </div>
