@@ -106,12 +106,11 @@ angular.module('myApp.shiftService', ['LocalStorageModule'])
         return availableShifts;
     };
     this.getShiftsByUserID = function(userID) {
-        var shifts = [];
         if(user.persona != null) {
-            shifts = user.persona.shifts;
+            userShifts = user.persona.shifts;
 
         };
-        return shifts;
+        return userShifts;
     };
 
     this.getAvailableShiftsByRealmID = function(realmID) {
@@ -138,7 +137,7 @@ angular.module('myApp.shiftService', ['LocalStorageModule'])
 
     this.getAvailableShiftsByPersonaID = function(personaID) {
         var availableShifts = {};
-        var shifts = this.getShifts();
+        var shifts = this.getActiveShifts();
         for(var i = 0; i<shifts.length; i++) {
             if(personaID == shift.userID + '-' + shift.realmID && shift.available == true) {
                 availableShifts.push(shift);
@@ -147,16 +146,32 @@ angular.module('myApp.shiftService', ['LocalStorageModule'])
         return availableShifts;
     };
     this.getShiftsByPersonaID = function(personaID) {
-        var personaShifts = {};
-        var shifts = this.getShifts();
-        console.log('Returned shifts' + JSON.stringify(shifts));
-        for(var i = 0; i<shifts.length; i++) {
-            if(personaID == shift.userID + '-' + shift.realmID) {
-                personaShifts.push(shift);
-            }
+
+        var inMemShifts = this.getActiveShifts();
+        if(!inMemShifts) {
+            return personaShifts;
         }
 
+        for(var i = 0; i<inMemShifts.length; i++) {
+            if(personaID == inMemShifts[i].userID + '-' + inMemShifts[i].realmID) {
+                personaShifts.push(inMemShifts[i]);
+            }
+        }
         return personaShifts;
+    };
+
+    var activeShifts = [];
+    var personaShifts = [];
+    var userShifts = [];
+
+    this.getShifts = function() {
+        var inMemShifts = this.getActiveShifts();
+        if(!inMemShifts) {
+            return activeShifts;
+        };
+        activeShifts = inMemShifts;
+
+        return activeShifts;
     };
 
     // DATA ACCESS
@@ -169,14 +184,21 @@ angular.module('myApp.shiftService', ['LocalStorageModule'])
 
     this.storeShift = function(shift) {
         console.log('store shift = ' + JSON.stringify(shift));
-        var shifts = this.getShifts();
-        shifts[key(shift)] = shift;
+        activeShifts = this.getActiveShifts();
+        if(!activeShifts) {
+            activeShifts = [];
+        }
+        activeShifts.push(shift);
 
-        localStorageService.set('shifts', shifts)
-        $rootScope.$broadcast('SHIFT_CHANGE_EVENT', shift);
+        //shifts[key(shift)] = shift;
+
+        console.log('Shifts Set:' + JSON.stringify(activeShifts));
+        localStorageService.set('shifts', activeShifts)
+        $rootScope.$broadcast('SHIFT_CHANGE_EVENT', activeShifts);
     };
     this.getActiveShifts = function() {
-        return localStorageService.get('shifts');
+        var shifts = localStorageService.get('shifts');
+        return shifts;
     };
     this.getShiftsByPersonaID = function(personaID) {
         return localStorageService.get('shifts');

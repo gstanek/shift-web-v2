@@ -17,12 +17,22 @@ angular.module('myApp.persona', ['ui.router', 'myApp.realmService', 'myApp.ngAut
 
     // COMMON
 
+    $scope.isActiveRealm = realmService.isActiveRealm();
     $scope.$on('REALM_CHANGE_EVENT', function() {
         $scope.isActiveRealm = realmService.isActiveRealm();
     });
 
-    $scope.isActiveRealm = realmService.isActiveRealm();
+    $scope.$on('SHIFT_CHANGE_EVENT', function() {
+        $scope.isShiftPresent = function() {
+            return isShiftPresent();
+        };
+        $scope.availableShifts = shiftService.getShifts();
+    });
     $scope.isShiftPresent = function() {
+        return isShiftPresent();
+    };
+    var isShiftPresent = function() {
+        //return true;
         var user = userService.getActiveUser();
         var shifts = shiftService.getShiftsByPersonaID(user.id + '-' + user.realmID);
         if(shifts) {
@@ -73,16 +83,19 @@ angular.module('myApp.persona', ['ui.router', 'myApp.realmService', 'myApp.ngAut
     //// NEW SHIFT ENTRY LOGIC
 
     $scope.companyName = realmService.getRealmName();
-    $scope.newShiftForm = {
-        dateStartTime : '',
-        dateEndTime : '',
+    $scope.newShiftModel = {
+        id : '',
+        dateRangeStart : '',
+        dateRangeEnd : '',
         comments : ''
     };
     $scope.createShift = function() {
-        console.log('In createShift Function.  newShiftForm Data: ' + JSON.stringify($scope.newShiftForm));
+        console.log('In createShift Function.  newShiftForm Data: ' + JSON.stringify($scope.newShiftModel));
+        $scope.newShiftModel.id = '123456';
+        shiftService.storeShift($scope.newShiftModel);
+        $scope.availableShifts.push($scope.newShiftModel);
 
     };
-
     $scope.beforeRenderStartDate = function($view, $dates, $leftDate, $upDate, $rightDate) {
         if ($scope.dateRangeEnd) {
             var activeDate = moment($scope.dateRangeEnd);
@@ -91,7 +104,6 @@ angular.module('myApp.persona', ['ui.router', 'myApp.realmService', 'myApp.ngAut
             }
         }
     }
-
     $scope.beforeRenderEndDate = function($view, $dates, $leftDate, $upDate, $rightDate) {
         if ($scope.dateRangeStart) {
             var activeDate = moment($scope.dateRangeStart).subtract(1, $view).add(1, 'minute');
@@ -115,6 +127,10 @@ angular.module('myApp.persona', ['ui.router', 'myApp.realmService', 'myApp.ngAut
     }
     $scope.delete = function(shiftID) {
         console.log('in delete ' + shiftID);
+    }
+    $scope.availableShifts = [];
+    $scope.getAvailableShifts = function() {
+        return shiftService.getShifts();
     }
 
 
