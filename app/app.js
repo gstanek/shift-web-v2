@@ -18,11 +18,19 @@ angular.module('myApp', [
     'myApp.personaService',
     'myApp.shiftService',
     'myApp.ngAutocomplete',
-    'ui.bootstrap.datetimepicker'
+    'ui.bootstrap.datetimepicker',
+    'satellizer'
 ])
-.config(['$stateProvider', '$urlRouterProvider', 'localStorageServiceProvider', function($stateProvider, $urlRouterProvider, localStorageServiceProvider) {
+.config(['$stateProvider', '$urlRouterProvider', 'localStorageServiceProvider', '$authProvider', function($stateProvider, $urlRouterProvider, localStorageServiceProvider, $authProvider) {
     $urlRouterProvider.otherwise("/home");
     localStorageServiceProvider.setPrefix('shift');
+    $authProvider.oauth2({
+        name: 'shift',
+        url: '/auth/shift',
+        clientId: 'AiFijhEYAYAad9r6KgYAgFUN6B2dOMAuFBe60ucE',
+        redirectUri: window.location.origin,
+        authorizationEndpoint: 'http://localhost:8000/o/token/',
+    });
 }])
     .controller('AppCtrl', ['$scope', 'authService', 'userService', 'realmService', function($scope, authService, userService, realmService) {
         $scope.displayName = userService.getBestDisplayName();

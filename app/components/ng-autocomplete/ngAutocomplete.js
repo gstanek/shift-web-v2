@@ -92,47 +92,39 @@ angular.module( "myApp.ngAutocomplete", [])
               scope.$apply(function() {
 
                 scope.details = result;
-                console.log('IN PLACE CHANGED EVENT');
                 if(scope.details) {
-                  //console.log('IN scope.details');
-                  console.log(JSON.stringify(scope.details));
                   if(scope.details.address_components) {
                     for (var i = 0; i < scope.details.address_components.length; i++) {
-                      //console.log('IN for');
                       if(scope.details.address_components[i].types) {
-                        //console.log('IN for.if');
                         for (var j = 0; j < scope.details.address_components[i].types.length; j++) {
                           if(scope.details.address_components[i].types[j] == 'street_number'){
                             scope.address.number = scope.details.address_components[i].short_name;
-                            //console.log('address number = ' + scope.address.number);
                           }
                           if(scope.details.address_components[i].types[j] == 'route'){
-                            //console.log('IN for.if.for.if');
                             scope.address.route = scope.details.address_components[i].long_name;
                           }
                           if(scope.details.address_components[i].types[j] == 'locality'){
                             scope.address.city = scope.details.address_components[i].long_name;
                           }
                           if(scope.details.address_components[i].types[j] == 'administrative_area_level_1'){
-                            scope.address.state = scope.details.address_components[i].short_name;
+                            scope.address.subnational_region = scope.details.address_components[i].short_name;
                           }
                           if(scope.details.address_components[i].types[j] == 'postal_code'){
-                            scope.address.postalCode = scope.details.address_components[i].short_name;
+                            scope.address.postal_code = scope.details.address_components[i].short_name;
                           }
                         }
                       }
                     }
                   }
                   if(scope.address.number && scope.address.route) {
-                    scope.address.addressLine1 = scope.address.number + ' ' + scope.address.route;
+                    scope.address.address_line_one = scope.address.number + ' ' + scope.address.route;
                   }
                   else if (scope.address.route) {
-                    scope.address.addressLine1 = scope.address.route;
+                    scope.address.address_line_one = scope.address.route;
                   }
                   else if (scope.address.number) {
-                    scope.address.addressLine1 = scope.address.number;
+                    scope.address.address_line_one = scope.address.number;
                   }
-                  console.log('Address=' + JSON.stringify(scope.address));
                 }
 
                 controller.$setViewValue(element.val());

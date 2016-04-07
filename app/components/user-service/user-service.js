@@ -2,7 +2,7 @@
 angular.module('myApp.userService', ['LocalStorageModule'])
 
 
-.service('userService', ['$rootScope', 'localStorageService', function($rootScope, localStorageService) {
+.service('userService', ['$rootScope', 'localStorageService', '$http', function($rootScope, localStorageService, $http) {
 
     // Global User Object
     var shift1 = {
@@ -38,12 +38,14 @@ angular.module('myApp.userService', ['LocalStorageModule'])
     };
 
     this.updateUser = function(user) {
-        // TODO SERVICE_LAYER
-
-        // TODO either do this first, and update again to previous value if service call failed.
-        if(true) {
-            this.setActiveUser(user);
-        }
+        return $http({
+            method: 'PATCH',
+            url: 'http://127.0.0.1:8000/api/v1/user/' + user.email,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: user
+        });
 
     }
 
@@ -52,11 +54,11 @@ angular.module('myApp.userService', ['LocalStorageModule'])
         if(!user) {
             return '';
         }
-        else if(user.preferredName) {
-            return user.preferredName;
+        else if(user.preferred_name) {
+            return user.preferred_name;
         }
-        else if(user.firstName) {
-            return user.firstName;
+        else if(user.first_name) {
+            return user.first_name;
         }
         else if(user.email) {
             return user.email;
@@ -67,42 +69,19 @@ angular.module('myApp.userService', ['LocalStorageModule'])
     };
 
 
-    /**
-     * Service Exposed to return all available shifts associated with given user
-     *
-     * @returns {Array} of Available Shifts associated with user
-     */
-    this.getAvailableShifts = function() {
-        var availableShifts = [];
-
-        if(user.persona != null) {
-            var allShifts = user.persona.shifts;
-            for (var i = 0; i < allShifts.length; i++) {
-                if(allShifts[i].available == true) {
-                    availableShifts.push(allShifts[i]);
-                }
+    this.getUserByEmail = function(email) {
+        return $http({
+            method: 'GET',
+            url: 'http://127.0.0.1:8000/api/v1/user/' + email,
+            headers: {
+                'Content-Type': 'application/json'
             }
-        }
-        return availableShifts;
-    };
-
-    /**
-     * Service Exposed to return all shifts associated with given user
-     *
-     * @returns {Array} of Shifts associated with user
-     */
-    this.getShifts = function() {
-        var shifts = [];
-        if(user.persona != null) {
-            shifts = user.persona.shifts;
-
-        };
-        return shifts;
-    };
+        });
+    }
 
     this.setActiveUser = function(user) {
-        console.log('set active user =' + JSON.stringify(user));
         localStorageService.set('user', user)
+
         $rootScope.$broadcast('USER_CHANGE_EVENT', user);
     };
     this.getActiveUser = function() {

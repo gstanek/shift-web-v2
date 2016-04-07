@@ -2,7 +2,7 @@
 angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
 
 
-.service('authService', ['$rootScope', 'localStorageService', 'userService', function($rootScope, localStorageService, userService) {
+.service('authService', ['$rootScope', 'localStorageService', 'userService', '$auth', '$http', function($rootScope, localStorageService, userService, $auth, $http) {
 
     // Global User Object
     var shift1 = {
@@ -72,8 +72,18 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
         console.log('signup service credentials=' + JSON.stringify(credentials))
 
 
+        return $http({
+            method: 'POST',
+            url: 'http://127.0.0.1:8000/api/v1/user/',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: credentials
+        });
+
+
         //TODO If signup success
-        if(true) {
+        /*if(true) {
             //TODO replace with userID from response
             user = {};
             user.id = '23134543';
@@ -84,26 +94,71 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
         else {
             //TODO on failure, fire event
             return null;
-        }
+        }*/
     };
 
     this.login = function(credentials) {
         //TODO SERVICE_LAYER Do login request here
 
-        user.email = credentials.email;
+        var user = {
+            grant_type: 'password',
+            client_id: 'AiFijhEYAYAad9r6KgYAgFUN6B2dOMAuFBe60ucE',
+            username: credentials.email,
+            password: credentials.password
+        };
 
 
-        //TODO If login success
-        if(true) {
-            userService.setActiveUser(user);
-            return true;
-        }
-        else {
-            return false;
-        }
+
+        return $http({
+            method: 'POST',
+            url: 'http://localhost:8000/o/token/',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            transformRequest: function(obj) {
+                var str = [];
+                for(var p in obj)
+                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                return str.join("&");
+            },
+            data: user
+        })
     };
+
+    this.setToken = function(token) {
+        $auth.setToken(token);
+    };
+
     this.logout = function() {
         //TODO SERVICE_LAYER make logout request here
+
+        var token = $auth.getToken();
+
+        var revokeData = {
+            grant_type: 'password',
+            client_id: 'AiFijhEYAYAad9r6KgYAgFUN6B2dOMAuFBe60ucE',
+            token: token
+        };
+
+        $http({
+            method: 'POST',
+            url: 'http://localhost:8000/o/revoke_token/',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            transformRequest: function(obj) {
+                var str = [];
+                for(var p in obj)
+                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                return str.join("&");
+            },
+            data: revokeData
+        }).then(function successCallback(response) {
+            console.log('Success:' + JSON.stringify(response));
+            $auth.removeToken();
+        }, function errorCallback(response) {
+            console.log('Failure:' + JSON.stringify(response));
+        });
 
         userService.removeActiveUser();
     }
@@ -132,29 +187,6 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
             return 'Company';
         }
         return 'Company';
-    };
-
-    this.getAvailableShifts = function() {
-        var availableShifts = [];
-
-        if(user.persona != null) {
-            var allShifts = user.persona.shifts;
-            for (var i = 0; i < allShifts.length; i++) {
-                if(allShifts[i].available == true) {
-                    availableShifts.push(allShifts[i]);
-                }
-            }
-        }
-        return availableShifts;
-    };
-
-    this.getShifts = function() {
-        var shifts = [];
-        if(user.persona != null) {
-            shifts = user.persona.shifts;
-
-        };
-        return shifts;
     };
 
     this.setIdentityMap = function(user) {
