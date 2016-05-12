@@ -6,24 +6,13 @@
  *
  * Usage:
  *
- * <input type="text"  ng-autocomplete ng-model="autocomplete" options="options" details="details/>
+ * <input type="text"  ng-autocomplete ng-model="autocomplete" address="address" />
  *
  * + ng-model - autocomplete textbox value
  *
- * + details - more detailed autocomplete result, includes address parts, latlng, etc. (Optional)
+ * + address - standard address object with all relevant fields
  *
- * + options - configuration for the autocomplete (Optional)
  *
- *       + types: type,        String, values can be 'geocode', 'establishment', '(regions)', or '(cities)'
- *       + bounds: bounds,     Google maps LatLngBounds Object, biases results to bounds, but may return results outside these bounds
- *       + country: country    String, ISO 3166-1 Alpha-2 compatible country code. examples; 'ca', 'us', 'gb'
- *
- * example:
- *
- *    options = {
- *        types: '(cities)',
- *        country: 'ca'
- *    }
  **/
 
 angular.module( "myApp.ngAutocomplete", [])
@@ -32,7 +21,6 @@ angular.module( "myApp.ngAutocomplete", [])
         require: 'ngModel',
         scope: {
           ngModel: '=',
-          details: '=?',
           address: '='
         },
 

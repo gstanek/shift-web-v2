@@ -81,15 +81,4 @@ angular.module('myApp')
         address : '',
         manager : ''
     };
-
-        // Start Autofill address logic
-        //$scope.result = '';
-        //$scope.options = {
-        //    watchEnter: true,
-        //    types:'address'
-        //};
-        //$scope.address = {};
-        //$scope.addressFound = '';
-        // End Autofill address logic
-        
 }]);

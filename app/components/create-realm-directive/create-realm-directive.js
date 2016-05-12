@@ -42,21 +42,9 @@ angular.module('myApp.createRealmDirective', [])
                 address : '',
                 manager : ''
             };
-            // Start Autofill address logic
-            //scope.address = {};
-            //console.log('Address in create realm: ' + JSON.stringify(scope.address));
-            //console.log('Details in create realm: ' + JSON.stringify(scope.details));
-            // End Autofill address logic
 
-            // Start Autofill address logic
-            scope.result = '';
-            scope.options = {
-                watchEnter: true,
-                types:'address'
-            };
+            // Address populated by autofill logic
             scope.address = {};
-            //scope.addressFound = '';
-            // End Autofill address logic
 
         }
 
