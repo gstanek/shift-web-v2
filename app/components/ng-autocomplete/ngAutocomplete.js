@@ -17,7 +17,6 @@
  *       + types: type,        String, values can be 'geocode', 'establishment', '(regions)', or '(cities)'
  *       + bounds: bounds,     Google maps LatLngBounds Object, biases results to bounds, but may return results outside these bounds
  *       + country: country    String, ISO 3166-1 Alpha-2 compatible country code. examples; 'ca', 'us', 'gb'
- *       + watchEnter:         Boolean, true; on Enter select top autocomplete result. false(default); enter ends autocomplete
  *
  * example:
  *
@@ -33,56 +32,16 @@ angular.module( "myApp.ngAutocomplete", [])
         require: 'ngModel',
         scope: {
           ngModel: '=',
-          options: '=?',
           details: '=?',
           address: '='
         },
 
         link: function(scope, element, attrs, controller) {
-
-          //options for autocomplete
-          var opts
-          var watchEnter = false
-          //convert options provided to opts
-          var initOpts = function() {
-
-            opts = {}
-            if (scope.options) {
-
-              if (scope.options.watchEnter !== true) {
-                watchEnter = false
-              } else {
-                watchEnter = true
-              }
-
-              if (scope.options.types) {
-                opts.types = []
-                opts.types.push(scope.options.types)
-                scope.gPlace.setTypes(opts.types)
-              } else {
-                scope.gPlace.setTypes([])
-              }
-
-              if (scope.options.bounds) {
-                opts.bounds = scope.options.bounds
-                scope.gPlace.setBounds(opts.bounds)
-              } else {
-                scope.gPlace.setBounds(null)
-              }
-
-              if (scope.options.country) {
-                opts.componentRestrictions = {
-                  country: scope.options.country
-                }
-                scope.gPlace.setComponentRestrictions(opts.componentRestrictions)
-              } else {
-                scope.gPlace.setComponentRestrictions(null)
-              }
-            }
-          }
-
           if (scope.gPlace == undefined) {
             scope.gPlace = new google.maps.places.Autocomplete(element[0], {});
+            scope.gPlace.setTypes(['address'])
+            scope.gPlace.setBounds(null)
+            scope.gPlace.setComponentRestrictions(null)
           }
           google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
             var result = scope.gPlace.getPlace();
@@ -101,7 +60,7 @@ angular.module( "myApp.ngAutocomplete", [])
                               scope.address.number = scope.details.address_components[i].short_name;
                             }
                             if(scope.details.address_components[i].types[j] == 'route'){
-                              scope.address.route = scope.details.address_components[i].long_name;
+                              scope.address.route = scope.details.address_components[i].short_name;
                             }
                             if(scope.details.address_components[i].types[j] == 'locality'){
                               scope.address.city = scope.details.address_components[i].long_name;
@@ -131,9 +90,8 @@ angular.module( "myApp.ngAutocomplete", [])
                 });
               }
               else {
-                if (watchEnter) {
-                  getPlace(result)
-                }
+                // On Enter select top autocomplete result
+                getPlace(result)
               }
             }
           })
@@ -187,15 +145,6 @@ angular.module( "myApp.ngAutocomplete", [])
             var location = controller.$viewValue;
             element.val(location);
           };
-
-          //watch options provided to directive
-          scope.watchOptions = function () {
-            return scope.options
-          };
-          scope.$watch(scope.watchOptions, function () {
-            initOpts()
-          }, true);
-
         }
       };
     });
