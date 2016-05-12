@@ -102,7 +102,7 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
 
         var user = {
             grant_type: 'password',
-            client_id: 'AiFijhEYAYAad9r6KgYAgFUN6B2dOMAuFBe60ucE',
+            client_id: 'GqtWKUGixAaG727XNqsNrVlgcpDQsZ4MgZLvYev1',
             username: credentials.email,
             password: credentials.password
         };
@@ -136,7 +136,7 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
 
         var revokeData = {
             grant_type: 'password',
-            client_id: 'AiFijhEYAYAad9r6KgYAgFUN6B2dOMAuFBe60ucE',
+            client_id: 'GqtWKUGixAaG727XNqsNrVlgcpDQsZ4MgZLvYev1',
             token: token
         };
 

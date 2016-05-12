@@ -1,0 +1,23 @@
+<h3>Your Shifts</h3>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Comments</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="shift in availableShifts">
+            <td>{{shift.start_datetime}}</td>
+            <td>{{shift.end_datetime}}</td>
+            <td>{{shift.comment}}</td>
+            <td><button class="btn btn-primary" type="submit" ng-click="markAvailable(shift.id)">Mark Available</button></td>
+            <td><button class="btn btn-primary" type="submit" ng-click="delete(shift.id)">Delete</button></td>
+        </tr>
+        </tbody>
+    </table>
+</div>

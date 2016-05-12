@@ -37,7 +37,10 @@ module.exports = function (grunt) {
                    'bower_components/angular-mocks/**/*.js',
                    'bower_components/angular-ui-router/**/*.js',
                    'bower_components/bootstrap/**/*.js',
-                   'bower_components/satellizer/*.js']
+                   'bower_components/satellizer/*.js',
+                   'bower_components/lodash/*.js',
+                   'bower_components/angular-simple-logger/*.js',
+                   'bower_components/angular-google-maps/*.js']
         }
       },
       dist: {
@@ -54,7 +57,11 @@ module.exports = function (grunt) {
           '<%= yeoman.dist %>/components/realm-service/realm-service.js': ['<%= yeoman.dist %>/components/realm-service/realm-service.js'],
           '<%= yeoman.dist %>/components/persona-service/persona-service.js': ['<%= yeoman.dist %>/components/persona-service/persona-service.js'],
           '<%= yeoman.dist %>/components/shift-service/shift-service.js': ['<%= yeoman.dist %>/components/shift-service/shift-service.js'],
-          '<%= yeoman.dist %>/components/ng-autocomplete/ngAutocomplete.js': ['<%= yeoman.dist %>/components/ng-autocomplete/ngAutocomplete.js']
+          '<%= yeoman.dist %>/components/ng-autocomplete/ngAutocomplete.js': ['<%= yeoman.dist %>/components/ng-autocomplete/ngAutocomplete.js'],
+          '<%= yeoman.dist %>/components/create-realm-directive/create-realm-directive.js': ['<%= yeoman.dist %>/components/create-realm-directive/create-realm-directive.js'],
+          '<%= yeoman.dist %>/components/add-shift-directive/add-shift-directive.js': ['<%= yeoman.dist %>/components/add-shift-directive/add-shift-directive.js'],
+          '<%= yeoman.dist %>/components/user-shift-list-directive/user-shift-list-directive.js': ['<%= yeoman.dist %>/components/user-shift-list-directive/user-shift-list-directive.js'],
+          '<%= yeoman.dist %>/components/realm-available-shift-list-directive/realm-available-shift-list-directive.js': ['<%= yeoman.dist %>/components/realm-available-shift-list-directive/realm-available-shift-list-directive.js']
         }
       }
     },
@@ -337,7 +344,8 @@ module.exports = function (grunt) {
             'views/{,*/}*.js',
             '!views/{,*/}*test.js',
             'components/{,*/}*.js',
-            'uib/template/typeahead/*.html',
+            'components/{,*/}*.html',
+            'uib/template/{,*/}*.html',
             '!components/{,*/}*test.js',
             'images/{,*/}*.{webp}',
             'images/{,*/}*.png',
@@ -345,17 +353,21 @@ module.exports = function (grunt) {
             'bower_components/angular-bootstrap/ui-bootstrap.min.js',
             'bower_components/angular-ui-router/release/angular-ui-router.min.js',
             'bower_components/angular/angular.min.js',
+            'bower_components/angular-animate/angular-animate.min.js',
             'bower_components/bootstrap/dist/fonts/*',
             'bower_components/bootstrap/dist/css/bootstrap.min.css',
-            'bower_components/bootstrap/dist/js/bootstrap.min.js',
+            //'bower_components/bootstrap/dist/js/bootstrap.min.js',
             'bower_components/satellizer/satellizer.min.js',
             'bower_components/angular-local-storage/dist/angular-local-storage.min.js',
-            'bower_components/jquery/dist/jquery.min.js',
+            //'bower_components/jquery/dist/jquery.min.js',
             'bower_components/moment/min/moment-with-locales.min.js',
             'bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
             'bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.templates.js',
-            'bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css'
-
+            'bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css',
+            'bower_components/lodash/dist/lodash.min.js',
+            'bower_components/angular-google-maps/dist/angular-google-maps.min.js',
+            'bower_components/angular-google-maps/dist/angular-google-maps.min.js',
+            'bower_components/angular-simple-logger/dist/angular-simple-logger.min.js'
           ]
         }, {
           expand: true,
