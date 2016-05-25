@@ -30,17 +30,17 @@ module.exports = function (grunt) {
     uglify: {
       options: {
         mangle: {
-          except: ['bower_components/angular/**/*.js',
-                   'bower_components/angular-animate/**/*.js',
-                   'bower_components/angular-bootstrap/**/*.js',
-                   'bower_components/angular-loader/**/*.js',
-                   'bower_components/angular-mocks/**/*.js',
-                   'bower_components/angular-ui-router/**/*.js',
-                   'bower_components/bootstrap/**/*.js',
-                   'bower_components/satellizer/*.js',
-                   'bower_components/lodash/*.js',
-                   'bower_components/angular-simple-logger/*.js',
-                   'bower_components/angular-google-maps/*.js']
+          except: [
+            'bower_components/angular/*.js',
+            'bower_components/angular-animate/*.js',
+            'bower_components/angular-bootstrap/*.js',
+            'bower_components/angular-loader/*.js',
+            'bower_components/angular-mocks/*.js',
+            'bower_components/angular-ui-router/**/*.js',
+            'bower_components/satellizer/*.js',
+            'bower_components/lodash/*.js',
+            'bower_components/angular-simple-logger/*.js',
+            'bower_components/angular-google-maps/*.js']
         }
       },
       dist: {
@@ -350,16 +350,14 @@ module.exports = function (grunt) {
             'images/{,*/}*.{webp}',
             'images/{,*/}*.png',
             'fonts/{,*/}*.*',
-            'bower_components/angular-bootstrap/ui-bootstrap.min.js',
-            'bower_components/angular-ui-router/release/angular-ui-router.min.js',
             'bower_components/angular/angular.min.js',
+            'bower_components/angular-bootstrap/ui-bootstrap.min.js',
             'bower_components/angular-animate/angular-animate.min.js',
+            'bower_components/angular-ui-router/release/angular-ui-router.min.js',
             'bower_components/bootstrap/dist/fonts/*',
             'bower_components/bootstrap/dist/css/bootstrap.min.css',
-            //'bower_components/bootstrap/dist/js/bootstrap.min.js',
             'bower_components/satellizer/satellizer.min.js',
             'bower_components/angular-local-storage/dist/angular-local-storage.min.js',
-            //'bower_components/jquery/dist/jquery.min.js',
             'bower_components/moment/min/moment-with-locales.min.js',
             'bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
             'bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.templates.js',

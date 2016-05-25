@@ -5,7 +5,7 @@ angular.module('myApp.addShiftDirective', [])
             shiftInfo: '=addShiftModel'
         },
         templateUrl: 'components/add-shift-directive/add-shift.html',
-        link: function (scope) {
+        link: function (scope, element, attrs, ngModel) {
             scope.isActiveRealm = realmService.isActiveRealm();
             var isShiftPresent = function() {
                 var user = userService.getActiveUser();
@@ -52,37 +52,54 @@ angular.module('myApp.addShiftDirective', [])
                     });
             };
 
-
-
-
-            /*scope.beforeRenderStartDate = function($view, $dates, $leftDate, $upDate, $rightDate) {
-                if (scope.dateRangeEnd) {
-                    var activeDate = moment(scope.dateRangeEnd);
-                    for (var i = 0; i < $dates.length; i++) {
-                        if ($dates[i].localDateValue() >= activeDate.valueOf()) $dates[i].selectable = false;
-                    }
-                }
+            scope.shiftDetails = {
+                startDate : null,
+                startTime : null,
+                endDate : null,
+                endTime : null,
+                comment : ''
             }
-            scope.beforeRenderEndDate = function($view, $dates, $leftDate, $upDate, $rightDate) {
-                if (scope.dateRangeStart) {
-                    var activeDate = moment(scope.dateRangeStart).subtract(1, $view).add(1, 'minute');
-                    for (var i = 0; i < $dates.length; i++) {
-                        if ($dates[i].localDateValue() <= activeDate.valueOf()) {
-                            $dates[i].selectable = false;
-                        }
-                    }
-                }
-            }*/
 
 
             scope.today = function() {
-                scope.dt = new Date();
+                return new Date();
             };
-            scope.today();
 
-            scope.clear = function() {
-                scope.dt = null;
+            scope.startDateToday = function() {
+                scope.shiftDetails.startDate = scope.today();
+            }
+            scope.startDateToday();
+
+            scope.endDateToday = function() {
+                scope.shiftDetails.endDate = scope.today();
+            }
+            scope.endDateToday();
+
+            scope.startDateClear = function() {
+                scope.shiftDetails.startDate = null
+            }
+
+            scope.endDateClear = function() {
+                scope.shiftDetails.endDate = null
+            }
+
+            //scope.inlineOptions = {
+            //    customClass: getDayClass,
+            //    minDate: new Date(),
+            //    showWeeks: true
+            //};
+
+            var maxDate = new Date();
+            maxDate.setFullYear(maxDate.getFullYear() + 5);
+            scope.startDateOptions = {
+                formatYear: 'yy',
+                // 5 years out for max date
+                maxDate: maxDate,
+                minDate: new Date(),
+                startingDay: 0
             };
+
+
 
             scope.inlineOptions = {
                 customClass: getDayClass,
@@ -90,28 +107,56 @@ angular.module('myApp.addShiftDirective', [])
                 showWeeks: true
             };
 
-            scope.dateOptions = {
-                dateDisabled: false,
+            scope.endDateOptions = {
                 formatYear: 'yy',
-                maxDate: new Date(2020, 5, 22),
+                // 5 years out for max date
+                maxDate: maxDate,
+                //TODO: Get endMinDate to dynamically update
                 minDate: new Date(),
-                startingDay: 0,
-                allowInvalid: false
+                startingDay: 0
             };
 
-            // Disable weekend selection
-            //function disabled(data) {
-            //    var date = data.date,
-            //        mode = data.mode;
-            //    return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
-            //}
+            //scope.toggleMin = function() {
+            //    scope.inlineOptions.minDate = scope.inlineOptions.minDate ? null : new Date();
+            //    scope.endDateOptions.minDate = scope.inlineOptions.minDate;
+            //};
+            //scope.toggleMin();
 
-            scope.toggleMin = function() {
-                scope.inlineOptions.minDate = scope.inlineOptions.minDate ? null : new Date();
-                scope.dateOptions.minDate = scope.inlineOptions.minDate;
-            };
+            scope.endMinDate = new Date();
+            scope.$watch('shiftDetails.startDate',function(value){
+                //scope.inlineOptions.minDate = scope.inlineOptions.minDate ? null : new Date();
+                scope.endDateOptions.minDate = scope.shiftDetails.startDate;
+                if(scope.shiftDetails.endDate < scope.shiftDetails.startDate) {
+                    scope.shiftDetails.endDate = scope.shiftDetails.startDate;
+                }
+                //console.log('Value:' + JSON.stringify(value));
+                //scope.toggleMin();
+                //scope.endDateOptions.minDate = getDayClass(value);
+                //scope.endMinDate = value;
+            });
 
-            scope.toggleMin();
+            //scope.endDateOptions.minDate = scope.shiftDetails.startDate ? scope.shiftDetails.startDate : new Date();
+
+            scope.showEndDateEntry = false;
+            scope.startDateHeader = 'Date of Shift';
+            scope.toggleShowEndDate = function() {
+                scope.showEndDateEntry = !scope.showEndDateEntry;
+                if(scope.showEndDateEntry) {
+                    scope.startDateHeader = 'Start Date of Shift';
+                }
+                else {
+                    scope.startDateHeader = 'Date of Shift';
+                }
+
+            }
+
+
+            //scope.toggleMin = function() {
+                //scope.inlineOptions.minDate = scope.inlineOptions.minDate ? null : new Date();
+                //scope.dateOptions.minDate = scope.inlineOptions.minDate;
+            //};
+
+            //scope.toggleMin();
 
             scope.open1 = function() {
                 scope.popup1.opened = true;
@@ -121,13 +166,22 @@ angular.module('myApp.addShiftDirective', [])
                 scope.popup2.opened = true;
             };
 
-            scope.setDate = function(year, month, day) {
-                scope.dt = new Date(year, month, day);
-            };
+            //scope.setStartDate = function(year, month, day) {
+            //    scope.shiftDetails.startDate = new Date(year, month, day);
+            //};
+            //
+            //scope.setEndDate = function(year, month, day) {
+            //    scope.shiftDetails.endDate = new Date(year, month, day);
+            //};
 
-            scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-            scope.format = scope.formats[0];
-            scope.altInputFormats = ['M!/d!/yyyy'];
+            //scope.setDate = function(year, month, day) {
+            //    scope.shiftDetails.startDate = new Date(year, month, day);
+            //};
+
+            //scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+            //scope.format = scope.formats[0];
+            scope.format = 'shortDate';
+            //scope.altInputFormats = ['M!/d!/yyyy'];
 
             scope.popup1 = {
                 opened: false
@@ -137,20 +191,20 @@ angular.module('myApp.addShiftDirective', [])
                 opened: false
             };
 
-            var tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            var afterTomorrow = new Date(tomorrow);
-            afterTomorrow.setDate(tomorrow.getDate() + 1);
-            scope.events = [
-                {
-                    date: tomorrow,
-                    status: 'full'
-                },
-                {
-                    date: afterTomorrow,
-                    status: 'partially'
-                }
-            ];
+            //var tomorrow = new Date();
+            //tomorrow.setDate(tomorrow.getDate() + 1);
+            //var afterTomorrow = new Date();
+            //afterTomorrow.setDate(tomorrow.getDate() + 1);
+            //scope.events = [
+            //    {
+            //        date: tomorrow,
+            //        status: 'full'
+            //    },
+            //    {
+            //        date: afterTomorrow,
+            //        status: 'partially'
+            //    }
+            //];
 
             function getDayClass(data) {
                 var date = data.date,
