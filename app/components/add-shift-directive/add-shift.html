@@ -11,71 +11,91 @@
     }
 </style>
 <div ng-if="isActiveRealm && !isShiftPresent()">
-    <h3>Add a Shift for {{companyName}}</h3>
-    <form class="row" name="newShiftForm"
-          ng-submit="createShift()">
     <div class="row">
-        <div class="col-md-6">
-            <h5>{{startDateHeader}}</h5>
-            <p class="input-group">
-                <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="shiftDetails.startDate" is-open="popup1.opened" datepicker-options="startDateOptions" ng-required="true" close-text="Close" />
-          <span class="input-group-btn">
-            <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
-          </span>
-            </p>
-            <button type="button" class="btn btn-sm btn-info" ng-click="startDateToday()">Today</button>
-            <button type="button" class="btn btn-sm btn-danger" ng-click="startDateClear()">Clear</button>
-            <button type="button" class="btn btn-sm btn-info" ng-click="toggleShowEndDate()">Different Shift End Date</button>
-        </div>
-
-
-        <div ng-if="showEndDateEntry" class="col-md-6">
-            <h5>End Date of Shift</h5>
-            <p class="input-group">
-                <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="shiftDetails.endDate" is-open="popup2.opened" datepicker-options="endDateOptions" ng-required="true" close-text="Close" />
-          <span class="input-group-btn">
-            <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
-          </span>
-            </p>
-            <button type="button" class="btn btn-sm btn-info" ng-click="endDateToday()">Today</button>
-            <button type="button" class="btn btn-sm btn-danger" ng-click="endDateClear()">Clear</button>
-        </div>
+        <h3>Add a Shift for {{companyName}}</h3>
     </div>
-
-
-
-
-
-        <!--<div class="dropdown form-group">
-            <label for="shiftStartTime">Start Time</label>
-            <a class="dropdown-toggle" id="dropdown1" role="button" data-toggle="dropdown" data-target="#" href="#">
-                <div class="input-group date">
-                    <input id="shiftStartTime" ng-required="true" type="text" class="form-control" data-ng-model="newShiftModel.dateRangeStart">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+    <form class="row" name="newShiftForm" ng-submit="createShift()">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="col-md-12">
+                    <div class="row">
+                        <h5>{{startDateHeader}}</h5>
+                    </div>
+                    <div class="row">
+                        <p class="input-group">
+                          <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="shiftDetails.startDate" is-open="popup1.opened" datepicker-options="startDateOptions" ng-required="true" close-text="Close" />
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                          </span>
+                        </p>
+                    </div>
+                    <div class="row">
+                        <button type="button" class="btn btn-sm btn-info" ng-click="startDateToday()">Today</button>
+                        <button type="button" class="btn btn-sm btn-danger" ng-click="startDateClear()">Clear</button>
+                        <button type="button" class="btn btn-sm btn-info" ng-click="toggleShowEndDate()">Different Shift End Date</button>
+                    </div>
                 </div>
-            </a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                <datetimepicker data-ng-model="newShiftModel.dateRangeStart" data-datetimepicker-config="{ dropdownSelector: '#dropdown1'}" data-before-render="beforeRenderStartDate($view, $dates, $leftDate, $upDate, $rightDate)"/>
-            </ul>
-        </div>
-        <div class="dropdown form-group">
-            <label for="shiftEndTime">End Time</label>
-            <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="#">
-                <div class="input-group date">
-                    <input id="shiftEndTime" ng-required="true" type="text" class="form-control" data-ng-model="newShiftModel.dateRangeEnd">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+            </div>
+            <div class="col-md-6">
+                <div ng-if="showEndDateEntry" class="col-md-12">
+                    <div class="row">
+                        <h5>{{endDateHeader}}</h5>
+                    </div>
+                    <div class="row">
+                        <p class="input-group">
+                            <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="shiftDetails.endDate" is-open="popup2.opened" datepicker-options="endDateOptions" ng-required="true" close-text="Close" />
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                      </span>
+                        </p>
+                    </div>
+                    <div class="row">
+                        <button type="button" class="btn btn-sm btn-info" ng-click="endDateToday()">Today</button>
+                        <button type="button" class="btn btn-sm btn-danger" ng-click="endDateClear()">Clear</button>
+                    </div>
                 </div>
-            </a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                <datetimepicker data-ng-model="newShiftModel.dateRangeEnd" data-datetimepicker-config="{ dropdownSelector: '#dropdown2'}" data-before-render="beforeRenderEndDate($view, $dates, $leftDate, $upDate, $rightDate)"/>
-            </ul>
-        </div>-->
-        <div class="form-group has-feedback" show-errors>
-            <label for="comments">Comments</label>
-            <input id="comments" class="form-control" ng-model="newShiftModel.comment" class="form-control" />
+
+            </div>
         </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-default">Save Shift</button>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="col-md-12">
+                    <div class="row">
+                        <h5>{{startTimeHeader}}</h5>
+                    </div>
+                    <div class="row">
+                        <uib-timepicker ng-model="shiftDetails.startTime" hour-step="1" minute-step="1" show-meridian="true"></uib-timepicker>
+                    </div>
+                    <div class="row">
+                        <pre class="alert alert-info">Time is: {{starttime | date:'shortTime' }}</pre>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-12">
+                    <div class="row">
+                        <h5>{{endTimeHeader}}</h5>
+                    </div>
+                    <div class="row">
+                        <uib-timepicker ng-model="shiftDetails.endTime" hour-step="1" minute-step="1" show-meridian="true"></uib-timepicker>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group has-feedback" show-errors>
+                    <label for="comments">Comments</label>
+                    <input id="comments" class="form-control" ng-model="newShiftModel.comment" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default">Save Shift</button>
+                </div>
+            </div>
         </div>
     </form>
 </div>

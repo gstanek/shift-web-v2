@@ -69,9 +69,7 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
 
     this.signup = function(credentials) {
         //TODO SERVICE_LAYER Do signup request here
-        console.log('signup service credentials=' + JSON.stringify(credentials))
-
-
+        console.log('signup service credentials=' + JSON.stringify(credentials));
         return $http({
             method: 'POST',
             url: 'http://127.0.0.1:8000/api/v1/user/',

@@ -35,13 +35,33 @@ angular.module('myApp.addShiftDirective', [])
             };
             scope.createShift = function() {
                 var realm = realmService.getLocalRealm();
+                // Construct Date
+                console.log('startDate = ' + JSON.stringify(scope.shiftDetails.startDate));
+                console.log('endDate = ' + JSON.stringify(scope.shiftDetails.endDate));
+
+                var parsedStartDate = scope.shiftDetails.startDate;
+                parsedStartDate.setHours(scope.shiftDetails.startTime.getHours());
+                parsedStartDate.setMinutes(scope.shiftDetails.startTime.getMinutes());
+                parsedStartDate.setSeconds(0);
+                parsedStartDate.setMilliseconds(0);
+
+                var parsedEndDate = scope.shiftDetails.endDate;
+                parsedEndDate.setHours(scope.shiftDetails.endTime.getHours());
+                parsedEndDate.setMinutes(scope.shiftDetails.endTime.getMinutes());
+                parsedEndDate.setSeconds(0);
+                parsedEndDate.setMilliseconds(0);
+
+                console.log('parsedStartDate = ' + JSON.stringify(parsedStartDate));
+                console.log('parsedEndDate = ' + JSON.stringify(parsedEndDate));
+
                 var shift = {
-                    start_datetime : scope.newShiftModel.dateRangeStart,
-                    end_datetime : scope.newShiftModel.dateRangeEnd,
+                    start_datetime : parsedStartDate,
+                    end_datetime : parsedEndDate,
                     available : false,
                     realm : realm.id,
                     comment : scope.newShiftModel.comment
                 };
+                console.log('shift = ' + JSON.stringify(shift))
 
                 shiftService.storeShift(shift)
                     .then(function successCallback(response) {
@@ -62,9 +82,9 @@ angular.module('myApp.addShiftDirective', [])
             };
             scope.shiftDetails = {
                 startDate : null,
-                startTime : null,
+                startTime : new Date(),
                 endDate : null,
-                endTime : null,
+                endTime : new Date(),
                 comment : ''
             }
             // Set max date to 5 years out
@@ -121,17 +141,20 @@ angular.module('myApp.addShiftDirective', [])
 
             // By default, assume shift ends on same date it starts, so initially hiding the end date selection
             scope.showEndDateEntry = false;
-            scope.startDateHeader = 'Date of Shift';
+            scope.startDateHeader = 'Shift Date';
+            scope.endDateHeader = 'Shift End Date';
             scope.toggleShowEndDate = function() {
                 scope.showEndDateEntry = !scope.showEndDateEntry;
                 if(scope.showEndDateEntry) {
-                    scope.startDateHeader = 'Start Date of Shift';
+                    scope.startDateHeader = 'Shift Start Date';
                 }
                 else {
-                    scope.startDateHeader = 'Date of Shift';
+                    scope.startDateHeader = 'Shift Date';
                 }
             }
 
+            scope.startTimeHeader = 'Shift Start Time';
+            scope.endTimeHeader = 'Shift End Time';
         }
     };
 }]);

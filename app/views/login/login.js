@@ -25,8 +25,6 @@ angular.module('myApp.login', ['ui.router'])
                     userService.getUserByEmail($scope.credentials.email)
                         .then(function successCallback(response) {
                             userService.setActiveUser(response.data);
-
-
                             shiftService.getShifts()
                                 .then(function successCallback(response) {
                                     console.log('Success:' + JSON.stringify(response));
