@@ -1,9 +1,13 @@
-<h3>{{companyName}} Shift Board</h3>
-<div class="table-responsive">
+<div class="row">
+    <h3>{{companyName}} Shift Board</h3>
+</div>
+<div class="row" class="table-responsive">
     <table class="table">
         <thead>
         <tr>
+            <th>Start Date</th>
             <th>Start Time</th>
+            <th>End Date</th>
             <th>End Time</th>
             <th>Comments</th>
             <th>Owner</th>
@@ -12,8 +16,10 @@
         </thead>
         <tbody>
         <tr ng-repeat="availableShift in availableShifts | filter:{ available : true }">
-            <td>{{availableShift.start_datetime}}</td>
-            <td>{{availableShift.end_datetime}}</td>
+            <td>{{availableShift.start_datetime | date: 'mediumDate'}}</td>
+            <td>{{availableShift.start_datetime | date: 'shortTime'}}</td>
+            <td>{{availableShift.end_datetime | date: 'mediumDate'}}</td>
+            <td>{{availableShift.end_datetime | date: 'shortTime'}}</td>
             <td>{{availableShift.comment}}</td>
             <td>{{availableShift.user}}</td>
             <td><button class="btn btn-primary" type="submit" ng-click="reclaim(availableShift.id)">Reclaim</button></td>

@@ -29,13 +29,23 @@ angular.module('myApp.userShiftListDirective', [])
                     });
             }
             scope.delete = function(shiftID) {
-                console.log('in delete ' + shiftID);
+                shiftService.deleteShift(shiftID)
+                    .then(function successCallback(response) {
+                        console.log('Success:' + JSON.stringify(response));
+                        shiftService.removeLocalShift(shiftID);
+                    }, function errorCallback(response) {
+                        if(response.status == 404) {
+                            shiftService.removeLocalShift(shiftID);
+                        }
+                        console.log('Failure:' + JSON.stringify(response));
+                    });
             }
             var init = function () {
                 scope.isShiftPresent = function() {
                     return isShiftPresent();
                 }
                 scope.availableShifts = shiftService.getLocalShifts();
+                //var timezone = jstz.determine();
             };
             init();
         }

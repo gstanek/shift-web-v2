@@ -344,6 +344,8 @@ module.exports = function (grunt) {
             'views/{,*/}*.js',
             '!views/{,*/}*test.js',
             'components/{,*/}*.js',
+            'components/*/dist/*min.js',
+            '!components/jsTimezoneDetect/dist/jstz.js',
             'components/{,*/}*.html',
             'uib/template/{,*/}*.html',
             '!components/{,*/}*test.js',

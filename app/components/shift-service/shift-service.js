@@ -142,6 +142,17 @@ angular.module('myApp.shiftService', ['LocalStorageModule'])
             data: shift
         });
     };
+
+    this.deleteShift = function(shiftID) {
+        return $http({
+            method: 'DELETE',
+            url: 'http://127.0.0.1:8000/api/v1/shift/' + shiftID,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    };
+
     this.storeLocalShift = function(shift) {
         var activeShifts = this.getLocalShifts();
         if(!activeShifts) {
@@ -149,6 +160,15 @@ angular.module('myApp.shiftService', ['LocalStorageModule'])
         }
         removeByAttr(activeShifts, 'id', shift.id);
         activeShifts.push(shift);
+        localStorageService.set('shifts', activeShifts)
+        $rootScope.$broadcast('SHIFT_CHANGE_EVENT', activeShifts);
+    };
+    this.removeLocalShift = function(shiftID) {
+        var activeShifts = this.getLocalShifts();
+        if(!activeShifts) {
+            activeShifts = [];
+        }
+        removeByAttr(activeShifts, 'id', shift.id);
         localStorageService.set('shifts', activeShifts)
         $rootScope.$broadcast('SHIFT_CHANGE_EVENT', activeShifts);
     };
@@ -161,6 +181,12 @@ angular.module('myApp.shiftService', ['LocalStorageModule'])
     };
     this.getShiftsByPersonaID = function(personaID) {
         return localStorageService.get('shifts');
+    };
+    this.removeLocalShift = function(shiftID) {
+        var shifts = this.getLocalShifts();
+
+        localStorageService.remove('shifts');
+        $rootScope.$broadcast('SHIFT_CHANGE_EVENT');
     };
     this.removeLocalShifts = function() {
         localStorageService.remove('shifts');

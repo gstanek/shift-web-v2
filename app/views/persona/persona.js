@@ -47,38 +47,41 @@ angular.module('myApp')
     });
 
 
-    $scope.radioModel = 'employee';
-    $scope.createRealm = function() {
-        var userId = userService.getActiveUser().id;
-        var realm = {
-            name : $scope.newRealmFormModel.name,
-            address : $scope.address
-        };
-        realmService.createRealm(realm)
-            .then(function successCallback(response) {
-                realm.id = response.data.id;
-                console.log('Realm to Store in Local Storage' + JSON.stringify(realm))
-                realmService.setLocalRealm(realm);
-                //personaService.createPersona(realm.id);
+    // Start Modal Logic
 
-            }, function errorCallback(response) {
-                console.log('Error creating realm in backend')
-            });
 
-    };
-    // Employee/Manager/Owner Picker Logic
-    $scope.$watchCollection('checkModel', function () {
-        $scope.checkResults = [];
-        angular.forEach($scope.checkModel, function (value, key) {
-            if (value) {
-                $scope.checkResults.push(key);
-            }
-        });
-    });
-    // End Picker logic
-    $scope.newRealmFormModel = {
-        name : '',
-        address : '',
-        manager : ''
-    };
+    // $scope.radioModel = 'employee';
+    // $scope.createRealm = function() {
+    //     var userId = userService.getActiveUser().id;
+    //     var realm = {
+    //         name : $scope.newRealmFormModel.name,
+    //         address : $scope.address
+    //     };
+    //     realmService.createRealm(realm)
+    //         .then(function successCallback(response) {
+    //             realm.id = response.data.id;
+    //             console.log('Realm to Store in Local Storage' + JSON.stringify(realm))
+    //             realmService.setLocalRealm(realm);
+    //             //personaService.createPersona(realm.id);
+    //
+    //         }, function errorCallback(response) {
+    //             console.log('Error creating realm in backend')
+    //         });
+    //
+    // };
+    // // Employee/Manager/Owner Picker Logic
+    // $scope.$watchCollection('checkModel', function () {
+    //     $scope.checkResults = [];
+    //     angular.forEach($scope.checkModel, function (value, key) {
+    //         if (value) {
+    //             $scope.checkResults.push(key);
+    //         }
+    //     });
+    // });
+    // // End Picker logic
+    // $scope.newRealmFormModel = {
+    //     name : '',
+    //     address : '',
+    //     manager : ''
+    // };
 }]);
