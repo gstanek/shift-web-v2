@@ -82,17 +82,6 @@
                             </div>
                         </div>
                     </div>
-                    <!--<div class="row">-->
-                        <!--<div class="col-md-12">-->
-                            <!--<div class="modal-footer">-->
-                                <!--<div class="form-group">-->
-                                    <!--&lt;!&ndash;<button type="submit" class="btn btn-default">Save Shift</button>&ndash;&gt;-->
-                                    <!--<button class="btn btn-primary" ng-click="createShift()">Save Shift</button>-->
-                                    <!--<button class="btn btn-warning" ng-click="cancel()">Cancel</button>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
                 </form>
             </div>
         </div>
@@ -101,9 +90,8 @@
         <div class="col-md-12">
             <div class="modal-footer">
                 <div class="form-group">
-                    <!--<button type="submit" class="btn btn-default">Save Shift</button>-->
                     <button class="btn btn-primary" ng-click="createShift()">Save Shift</button>
-                    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+                    <button ng-if="isShiftPresent()" class="btn btn-warning" ng-click="cancel()">Cancel</button>
                 </div>
             </div>
         </div>
