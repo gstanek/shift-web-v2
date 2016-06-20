@@ -9,10 +9,10 @@
     <div class="row">
         <div class="col-md-12">
             <div class="modal-body">
-                <form class="row" name="newShiftForm"> <!-- ng-submit="createShift()"-->
+                <form class="row" name="newShiftForm">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="col-md-12">
+                            <div class="col-md-12"> <!-- This extra column adds proper spacing -->
                                 <div class="row">
                                     <h5>{{startDateHeader}}</h5>
                                 </div>
@@ -31,8 +31,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div ng-if="showEndDateEntry" class="col-md-12">
+                        <div class="col-md-6" ng-if="showEndDateEntry">
+                            <div class="col-md-12">
                                 <div class="row">
                                     <h5>{{endDateHeader}}</h5>
                                 </div>

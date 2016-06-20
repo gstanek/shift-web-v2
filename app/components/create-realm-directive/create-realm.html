@@ -1,75 +1,112 @@
-<div ng-if="isActiveRealm == false">
-    <h4>What is your role at your current employer?</h4>
-    <div class="btn-group">
-        <label class="btn btn-primary" ng-model="radioModel" uib-btn-radio="'employee'">Employee</label>
-        <label class="btn btn-primary" ng-model="radioModel" uib-btn-radio="'manager'">Manager</label>
-        <label class="btn btn-primary" ng-model="radioModel" uib-btn-radio="'owner'">Owner</label>
+<div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="modal-header">
+                <h3 class="modal-title">Company Details</h3>
+            </div>
+        </div>
     </div>
-    <div ng-if="radioModel == 'employee'">
-        <h3>Let's find out a little more about your employer</h3>
-        <form class="row" name="newRealmForm" ng-submit="createRealm()">
-            <div class="form-group has-feedback" show-errors >
-                <label for="realmName">Business Name</label>
-                <input type="text" class="form-control" name="realmsName" id="realmName" ng-model="newRealmFormModel.name" class="form-control"  required="required" placeholder="Business Name"/>
-                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="newRealmForm.name.$touched && !newRealmForm.name.$error.required"></span>
-                <span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="newRealmForm.name.$touched && newRealmForm.name.$error.required"></span>
-                <span class="help-block text-danger" ng-if="!newRealmForm.name.$error.required && newRealmForm.name.$touched">Please let us know the business name</span>
-            </div>
-            <div class="form-group move-down">
+    <div class="row">
+        <!--<div class="col-md-12">-->
+            <div class="modal-body">
                 <div class="row">
-                    <div class="col-xs-12" >
-                        <label for="Autocomplete2">Business Address</label>
-                        <input type="text" id="Autocomplete2" class="form-control" ng-autocomplete ng-model="autocomplete" address="address" placeholder="Enter the business address"/>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group move-down">
-                <div class="form-inline">
-                    <div class="row">
-                        <div class="col-xs-2" >
-                            <label for="addressLine1">Address Line 1</label>
-                        </div>
-                        <div class="col-xs-10" >
-                            <input type="text" ng-disabled="!address.address_line_one" id="addressLine1" ng-model="address.address_line_one"  class="form-control" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-2" >
-                            <label for="addressLine2">Address Line 2</label>
-                        </div>
-                        <div class="col-xs-10" >
-                            <input type="text" ng-disabled="!address.address_line_one" id="addressLine2" ng-model="address.address_line_two"  class="form-control" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-2" >
-                            <label for="city">City</label>
-                        </div>
-                        <div class="col-xs-10" >
-                            <input type="text" ng-disabled="!address.address_line_one" id="city" ng-model="address.city"  class="form-control" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-2" >
-                            <label for="state">State</label>
-                        </div>
-                        <div class="col-xs-10" >
-                            <input type="text" ng-disabled="!address.address_line_one" id="state" ng-model="address.subnational_region"  class="form-control" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-2" >
-                            <label for="postalCode">Postal Code</label>
-                        </div>
-                        <div class="col-xs-10" >
-                            <input type="text" ng-disabled="!address.address_line_one" id="postalCode" ng-model="address.postal_code"  class="form-control" />
+                    <div class="col-md-12">
+                        <h4>What is your role at your current employer?</h4>
+                        <div class="btn-group">
+                            <label class="btn btn-primary" ng-model="radioModel" uib-btn-radio="'employee'">Employee</label>
+                            <label class="btn btn-primary" ng-model="radioModel" uib-btn-radio="'manager'">Manager</label>
+                            <label class="btn btn-primary" ng-model="radioModel" uib-btn-radio="'owner'">Owner</label>
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div ng-if="radioModel == 'employee'">
+                            <h4>Let's find out a little more about your employer</h4>
+                            <form class="row" name="newRealmForm"><!--ng-submit="createRealm()"-->
+
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="has-feedback" show-errors > <!--form-group -->
+                                                <label for="realmName">Business Name</label>
+                                                <input type="text" class="form-control" name="realmsName" id="realmName" ng-model="newRealmFormModel.name" class="form-control"  required="required" placeholder="Business Name"/>
+                                                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="newRealmForm.name.$touched && !newRealmForm.name.$error.required"></span>
+                                                <span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="newRealmForm.name.$touched && newRealmForm.name.$error.required"></span>
+                                                <span class="help-block text-danger" ng-if="!newRealmForm.name.$error.required && newRealmForm.name.$touched">Please let us know the business name</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group move-down">
+                                        <div class="row">
+                                            <div class="col-xs-12" >
+                                                <label for="Autocomplete2">Business Address</label>
+                                                <input type="text" id="Autocomplete2" class="form-control" ng-autocomplete ng-model="autocomplete" address="address" placeholder="Enter the business address"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group move-down">
+                                        <div class="form-inline">
+                                            <div class="row">
+                                                <div class="col-xs-2" >
+                                                    <label for="addressLine1">Address Line 1</label>
+                                                </div>
+                                                <div class="col-xs-10" >
+                                                    <input type="text" ng-disabled="!address.address_line_one" id="addressLine1" ng-model="address.address_line_one"  class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-2" >
+                                                    <label for="addressLine2">Address Line 2</label>
+                                                </div>
+                                                <div class="col-xs-10" >
+                                                    <input type="text" ng-disabled="!address.address_line_one" id="addressLine2" ng-model="address.address_line_two"  class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-2" >
+                                                    <label for="city">City</label>
+                                                </div>
+                                                <div class="col-xs-10" >
+                                                    <input type="text" ng-disabled="!address.address_line_one" id="city" ng-model="address.city"  class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-2" >
+                                                    <label for="state">State</label>
+                                                </div>
+                                                <div class="col-xs-10" >
+                                                    <input type="text" ng-disabled="!address.address_line_one" id="state" ng-model="address.subnational_region"  class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-2" >
+                                                    <label for="postalCode">Postal Code</label>
+                                                </div>
+                                                <div class="col-xs-10" >
+                                                    <input type="text" ng-disabled="!address.address_line_one" id="postalCode" ng-model="address.postal_code"  class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-default">Create Company</button>
+        <!--</div>-->
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button class="btn btn-primary" ng-click="createRealm()">Create Company</button>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
