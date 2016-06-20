@@ -8,13 +8,20 @@ angular.module('myApp.userShiftListDirective', [])
         },
         templateUrl: 'components/user-shift-list-directive/user-shift-list.html',
         link: function (scope) {
+            scope.$on('SHIFT_CHANGE_EVENT', function() {
+                // scope.isShiftPresent = function() {
+                //     return isShiftPresent();
+                // };
+                scope.availableShifts = shiftService.getLocalShifts();
+            });
+
             scope.reclaim = function(shiftID) {
                 updateShift(shiftID, false);
-            }
+            };
             scope.markAvailable = function(shiftID) {
                 console.log('ShiftID: ' + JSON.stringify(shiftID))
                 updateShift(shiftID, true);
-            }
+            };
 
             var updateShift = function(id, bAvailable) {
                 var shift = {
@@ -27,7 +34,7 @@ angular.module('myApp.userShiftListDirective', [])
                     }, function errorCallback(response) {
                         console.log('Failure:' + JSON.stringify(response));
                     });
-            }
+            };
             scope.delete = function(shiftID) {
                 shiftService.deleteShift(shiftID)
                     .then(function successCallback(response) {
@@ -39,7 +46,7 @@ angular.module('myApp.userShiftListDirective', [])
                         }
                         console.log('Failure:' + JSON.stringify(response));
                     });
-            }
+            };
             var init = function () {
                 scope.isShiftPresent = function() {
                     return isShiftPresent();

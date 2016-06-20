@@ -11,9 +11,8 @@ angular.module('myApp')
         controller: 'PersonaCtrl'
       });
 }])
-
-.controller('PersonaCtrl', ['$scope', '$http', 'authService', 'realmService', 'userService', 'shiftService',
-    function($scope, $http, authService, realmService, userService, shiftService) {
+.controller('PersonaCtrl', ['$scope', '$http', 'authService', 'realmService', 'userService', 'shiftService', '$uibModal',
+    function($scope, $http, authService, realmService, userService, shiftService, $uibModal) {
 
     $scope.isActiveRealm = realmService.isActiveRealm();
     $scope.$on('REALM_CHANGE_EVENT', function() {
@@ -48,6 +47,18 @@ angular.module('myApp')
 
 
     // Start Modal Logic
+    $scope.modal = {
+        instance: null,
+        items: ['item1', 'item2', 'item3']
+    };
+    $scope.open = function () {
+        $scope.modal.instance = $uibModal.open({
+            animation: true,
+            template: '<my-modal modal="modal"></my-modal>',
+            scope : $scope
+        });
+    };
+    // End Modal Logic
 
 
     // $scope.radioModel = 'employee';

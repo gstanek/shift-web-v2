@@ -1,8 +1,12 @@
 angular.module('myApp.addShiftDirective', [])
 .directive('addShiftDirective', ['realmService', 'userService', 'shiftService', function(realmService, userService, shiftService) {
     return {
+        restrict: 'E',
+        // transclude: true,
         scope: {
-            shiftInfo: '=addShiftModel'
+            modal: '=',
+            'save': '&onSave',
+            'cancel': '&onCancel'
         },
         templateUrl: 'components/add-shift-directive/add-shift.html',
         link: function (scope, element, attrs, ngModel) {
@@ -34,42 +38,23 @@ angular.module('myApp.addShiftDirective', [])
                 comment : ''
             };
             scope.createShift = function() {
-                var realm = realmService.getLocalRealm();
-                // Construct Date
-                console.log('startDate = ' + JSON.stringify(scope.shiftDetails.startDate));
-                console.log('endDate = ' + JSON.stringify(scope.shiftDetails.endDate));
-
-                var parsedStartDate = scope.shiftDetails.startDate;
-                parsedStartDate.setHours(scope.shiftDetails.startTime.getHours());
-                parsedStartDate.setMinutes(scope.shiftDetails.startTime.getMinutes());
-                parsedStartDate.setSeconds(0);
-                parsedStartDate.setMilliseconds(0);
-
-                var parsedEndDate = scope.shiftDetails.endDate;
-                parsedEndDate.setHours(scope.shiftDetails.endTime.getHours());
-                parsedEndDate.setMinutes(scope.shiftDetails.endTime.getMinutes());
-                parsedEndDate.setSeconds(0);
-                parsedEndDate.setMilliseconds(0);
-
-                console.log('parsedStartDate = ' + JSON.stringify(parsedStartDate));
-                console.log('parsedEndDate = ' + JSON.stringify(parsedEndDate));
-
-                var shift = {
-                    start_datetime : parsedStartDate,
-                    end_datetime : parsedEndDate,
-                    available : false,
-                    realm : realm.id,
+                var shiftDAO = {
+                    startDate : scope.shiftDetails.startDate,
+                    startTime : scope.shiftDetails.startTime,
+                    endDate : scope.shiftDetails.endDate,
+                    endTime : scope.shiftDetails.endTime,
                     comment : scope.newShiftModel.comment
-                };
-                console.log('shift = ' + JSON.stringify(shift))
-
-                shiftService.storeShift(shift)
+                }
+                shiftService.storeShift(shiftDAO)
                     .then(function successCallback(response) {
                         console.log('Success:' + JSON.stringify(response));
                         shiftService.storeLocalShift(response.data);
+                        scope.save();
                     }, function errorCallback(response) {
                         console.log('Failure:' + JSON.stringify(response));
                     });
+
+
             };
 
             /** Date Selection Initial Configuration */

@@ -25,9 +25,9 @@ angular.module('myApp.realmAvailableShiftListDirective', [])
                 return isShiftPresent();
             }
             scope.$on('SHIFT_CHANGE_EVENT', function() {
-                scope.isShiftPresent = function() {
-                    return isShiftPresent();
-                }
+                // scope.isShiftPresent = function() {
+                //     return isShiftPresent();
+                // };
                 scope.availableShifts = shiftService.getLocalShifts();
             });
 
@@ -50,9 +50,6 @@ angular.module('myApp.realmAvailableShiftListDirective', [])
                     }, function errorCallback(response) {
                         console.log('Failure:' + JSON.stringify(response));
                     });
-            }
-            scope.delete = function(shiftID) {
-                console.log('in delete ' + shiftID);
             }
             var init = function () {
                 scope.isShiftPresent = function() {

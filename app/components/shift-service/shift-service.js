@@ -132,7 +132,39 @@ angular.module('myApp.shiftService', ['LocalStorageModule'])
         });
     }
 
-    this.storeShift = function(shift) {
+    this.storeShift = function(shiftDetails) {
+        var realm = realmService.getLocalRealm();
+        // Construct Date
+        console.log('startDate = ' + JSON.stringify(shiftDetails.startDate));
+        console.log('endDate = ' + JSON.stringify(shiftDetails.endDate));
+
+        var parsedStartDate = shiftDetails.startDate;
+        parsedStartDate.setHours(shiftDetails.startTime.getHours());
+        parsedStartDate.setMinutes(shiftDetails.startTime.getMinutes());
+        parsedStartDate.setSeconds(0);
+        parsedStartDate.setMilliseconds(0);
+
+        var parsedEndDate = shiftDetails.endDate;
+        parsedEndDate.setHours(shiftDetails.endTime.getHours());
+        parsedEndDate.setMinutes(shiftDetails.endTime.getMinutes());
+        parsedEndDate.setSeconds(0);
+        parsedEndDate.setMilliseconds(0);
+
+        console.log('parsedStartDate = ' + JSON.stringify(parsedStartDate));
+        console.log('parsedEndDate = ' + JSON.stringify(parsedEndDate));
+
+        var shift = {
+            start_datetime : parsedStartDate,
+            end_datetime : parsedEndDate,
+            available : false,
+            realm : realm.id,
+            comment : shiftDetails.comment
+        };
+        console.log('shift = ' + JSON.stringify(shift));
+
+
+
+
         return $http({
             method: 'POST',
             url: 'http://127.0.0.1:8000/api/v1/shift/',
@@ -168,7 +200,7 @@ angular.module('myApp.shiftService', ['LocalStorageModule'])
         if(!activeShifts) {
             activeShifts = [];
         }
-        removeByAttr(activeShifts, 'id', shift.id);
+        removeByAttr(activeShifts, 'id', shiftID);
         localStorageService.set('shifts', activeShifts)
         $rootScope.$broadcast('SHIFT_CHANGE_EVENT', activeShifts);
     };
@@ -177,16 +209,12 @@ angular.module('myApp.shiftService', ['LocalStorageModule'])
     };
     this.getLocalShifts = function() {
         var shifts = localStorageService.get('shifts');
+        if(shifts) {
+            if(shifts.length == 0) {
+                return null;
+            }
+        }
         return shifts;
-    };
-    this.getShiftsByPersonaID = function(personaID) {
-        return localStorageService.get('shifts');
-    };
-    this.removeLocalShift = function(shiftID) {
-        var shifts = this.getLocalShifts();
-
-        localStorageService.remove('shifts');
-        $rootScope.$broadcast('SHIFT_CHANGE_EVENT');
     };
     this.removeLocalShifts = function() {
         localStorageService.remove('shifts');
