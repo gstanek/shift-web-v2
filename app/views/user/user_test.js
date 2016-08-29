@@ -1,21 +1,3 @@
-// 'use strict';
-
-// describe('myApp.user module', function() {
-//
-//   beforeEach(module('myApp.user'));
-//
-//   describe('about controller', function(){
-//
-//     it('should ....', inject(function($controller) {
-//       //spec body
-//       var userCtrl = $controller('UserCtrl');
-//       expect(userCtrl).toBeDefined();
-//     }));
-//
-//   });
-// });
-
-
 'use strict';
 
 describe('myApp.user module', function() {
