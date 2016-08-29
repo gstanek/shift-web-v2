@@ -12,7 +12,7 @@ angular.module('myApp.addShiftDirective', [])
         link: function (scope, element, attrs, ngModel) {
             scope.isActiveRealm = realmService.isActiveRealm();
             var isShiftPresent = function() {
-                var user = userService.getActiveUser();
+                var user = userService.getLocalUser();
                 if(user) {
                     var shifts = shiftService.getLocalShifts();
                     if(shifts) {
@@ -44,17 +44,15 @@ angular.module('myApp.addShiftDirective', [])
                     endDate : scope.shiftDetails.endDate,
                     endTime : scope.shiftDetails.endTime,
                     comment : scope.newShiftModel.comment
-                }
+                };
                 shiftService.storeShift(shiftDAO)
                     .then(function successCallback(response) {
                         console.log('Success:' + JSON.stringify(response));
-                        shiftService.storeLocalShift(response.data);
+                        shiftService.setLocalShift(response.data, true);
                         scope.save();
                     }, function errorCallback(response) {
                         console.log('Failure:' + JSON.stringify(response));
                     });
-
-
             };
 
             /** Date Selection Initial Configuration */

@@ -2,124 +2,31 @@
 angular.module('myApp.shiftService', ['LocalStorageModule'])
 
 
-.service('shiftService', ['$rootScope', 'localStorageService', '$http', 'realmService', function($rootScope, localStorageService, $http, realmService) {
+.service('shiftService', ['$rootScope', 'localStorageService', '$http', 'realmService', 'commonService',
+    function($rootScope, localStorageService, $http, realmService, commonService) {
 
-    var realm = {}
-    var personas = [];
-    var shiftsByActivePersona = [];
-    var shiftsByUser = [];
+    var self = this;
 
-
-
-
-    this.getAvailableShiftsByUserID = function(userID) {
-        // First get shifts from in memory and return them
-
-
-        // TODO SERVICE_LAYER
-        // Make service layer call to get latest shifts for user, update view after we've refreshed
-        var availableShifts = [];
-
-        if(user.persona != null) {
-            var allShifts = user.persona.shifts;
-            for (var i = 0; i < allShifts.length; i++) {
-                if(allShifts[i].available == true) {
-                    availableShifts.push(allShifts[i]);
-                }
-            }
-        }
-        return availableShifts;
-    };
-    this.getShiftsByUserID = function(userID) {
-        if(user.persona != null) {
-            userShifts = user.persona.shifts;
-
-        };
-        return userShifts;
-    };
-
-    this.getAvailableShiftsByRealmID = function(realmID) {
-        var availableShifts = [];
-
-        if(user.persona != null) {
-            var allShifts = user.persona.shifts;
-            for (var i = 0; i < allShifts.length; i++) {
-                if(allShifts[i].available == true) {
-                    availableShifts.push(allShifts[i]);
-                }
-            }
-        }
-        return availableShifts;
-    };
-    this.getShiftsByRealmID = function(realmID) {
-        var shifts = [];
-        if(user.persona != null) {
-            shifts = user.persona.shifts;
-
-        };
-        return shifts;
-    };
-
-    this.getAvailableShiftsByPersonaID = function(personaID) {
-        var availableShifts = {};
-        var shifts = this.getLocalShifts();
-        for(var i = 0; i<shifts.length; i++) {
-            if(personaID == shift.userID + '-' + shift.realmID && shift.available == true) {
-                availableShifts.push(shift);
-            }
-        }
-        return availableShifts;
-    };
-    this.getShiftsByPersonaID = function(personaID) {
-
-        var inMemShifts = this.getLocalShifts();
-        if(!inMemShifts) {
-            return personaShifts;
-        }
-
-        for(var i = 0; i<inMemShifts.length; i++) {
-            if(personaID == inMemShifts[i].userID + '-' + inMemShifts[i].realmID) {
-                personaShifts.push(inMemShifts[i]);
-            }
-        }
-        return personaShifts;
-    };
-
-
-    var personaShifts = [];
-    var userShifts = [];
-
-    this.getShifts = function() {
+    this.getShifts = function(triggerEvent) {
         var realm = realmService.getLocalRealm();
         var realmQueryParam = '';
         if(realm) {
             realmQueryParam = '?realm_id=' + realm.id;
         }
-        return $http({
+        $http({
             method: 'GET',
             url: 'http://127.0.0.1:8000/api/v1/shift' + realmQueryParam,
             headers: {
                 'Content-Type': 'application/json'
             }
-        });
-
-        /*var shifts = [];
-        var inMemShifts = this.getActiveShifts();
-        if(!inMemShifts) {
-            return shifts;
-        };
-        shifts = inMemShifts;
-
-        return shifts;*/
+        }).then(function successCallback(getShiftsResponse) {
+            console.log('Success:' + JSON.stringify(getShiftsResponse));
+            self.setLocalShifts(getShiftsResponse.data, triggerEvent);
+        }, function errorCallback(getShiftsResponse) {
+            console.log('Failure to Get Shifts:' + JSON.stringify(getShiftsResponse));
+            alert('Something went wrong during the signup process.  Please try again.  If the problem persists, please check back later.');
+        });;
     };
-
-    // DATA ACCESS
-
-    // 'HashMap' implementation
-    /*var key = function(obj){
-        // some unique object-dependent key
-        return obj.id; // just an example
-    };*/
 
     this.updateShift = function(id, shift) {
         return $http({
@@ -162,9 +69,6 @@ angular.module('myApp.shiftService', ['LocalStorageModule'])
         };
         console.log('shift = ' + JSON.stringify(shift));
 
-
-
-
         return $http({
             method: 'POST',
             url: 'http://127.0.0.1:8000/api/v1/shift/',
@@ -185,7 +89,12 @@ angular.module('myApp.shiftService', ['LocalStorageModule'])
         });
     };
 
-    this.storeLocalShift = function(shift) {
+    /**
+     * Local Methods ...
+     *
+     */
+
+    this.setLocalShift = function(shift, updatePersonaDisplayState) {
         var activeShifts = this.getLocalShifts();
         if(!activeShifts) {
             activeShifts = [];
@@ -194,8 +103,11 @@ angular.module('myApp.shiftService', ['LocalStorageModule'])
         activeShifts.push(shift);
         localStorageService.set('shifts', activeShifts)
         $rootScope.$broadcast('SHIFT_CHANGE_EVENT', activeShifts);
+        if(updatePersonaDisplayState) {
+            commonService.setPersonaDisplayState();
+        }
     };
-    this.removeLocalShift = function(shiftID) {
+    this.removeLocalShift = function(shiftID, updatePersonaDisplayState) {
         var activeShifts = this.getLocalShifts();
         if(!activeShifts) {
             activeShifts = [];
@@ -203,9 +115,15 @@ angular.module('myApp.shiftService', ['LocalStorageModule'])
         removeByAttr(activeShifts, 'id', shiftID);
         localStorageService.set('shifts', activeShifts)
         $rootScope.$broadcast('SHIFT_CHANGE_EVENT', activeShifts);
+        if(updatePersonaDisplayState) {
+            commonService.setPersonaDisplayState();
+        }
     };
-    this.storeLocalShifts = function(shifts) {
-        localStorageService.set('shifts', shifts)
+    this.setLocalShifts = function(shifts, updatePersonaDisplayState) {
+        localStorageService.set('shifts', shifts);
+        if(updatePersonaDisplayState) {
+            commonService.setPersonaDisplayState();
+        }
     };
     this.getLocalShifts = function() {
         var shifts = localStorageService.get('shifts');
@@ -216,9 +134,12 @@ angular.module('myApp.shiftService', ['LocalStorageModule'])
         }
         return shifts;
     };
-    this.removeLocalShifts = function() {
+    this.removeLocalShifts = function(updatePersonaDisplayState) {
         localStorageService.remove('shifts');
         $rootScope.$broadcast('SHIFT_CHANGE_EVENT');
+        if(updatePersonaDisplayState) {
+            commonService.setPersonaDisplayState();
+        }
     };
 
     // Helper Method to remove item from array

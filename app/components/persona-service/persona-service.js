@@ -27,7 +27,7 @@ angular.module('myApp.personaService', ['LocalStorageModule', 'myApp.userService
             id : '',
             roles : ['admin']
         };
-        persona.id = userService.getActiveUser() + '-' + realmID;
+        persona.id = userService.getLocalUser() + '-' + realmID;
 
         //TODO SERVICE_LAYER create persona in backend
         if(true) {

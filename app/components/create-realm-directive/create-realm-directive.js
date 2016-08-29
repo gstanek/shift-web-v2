@@ -1,6 +1,7 @@
 angular.module('myApp.createRealmDirective', [])
 //angular.module('myApp')
-.directive('createRealmDirective', ['realmService', 'userService', function(realmService, userService) {
+.directive('createRealmDirective', ['realmService', 'userService', 'commonService',
+    function(realmService, userService, commonService) {
     return {
         scope: {
             realmInfo: '=createRealmModel'
@@ -10,7 +11,7 @@ angular.module('myApp.createRealmDirective', [])
             scope.isActiveRealm = realmService.isActiveRealm();
             scope.radioModel = 'employee';
             scope.createRealm = function() {
-                var userId = userService.getActiveUser().id;
+                var userId = userService.getLocalUser().id;
                 var realm = {
                     name : scope.newRealmFormModel.name,
                     address : scope.address
@@ -19,8 +20,8 @@ angular.module('myApp.createRealmDirective', [])
                     .then(function successCallback(response) {
                         realm.id = response.data.id;
                         console.log('Realm to Store in Local Storage' + JSON.stringify(realm))
-                        realmService.setLocalRealm(realm);
-                        //personaService.createPersona(realm.id);
+                        realmService.setLocalRealm(realm, true);
+                        commonService.setPersonaDisplayState();
 
                     }, function errorCallback(response) {
                         console.log('Error creating realm in backend')

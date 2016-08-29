@@ -1,7 +1,8 @@
 
-angular.module('myApp.userShiftListDirective', [])
-//angular.module('myApp')
-.directive('userShiftListDirective', ['realmService', 'userService', 'shiftService', function(realmService, userService, shiftService) {
+//angular.module('myApp.userShiftListDirective', [])
+angular.module('myApp')
+.directive('userShiftListDirective', ['realmService', 'userService', 'shiftService','RealmWebSocket',//
+    function(realmService, userService, shiftService, RealmWebSocket) { //
     return {
         scope: {
             userShiftListInfo: '=userShiftListModel'
@@ -14,6 +15,8 @@ angular.module('myApp.userShiftListDirective', [])
                 // };
                 scope.availableShifts = shiftService.getLocalShifts();
             });
+
+            //scope.socketShifts = RealmWebSocket.collection;
 
             scope.reclaim = function(shiftID) {
                 updateShift(shiftID, false);
@@ -30,7 +33,7 @@ angular.module('myApp.userShiftListDirective', [])
                 shiftService.updateShift(id, shift)
                     .then(function successCallback(response) {
                         console.log('Success:' + JSON.stringify(response));
-                        shiftService.storeLocalShift(response.data);
+                        // shiftService.setLocalShift(response.data, true);
                     }, function errorCallback(response) {
                         console.log('Failure:' + JSON.stringify(response));
                     });
@@ -39,10 +42,10 @@ angular.module('myApp.userShiftListDirective', [])
                 shiftService.deleteShift(shiftID)
                     .then(function successCallback(response) {
                         console.log('Success:' + JSON.stringify(response));
-                        shiftService.removeLocalShift(shiftID);
+                        shiftService.removeLocalShift(shiftID, true);
                     }, function errorCallback(response) {
                         if(response.status == 404) {
-                            shiftService.removeLocalShift(shiftID);
+                            shiftService.removeLocalShift(shiftID, true);
                         }
                         console.log('Failure:' + JSON.stringify(response));
                     });

@@ -1,7 +1,14 @@
-
-
 <div ng-controller='PersonaCtrl'>
-    <div ng-if="isActiveRealm && isShiftPresent()">
+    <div ng-if="personaDisplayState=='NO_REALM'">
+        <create-realm-directive></create-realm-directive>
+    </div>
+    <div ng-if="personaDisplayState=='REALM_USER_NO_COWORKERS'">
+        <add-users-directive></add-users-directive>
+    </div>
+    <div ng-if="personaDisplayState=='REALM_USER_COWORKERS_NO_SHIFTS'">
+        <add-shift-directive on-save="ok()" on-cancel="cancel()"></add-shift-directive>
+    </div>
+    <div ng-if="personaDisplayState=='REALM_USER_COWORKERS_SHIFTS'">
         <div class="row">
             <div class="col-md-10">
                 <realm-available-shift-list-directive></realm-available-shift-list-directive>
@@ -12,10 +19,4 @@
             </div>
         </div>
     </div>
-    <div ng-if="isActiveRealm && !isShiftPresent()">
-        <add-shift-directive></add-shift-directive>
-    </div>
-    <create-realm-directive ng-if="isActiveRealm == false"></create-realm-directive>
-
-
 </div>

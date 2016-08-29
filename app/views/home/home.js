@@ -10,26 +10,23 @@ angular.module('myApp.home', ['ui.router', 'myApp.authService'])
       controller: 'HomeCtrl'
   });
 }])
+.controller('HomeCtrl', ['$scope', 'authService',
+  function($scope, authService) {
+  $scope.isActiveUser = authService.isAuthenticated();
+  $scope.credentials = {};
+  $scope.showpassword = false;
 
-  .controller('HomeCtrl', ['$scope', '$state', 'authService', 'userService', 'realmService', 'shiftService', function($scope, $state, authService, userService, realmService, shiftService) {
+  $scope.signup = function() {
+      if($scope.signUpForm.$valid) {
+          authService.signup($scope.credentials);
+      }
+      else {
+          //TODO: make this a better notification
+          alert('Please double check your signup form entry and try again.');
+      }
+  };
+
+  $scope.$on('USER_CHANGE_EVENT', function() {
       $scope.isActiveUser = authService.isAuthenticated();
-      $scope.credentials = {};
-      $scope.showpassword = false;
-      $scope.signup = function() {
-          if($scope.signUpForm.$valid) {
-              authService.signup($scope.credentials)
-                  .then(function successCallback(response) {
-                      authService.setToken(response.data.access_token);
-                      userService.setActiveUser(response.data.user);
-                      realmService.removeLocalRealm();
-                      shiftService.removeLocalShifts();
-                      $state.go('persona');
-                  }, function errorCallback(response) {
-                      alert('Something went wrong during the signup process.  Please try again.  If the problem persists, please check back later.');
-              });
-          }
-          else {
-              alert('Please double check your signup form entry and try again.');
-          }
-      };
-  }]);
+  });
+}]);

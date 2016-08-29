@@ -7,7 +7,7 @@ angular.module('myApp.realmAvailableShiftListDirective', [])
         templateUrl: 'components/realm-available-shift-list-directive/realm-available-shift-list.html',
         link: function (scope) {
             var isShiftPresent = function() {
-                var user = userService.getActiveUser();
+                var user = userService.getLocalUser();
                 if(user) {
                     var shifts = shiftService.getLocalShifts();
                     if(shifts) {
@@ -46,7 +46,7 @@ angular.module('myApp.realmAvailableShiftListDirective', [])
                 shiftService.updateShift(id, shift)
                     .then(function successCallback(response) {
                         console.log('Success:' + JSON.stringify(response));
-                        shiftService.storeLocalShift(response.data);
+                        shiftService.setLocalShift(response.data, true);
                     }, function errorCallback(response) {
                         console.log('Failure:' + JSON.stringify(response));
                     });

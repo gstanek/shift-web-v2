@@ -2,40 +2,8 @@
 angular.module('myApp.userService', ['LocalStorageModule'])
 
 
-.service('userService', ['$rootScope', 'localStorageService', '$http', function($rootScope, localStorageService, $http) {
-
-    // Global User Object
-    var shift1 = {
-        shiftID: '1616',
-        starttime: '01/29/16 01:30:00',
-        endtime: '01/29/16 04:30:00',
-        available: true,
-        realmID: '8900',
-        userID: '123456'
-    };
-    var shift2 = {
-        shiftID: '1617',
-        starttime: '01/30/16 01:30:00',
-        endtime: '01/30/16 04:30:00',
-        available: false,
-        realmID: '8900',
-        userID: '123456'
-    };
-    var user = {
-        userID: '123456',
-        firstName: '',
-        lastName: '',
-        preferredName: '',
-        email: '',
-        persona: {
-            personaID: '56789',
-            roles: ['user', 'admin'],
-            realm: {
-                realmID: '8900',
-                realmName: ''
-            }
-        }
-    };
+.service('userService', ['$rootScope', 'localStorageService', '$http', 'commonService',
+    function($rootScope, localStorageService, $http, commonService) {
 
     this.updateUser = function(user) {
         return $http({
@@ -49,8 +17,19 @@ angular.module('myApp.userService', ['LocalStorageModule'])
 
     }
 
+    this.createUsers = function(createUsersPayload) {
+        return $http({
+            method: 'POST',
+            url: 'http://127.0.0.1:8000/api/v1/user/bulk',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: createUsersPayload
+        });
+    }
+
     this.getBestDisplayName = function() {
-        user = this.getActiveUser();
+        var user = this.getLocalUser();
         if(!user) {
             return '';
         }
@@ -68,27 +47,39 @@ angular.module('myApp.userService', ['LocalStorageModule'])
         }
     };
 
-
-    this.getUserByEmail = function(email) {
-        return $http({
-            method: 'GET',
-            url: 'http://127.0.0.1:8000/api/v1/user/' + email,
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-    }
-
-    this.setActiveUser = function(user) {
+    this.setLocalCoworkers = function(coworkers, updatePersonaDisplayState) {
+        localStorageService.set('coworkers', coworkers);
+        $rootScope.$broadcast('USER_CHANGE_EVENT', coworkers);
+        if(updatePersonaDisplayState) {
+            console.log('Update Persona Display State persona state update');
+            commonService.setPersonaDisplayState();
+        }
+    };
+    this.getLocalCoworkers = function() {
+        return localStorageService.get('coworkers');
+    };
+    this.removeLocalCoworkers = function() {
+        localStorageService.remove('coworkers');
+        $rootScope.$broadcast('USER_CHANGE_EVENT', null);
+        commonService.setPersonaDisplayState();
+    };
+    this.setLocalUser = function(user, updatePersonaDisplayState) {
         localStorageService.set('user', user)
 
         $rootScope.$broadcast('USER_CHANGE_EVENT', user);
+        if(updatePersonaDisplayState) {
+            commonService.setPersonaDisplayState();
+        }
+
     };
-    this.getActiveUser = function() {
+    this.getLocalUser = function() {
         return localStorageService.get('user');
     };
-    this.removeActiveUser = function() {
+    this.removeLocalUser = function(updatePersonaDisplayState) {
         localStorageService.remove('user');
-        $rootScope.$broadcast('USER_CHANGE_EVENT', user);
+        $rootScope.$broadcast('USER_CHANGE_EVENT', null);
+        if(updatePersonaDisplayState) {
+            commonService.setPersonaDisplayState();
+        }
     };
 }]);

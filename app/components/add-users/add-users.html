@@ -1,0 +1,39 @@
+<div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="modal-header">
+                <h3 class="modal-title">Who do you work with at {{companyName}}?</h3>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="modal-body">
+                <div class="form-group" ng-repeat="user in formData.users">
+                    <div class="col-md-4">
+                        <label>First Name</label>
+                        <input type="text" class="form-control" name="first_name" ng-model="user.first_name" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Last Name</label>
+                        <input type="text" class="form-control" name="last_name" ng-model="user.last_name" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Email</label>
+                        <input type="text" class="form-control" name="email" ng-model="user.email" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button class="btn btn-primary" ng-click="addUsers()">Save Co-worker Data</button>
+                    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

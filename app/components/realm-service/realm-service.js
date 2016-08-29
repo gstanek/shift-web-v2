@@ -2,7 +2,8 @@
 angular.module('myApp.realmService', ['LocalStorageModule', 'myApp.personaService'])
 
 
-.service('realmService', ['$rootScope', 'localStorageService', 'personaService', '$http', function($rootScope, localStorageService, personaService, $http) {
+.service('realmService', ['$rootScope', 'localStorageService', 'personaService', '$http', 'commonService', '$websocket',
+    function($rootScope, localStorageService, personaService, $http, commonService, $websocket) {
 
     /**
      * Create a new realm
@@ -17,6 +18,16 @@ angular.module('myApp.realmService', ['LocalStorageModule', 'myApp.personaServic
                 'Content-Type': 'application/json'
             },
             data: realm
+        });
+    }
+
+    this.getRealmsByUser = function() {
+        return $http({
+            method: 'GET',
+            url: 'http://127.0.0.1:8000/api/v1/realm',
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
     }
 
@@ -63,12 +74,19 @@ angular.module('myApp.realmService', ['LocalStorageModule', 'myApp.personaServic
     this.getLocalRealm = function() {
         return localStorageService.get('realm');
     };
-    this.setLocalRealm = function(realm) {
+    this.setLocalRealm = function(realm, updatePersonaDisplayState) {
         localStorageService.set('realm', realm)
         $rootScope.$broadcast('REALM_CHANGE_EVENT', realm);
+        if(updatePersonaDisplayState) {
+            commonService.setPersonaDisplayState();
+        }
+
     };
-    this.removeLocalRealm = function() {
+    this.removeLocalRealm = function(updatePersonaDisplayState) {
         localStorageService.remove('realm');
         $rootScope.$broadcast('REALM_CHANGE_EVENT');
+        if(updatePersonaDisplayState) {
+            commonService.setPersonaDisplayState();    
+        }
     };
 }]);

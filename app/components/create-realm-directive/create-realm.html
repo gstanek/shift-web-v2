@@ -50,7 +50,8 @@
                                                 <label for="addressLine1">Address Line 1</label>
                                             </div>
                                             <div class="col-xs-10" >
-                                                <input type="text" ng-disabled="!address.address_line_one" id="addressLine1" ng-model="address.address_line_one"  class="form-control" />
+                                                <!--<input type="text" ng-disabled="!address.address_line_one || !googleAvailable" id="addressLine1" ng-model="address.address_line_one"  class="form-control" />-->
+                                                <input type="text" ng-disabled="googleAvailable == false" id="addressLine1" ng-model="address.address_line_one"  class="form-control" />
                                             </div>
                                         </div>
                                         <div class="row">

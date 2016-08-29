@@ -13,12 +13,12 @@ angular.module('myApp.user', ['ui.router', 'myApp.userService'])
 
 .controller('UserCtrl', ['$scope', 'userService', function($scope, userService) {
     $scope.user = {};
-    $scope.user = userService.getActiveUser();
+    $scope.user = userService.getLocalUser();
     $scope.updateUser = function() {
         if($scope.updateUserForm.$valid) {
             userService.updateUser($scope.user)
                 .then(function successCallback(response) {
-                    userService.setActiveUser(response.data);
+                    userService.setLocalUser(response.data, true);
 
                 }, function errorCallback(response) {
                     console.log('Failure:' + JSON.stringify(response));
@@ -30,6 +30,6 @@ angular.module('myApp.user', ['ui.router', 'myApp.userService'])
     }
 
     $scope.$on('USER_CHANGE_EVENT', function() {
-        $scope.user = userService.getActiveUser();
+        $scope.user = userService.getLocalUser();
     });
 }]);

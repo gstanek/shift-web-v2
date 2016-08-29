@@ -15,6 +15,9 @@ module.exports = function (grunt) {
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
+  // Required for running test server
+  var serveStatic = require('serve-static');
+
   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
@@ -40,7 +43,9 @@ module.exports = function (grunt) {
             'bower_components/satellizer/*.js',
             'bower_components/lodash/*.js',
             'bower_components/angular-simple-logger/*.js',
-            'bower_components/angular-google-maps/*.js']
+            'bower_components/angular-google-maps/*.js',
+            'bower_components/angular-websocket/dist/*.js',
+            'bower_components/angular-websocket/dist/*.js.map']
         }
       },
       dist: {
@@ -53,13 +58,17 @@ module.exports = function (grunt) {
           '<%= yeoman.dist %>/views/login/login.js': ['<%= yeoman.dist %>/views/login/login.js'],
           '<%= yeoman.dist %>/views/user/user.js': ['<%= yeoman.dist %>/views/user/user.js'],
           '<%= yeoman.dist %>/components/auth-service/auth-service.js': ['<%= yeoman.dist %>/components/auth-service/auth-service.js'],
+          '<%= yeoman.dist %>/components/common-service/common-service.js': ['<%= yeoman.dist %>/components/common-service/common-service.js'],
           '<%= yeoman.dist %>/components/user-service/user-service.js': ['<%= yeoman.dist %>/components/user-service/user-service.js'],
           '<%= yeoman.dist %>/components/realm-service/realm-service.js': ['<%= yeoman.dist %>/components/realm-service/realm-service.js'],
+          '<%= yeoman.dist %>/components/realm-service/realm-websocket.js': ['<%= yeoman.dist %>/components/realm-service/realm-websocket.js'],
           '<%= yeoman.dist %>/components/persona-service/persona-service.js': ['<%= yeoman.dist %>/components/persona-service/persona-service.js'],
           '<%= yeoman.dist %>/components/shift-service/shift-service.js': ['<%= yeoman.dist %>/components/shift-service/shift-service.js'],
           '<%= yeoman.dist %>/components/ng-autocomplete/ngAutocomplete.js': ['<%= yeoman.dist %>/components/ng-autocomplete/ngAutocomplete.js'],
           '<%= yeoman.dist %>/components/create-realm-directive/create-realm-directive.js': ['<%= yeoman.dist %>/components/create-realm-directive/create-realm-directive.js'],
           '<%= yeoman.dist %>/components/add-shift-directive/add-shift-directive.js': ['<%= yeoman.dist %>/components/add-shift-directive/add-shift-directive.js'],
+          '<%= yeoman.dist %>/components/add-users/add-users-directive.js': ['<%= yeoman.dist %>/components/add-users/add-users-directive.js'],
+          '<%= yeoman.dist %>/components/add-users/add-users-modal-directive.js': ['<%= yeoman.dist %>/components/add-users/add-users-modal-directive.js'],
           '<%= yeoman.dist %>/components/user-shift-list-directive/user-shift-list-directive.js': ['<%= yeoman.dist %>/components/user-shift-list-directive/user-shift-list-directive.js'],
           '<%= yeoman.dist %>/components/realm-available-shift-list-directive/realm-available-shift-list-directive.js': ['<%= yeoman.dist %>/components/realm-available-shift-list-directive/realm-available-shift-list-directive.js']
         }
@@ -112,12 +121,12 @@ module.exports = function (grunt) {
           open: true,
           middleware: function (connect) {
             return [
-              connect.static('.tmp'),
+              serveStatic('.tmp'),
               connect().use(
                 '/bower_components',
-                connect.static('./bower_components')
+                  serveStatic('./bower_components')
               ),
-              connect.static(appConfig.app)
+              serveStatic(appConfig.app)
             ];
           }
         }
@@ -127,13 +136,13 @@ module.exports = function (grunt) {
           port: 9001,
           middleware: function (connect) {
             return [
-              connect.static('.tmp'),
-              connect.static('test'),
+              serveStatic('.tmp'),
+              serveStatic('test'),
               connect().use(
                 '/bower_components',
-                connect.static('./bower_components')
+                  serveStatic('./bower_components')
               ),
-              connect.static(appConfig.app)
+              serveStatic(appConfig.app)
             ];
           }
         }
@@ -354,6 +363,7 @@ module.exports = function (grunt) {
             'fonts/{,*/}*.*',
             'bower_components/angular/angular.min.js',
             'bower_components/angular-bootstrap/ui-bootstrap.min.js',
+            'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
             'bower_components/angular-animate/angular-animate.min.js',
             'bower_components/angular-ui-router/release/angular-ui-router.min.js',
             'bower_components/bootstrap/dist/fonts/*',
@@ -366,8 +376,9 @@ module.exports = function (grunt) {
             'bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css',
             'bower_components/lodash/dist/lodash.min.js',
             'bower_components/angular-google-maps/dist/angular-google-maps.min.js',
-            'bower_components/angular-google-maps/dist/angular-google-maps.min.js',
-            'bower_components/angular-simple-logger/dist/angular-simple-logger.min.js'
+            'bower_components/angular-simple-logger/dist/angular-simple-logger.min.js',
+            'bower_components/angular-websocket/dist/angular-websocket.min.js',
+            'bower_components/angular-websocket/dist/angular-websocket.min.js.map'
           ]
         }, {
           expand: true,

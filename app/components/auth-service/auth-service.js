@@ -1,19 +1,50 @@
 
 angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
 
-.service('authService', ['$rootScope', 'localStorageService', 'userService', '$auth', '$http',
-    function($rootScope, localStorageService, userService, $auth, $http) {
+.service('authService', ['$rootScope', 'localStorageService', 'userService', '$auth', '$http', '$state', 'realmService', 'commonService', 'shiftService', 'RealmWebSocket',
+    function($rootScope, localStorageService, userService, $auth, $http, $state, realmService, commonService, shiftService, RealmWebSocket) {
 
-    this.isAuthenticated = function() {
-        var activeUser = userService.getActiveUser();
-        if(activeUser == null) {
+
+    var self = this;
+
+    this.validateAuthenticated = function() {
+        var isAuthenticated = this.isAuthenticated();
+        if(isAuthenticated) {
+            return true;
+        }
+        else {
+            $state.go("home");
             return false;
         }
-        return true;
+    }
+    this.isAuthenticated = function() {
+        var token = $auth.getToken();
+        var token_exipiration_time = this.getTokenExpirationTime();
+
+        var current = new Date();
+        // console.log("Token Expiration Time=" + token_exipiration_time);
+        // console.log("Current=" + current.getTime());
+        // var compare = token_exipiration_time > current.getTime();
+        // console.log("compare=" + compare);
+
+        if(token && token_exipiration_time) {
+            var parsedDate = Date.parse(token_exipiration_time);
+            if(parsedDate > current.getTime()) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+
+        else {
+            return false;
+        }
     };
 
     this.isAuthorized = function (requiredRole) {
-        var activeUser = userService.getActiveUser();
+        var activeUser = userService.getLocalUser();
         var roles = null;
         if(activeUser != null && activeUser.persona != null){
             roles = activeUser.persona.roles;
@@ -26,37 +57,81 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
     };
 
     this.signup = function(credentials) {
-        return $http({
+        $http({
             method: 'POST',
             url: 'http://127.0.0.1:8000/api/v1/user/',
             headers: {
                 'Content-Type': 'application/json'
             },
             data: credentials
-        });
+        })
+            .then(function successCallback(response) {
+                console.log('signup response:' + JSON.stringify(response))
+                self.setToken(response.data.access_token);
+                self.setTokenExpirationTime(response.data.token_expiration_time);
+                userService.setLocalUser(response.data.user, false);
+                realmService.removeLocalRealm(false);
+                shiftService.removeLocalShifts(false);
+                $state.go('persona');
+                commonService.setPersonaDisplayState();
+            }, function errorCallback(response) {
+                alert('Something went wrong during the signup process.  Please try again.  If the problem persists, please check back later.');
+            });
     };
 
     this.login = function(credentials) {
         var user = {
             grant_type: 'password',
-            client_id: 'GqtWKUGixAaG727XNqsNrVlgcpDQsZ4MgZLvYev1',
+            client_id: 'AiFijhEYAYAad9r6KgYAgFUN6B2dOMAuFBe60ucE',
             username: credentials.email,
             password: credentials.password
         };
+        var loginUrl = 'http://127.0.0.1:8000/api/v1/security/login?email=' + credentials.email + '&password=' + credentials.password;
         return $http({
-            method: 'POST',
-            url: 'http://localhost:8000/o/token/',
+            method: 'GET',
+            url: loginUrl,
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            transformRequest: function(obj) {
-                var str = [];
-                for(var p in obj)
-                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-                return str.join("&");
-            },
-            data: user
+                'Content-Type': 'application/json'
+            }
         })
+
+        .then(function successCallback(loginResponse) {
+            console.log("Login Success: " + JSON.stringify(loginResponse));
+
+            self.setToken(loginResponse.data.access_token);
+            self.setTokenExpirationTime(loginResponse.data.token_expiration_time);
+            var user = loginResponse.data.user;
+            userService.setLocalUser(user, false);
+
+            // TODO Enable default preference for active realm instead of taking first
+            var realm = user.realms[0];
+            realmService.setLocalRealm(realm, false);
+            if(realm) {
+                RealmWebSocket.connect();
+                userService.setLocalCoworkers(realm.users, false);
+                shiftService.getShifts(true);
+                $state.go('persona');
+            }
+
+            commonService.setPersonaDisplayState();
+        }, function errorCallback(loginResponse) {
+            console.log("Login Error: " + JSON.stringify(loginResponse));
+        });
+
+        // return $http({
+        //     method: 'POST',
+        //     url: 'http://localhost:8000/o/token/',
+        //     headers: {
+        //         'Content-Type': 'application/x-www-form-urlencoded'
+        //     },
+        //     transformRequest: function(obj) {
+        //         var str = [];
+        //         for(var p in obj)
+        //             str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+        //         return str.join("&");
+        //     },
+        //     data: user
+        // })
     };
 
     this.setToken = function(token) {
@@ -68,7 +143,7 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
 
         var revokeData = {
             grant_type: 'password',
-            client_id: 'GqtWKUGixAaG727XNqsNrVlgcpDQsZ4MgZLvYev1',
+            client_id: 'AiFijhEYAYAad9r6KgYAgFUN6B2dOMAuFBe60ucE',
             token: token
         };
 
@@ -87,8 +162,17 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
             data: revokeData
         }).then(function successCallback(response) {
             console.log('Success:' + JSON.stringify(response));
+            //TODO: Ensure disconnect happens on server side
+            //RealmWebSocket.disconnect();
             $auth.removeToken();
-            userService.removeActiveUser();
+            userService.removeLocalUser(false);
+            userService.removeLocalCoworkers();
+            shiftService.removeLocalShift();
+            shiftService.removeLocalShifts();
+            commonService.removeLocalPersonaDisplayState();
+            realmService.removeLocalRealm();
+            localStorageService.remove('token_expiration_time');
+
         }, function errorCallback(response) {
             console.log('Failure:' + JSON.stringify(response));
         });
@@ -110,39 +194,28 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
         }
     };
 
-    // this.getCompanyName = function() {
-    //     if(user.persona != null && user.persona.realm != null) {
-    //         if(user.persona.realm.realmName) {
-    //             return user.persona.realm.realmName;
-    //         }
-    //         return 'Company';
-    //     }
-    //     return 'Company';
-    // };
-
-    // this.setIdentityMap = function(user) {
-    //     localStorageService.set('user', user)
-    //     $rootScope.$broadcast('USER_CHANGE_EVENT', user);
-    // };
-    // this.getIdentityMap = function() {
-    //     return localStorageService.get('user');
-    // };
-    this.removeActiveUser = function() {
-        localStorageService.remove('user');
-        $rootScope.$broadcast('USER_CHANGE_EVENT', user);
+    this.setTokenExpirationTime = function(token_expiration_time) {
+        localStorageService.set('token_expiration_time', token_expiration_time);
+    };
+    this.getTokenExpirationTime = function() {
+        return localStorageService.get('token_expiration_time');
+    };
+    this.removeTokenExpirationTime = function() {
+        localStorageService.remove('token_expiration_time');
     };
 
 
 }])
-.factory('authHttpInterceptor', ['$q',
-    function($q) {
+.factory('authHttpInterceptor', ['$q', '$rootScope',
+    function($q, $rootScope) {
     return {
-
         // optional method
         'responseError': function(rejection) {
             // do something on error
             if(rejection.status == 401) {
                 //TODO display login popup
+                console.log("In error response interceptor");
+                $rootScope.$broadcast('UNAUTHORIZED_EVENT', null);
             }
             // if (canRecover(rejection)) {
             //     return responseOrNewPromise
