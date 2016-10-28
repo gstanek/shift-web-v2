@@ -5,17 +5,22 @@ angular.module('myApp')
             restrict: 'E',
             templateUrl: 'components/auth-modal/auth-modal.html',
             scope: {
-                modal: '='
+                modal: '=',
+                errorDesc: '=',
+                title: '=',
+                action: '='
             },
             controller: function ($scope) {
-                console.log($scope);
                 $scope.credentials = {};
                 $scope.showpassword = false;
+                $scope.showPasswordModel = { value : 'password'}
 
                 $scope.login = function (form) {
                     if(form.$valid) {
                         authService.login($scope.credentials);
-                        $scope.modal.instance.close();
+                        if($scope.modal) {
+                            $scope.modal.instance.close();
+                        }
                     }
                     else {
                         console.log('Login Form not valid');
@@ -24,11 +29,17 @@ angular.module('myApp')
                 };
 
                 $scope.signup = function () {
-                    $scope.modal.instance.close();
+                    authService.signup($scope.credentials);
+                    if($scope.modal) {
+                        $scope.modal.instance.close();
+                    }
+
                 };
 
                 $scope.cancel = function () {
-                    $scope.modal.instance.dismiss('cancel');
+                    if($scope.modal) {
+                        $scope.modal.instance.dismiss('cancel');
+                    }
                 };
 
             }

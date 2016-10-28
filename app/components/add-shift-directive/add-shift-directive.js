@@ -1,8 +1,8 @@
 angular.module('myApp.addShiftDirective', [])
 .directive('addShiftDirective', ['realmService', 'userService', 'shiftService', function(realmService, userService, shiftService) {
+    "ngInject";
     return {
         restrict: 'E',
-        // transclude: true,
         scope: {
             modal: '=',
             'save': '&onSave',

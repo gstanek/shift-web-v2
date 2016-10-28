@@ -1,5 +1,7 @@
 angular.module('myApp')
-.directive('myModal', ['$log', 'realmService', 'shiftService', function($log, realmService, shiftService) {
+.directive('myModal', ['$log', 'realmService',
+    function($log, realmService) {
+    "ngInject";
     return {
         restrict: 'E',
         templateUrl: 'components/add-shift-directive/add-shift-modal.html',
@@ -10,26 +12,7 @@ angular.module('myApp')
             $scope.companyName = realmService.getRealmName();
             console.log($scope);
 
-
             $scope.ok = function () {
-                console.log("in OK function");
-
-                // var shiftDAO = {
-                //     startDate : $scope.shiftDetails.startDate,
-                //     startTime : $scope.shiftDetails.startTime,
-                //     endDate : $scope.shiftDetails.endDate,
-                //     endTime : $scope.shiftDetails.endTime,
-                //     comment : $scope.newShiftModel.comment
-                // }
-                // shiftService.storeShift(shiftDAO)
-                //     .then(function successCallback(response) {
-                //         console.log('Success:' + JSON.stringify(response));
-                //         shiftService.storeLocalShift(response.data);
-                //         $scope.modal.instance.close($scope.selected);
-                //     }, function errorCallback(response) {
-                //         console.log('Failure:' + JSON.stringify(response));
-                //     });
-
                 $scope.modal.instance.close($scope.selected);
             };
 

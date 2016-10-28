@@ -12,6 +12,7 @@ angular.module('myApp.user', ['ui.router', 'myApp.userService'])
 }])
 
 .controller('UserCtrl', ['$scope', 'userService', function($scope, userService) {
+    "ngInject";
     $scope.user = {};
     $scope.user = userService.getLocalUser();
     $scope.updateUser = function() {

@@ -15,7 +15,7 @@ angular.module('myApp.commonService', [])//['myApp.userService','myApp.realmServ
                 var activeUser = this.getLocalUser();
                 if(activeUser) {
                     var coworkers = this.getLocalCoworkers();
-                    if(coworkers  && coworkers.length > 1) {
+                    if(coworkers  && coworkers.length > 0) {
                         var shifts = this.getLocalShifts();
                         if(shifts) {
                             console.log('returning REALM_USER_COWORKERS_SHIFTS');

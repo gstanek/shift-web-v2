@@ -56,6 +56,20 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
         }
     };
 
+    this.clearUserContext = function() {
+
+        //TODO: Ensure disconnect happens on server side
+        //RealmWebSocket.disconnect();
+        $auth.removeToken();
+        userService.removeLocalUser(false);
+        userService.removeLocalCoworkers(false);
+        shiftService.removeLocalShift(false);
+        shiftService.removeLocalShifts(false);
+        commonService.removeLocalPersonaDisplayState();
+        realmService.removeLocalRealm(false);
+        localStorageService.remove('token_expiration_time');
+    };
+
     this.signup = function(credentials) {
         $http({
             method: 'POST',
@@ -75,7 +89,7 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
                 $state.go('persona');
                 commonService.setPersonaDisplayState();
             }, function errorCallback(response) {
-                alert('Something went wrong during the signup process.  Please try again.  If the problem persists, please check back later.');
+                self.clearUserContext();
             });
     };
 
@@ -116,22 +130,12 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
             commonService.setPersonaDisplayState();
         }, function errorCallback(loginResponse) {
             console.log("Login Error: " + JSON.stringify(loginResponse));
+            var errorObject = {
+                httpStatusCode : loginResponse,
+                message : loginResponse.data
+            }
+            return errorObject;
         });
-
-        // return $http({
-        //     method: 'POST',
-        //     url: 'http://localhost:8000/o/token/',
-        //     headers: {
-        //         'Content-Type': 'application/x-www-form-urlencoded'
-        //     },
-        //     transformRequest: function(obj) {
-        //         var str = [];
-        //         for(var p in obj)
-        //             str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-        //         return str.join("&");
-        //     },
-        //     data: user
-        // })
     };
 
     this.setToken = function(token) {
@@ -208,21 +212,26 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
 }])
 .factory('authHttpInterceptor', ['$q', '$rootScope',
     function($q, $rootScope) {
-    return {
-        // optional method
-        'responseError': function(rejection) {
-            // do something on error
-            if(rejection.status == 401) {
-                //TODO display login popup
-                console.log("In error response interceptor");
-                $rootScope.$broadcast('UNAUTHORIZED_EVENT', null);
+        return {
+
+            'responseError': function(rejection) {
+                if(rejection.status == 401) {
+                    $rootScope.$broadcast('UNAUTHORIZED_EVENT', { rejection : rejection });
+                    return $q.reject(rejection.data);
+                }
+                else if(rejection.status == 400) {
+                    $rootScope.$broadcast('BAD_REQUEST_EVENT', { rejection : rejection });
+                    return $q.reject(rejection.data);
+                }
+                else {
+                    return $q.reject(rejection);
+                }
             }
-            // if (canRecover(rejection)) {
-            //     return responseOrNewPromise
+            // 'response': function(response) {
+            //     // do something on success
+            //     return response || $q.when(response);
             // }
-            return $q.reject(rejection);
-        }
-    };
+        };
 }])
 .config(['$httpProvider', function($httpProvider) {
     $httpProvider.interceptors.push('authHttpInterceptor');

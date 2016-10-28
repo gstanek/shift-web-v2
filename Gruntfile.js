@@ -9,7 +9,7 @@
 
 module.exports = function (grunt) {
 
-  // Load grunt tasks automatically
+  // load all grunt tasks matching the ['grunt-*', '@*/grunt-*'] patterns
   require('load-grunt-tasks')(grunt);
 
   // Time how long tasks take. Can help when optimizing build times
@@ -26,6 +26,7 @@ module.exports = function (grunt) {
 
   // Define the configuration for all the tasks
   grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
 
     // Project settings
     yeoman: appConfig,
@@ -260,7 +261,6 @@ module.exports = function (grunt) {
         }]
       }
     },
-    pkg: grunt.file.readJSON('package.json'),
     concat: {
       options: {
         stripBanners: true,
@@ -320,7 +320,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '.tmp/concat/scripts',
-          src: ['*.js', '!oldieshim.js'],
+          src: ['*.js', 'test/spec/{,*/}*.js', '!oldieshim.js'],
           dest: '.tmp/concat/scripts'
         }]
       }

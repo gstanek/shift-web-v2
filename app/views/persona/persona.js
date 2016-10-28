@@ -11,7 +11,7 @@ angular.module('myApp')
 }])
 .controller('PersonaCtrl', ['$scope', '$uibModal', 'commonService', 'shiftService',
     function($scope, $uibModal, commonService, shiftService) {
-
+    "ngInject";
     $scope.personaDisplayState = commonService.getLocalPersonaDisplayState();
     $scope.$on('PERSONA_DISPLAY_STATE_CHANGE_EVENT', function(personaState) {
         $scope.personaDisplayState = commonService.getLocalPersonaDisplayState();
