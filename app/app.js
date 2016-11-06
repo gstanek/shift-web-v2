@@ -70,10 +70,10 @@ angular.module('myApp', [
     };
     // $scope.errorDesc='';
     $scope.openLogin = function () {
-        $scope.errorDesc='';
+        $scope.errorObj={};
         $scope.modal.instance = $uibModal.open({
             animation: true,
-            template: '<auth-modal modal="modal" error-desc="errorDesc" action="\'login\'" title="\'Login\'"></auth-modal>',
+            template: '<auth-modal modal="modal" error-obj="errorObj" action="\'login\'" title="\'Login\'"></auth-modal>',
             scope : $scope
         });
     };
@@ -102,10 +102,11 @@ angular.module('myApp', [
         $scope.companyName = realmService.getRealmName();
 
         if(args && args.rejection) {
-            $scope.errorDesc=args.rejection.data;
+            $scope.errorObj.detail=args.rejection.data.detail;
+            $scope.errorObj.code= args.rejection.data.code;
         }
         else {
-            $scope.errorDesc='Invalid credentials';
+            $scope.errorObj.detail='Invalid credentials';
         }
     });
 

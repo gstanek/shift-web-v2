@@ -1,48 +1,48 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{title}}</h3>
-</div>
-<div class="modal-body">
-    <form name="loginForm" class="form-horizontal" novalidate> <!--ng-controller="LoginCtrl" ng-submit="login(credentials)"-->
-        <div class="form-group has-feedback" show-errors>
-            <label class="col-sm-4 control-label" for="email">Email:</label>
-            <div class="col-sm-8">
-                <input type="text" class="form-control" id="email" name="email"
-                       ng-model="credentials.email"
-                       ng-pattern="/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/" data-ng-required="true">
-                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="loginForm.email.$touched && !loginForm.email.$error.pattern && !loginForm.email.$error.required"></span>
-                <span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="(loginForm.email.$touched && loginForm.email.$error.pattern) || (loginForm.email.$touched && loginForm.email.$error.required)"></span>
-                <span class="help-block text-danger" ng-if="loginForm.email.$error.required && loginForm.email.$touched">Email is required</span>
-                <span class="help-block text-danger" ng-if="loginForm.email.$touched && loginForm.email.$error.pattern">Email address entered is not valid</span>
-                <span class="help-block text-danger">{{errorDesc}}</span>
+<div class="shift-modal">
+    <div class="modal-header">
+        <h3 class="modal-title" ng-class="{'modal-title': true, 'sr-only': action=='signup'}">{{title}}</h3>
+    </div>
+    <div class="modal-body">
+        <form name="authForm" class="form-horizontal shift-form" novalidate> <!--ng-controller="LoginCtrl" ng-submit="login(credentials)"-->
+            <div class="form-group has-feedback">
+                <div ng-class="{'col-sm-8': true, 'col-sm-offset-2': true, 'has-error': authForm.email.$touched && (authForm.email.$error.pattern || authForm.email.$error.required), 'has-success': authForm.email.$touched && !authForm.email.$error.pattern && !authForm.email.$error.required}">
+                    <label class="control-label sr-only" for="email">Email</label>
+                    <input type="text" class="form-control" id="email" name="email" placeholder="Email"
+                           ng-model="credentials.email"
+                           ng-pattern="/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/" data-ng-required="true">
+                    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="authForm.email.$touched && !authForm.email.$error.pattern && !authForm.email.$error.required"></span>
+                    <span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="(authForm.email.$touched && authForm.email.$error.pattern) || (authForm.email.$touched && authForm.email.$error.required)"></span>
+                    <span class="shift-help-block" ng-if="authForm.email.$error.required && authForm.email.$touched">Email address required</span>
+                    <span class="shift-help-block" ng-if="authForm.email.$touched && authForm.email.$error.pattern">Email address not valid</span>
+                </div>
             </div>
-        </div>
-        <div class="form-group has-feedback" show-errors >
-            <label class="col-sm-4 control-label" for="password">Password:</label>
-            <div class="col-sm-8">
-                <input class="form-control" type="{{showPasswordModel.value}}" id="password" name="password" ng-model="credentials.password">
-                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="loginForm.password.$touched && !loginForm.password.$error.required"></span>
-                <span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="loginForm.password.$touched && loginForm.password.$error.required"></span>
-                <span class="help-block text-danger" ng-if="loginForm.password.$error.required && loginForm.password.$touched">Required</span>
+            <div class="form-group has-feedback">
+                <label class="control-label sr-only" for="password">Password</label>
+                <div ng-class="{'col-sm-8': true, 'col-sm-offset-2': true, 'has-error': authForm.password.$touched && authForm.password.$error.required, 'has-success': authForm.password.$touched && !authForm.password.$error.required}">
+                    <input class="form-control" type="{{showPasswordModel.value}}" id="password" name="password" placeholder="Password" ng-model="credentials.password" data-ng-required="true">
+                    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="authForm.password.$touched && !authForm.password.$error.required"></span>
+                    <span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="authForm.password.$touched && authForm.password.$error.required"></span>
+                    <span class="shift-help-block" ng-if="authForm.password.$error.required && authForm.password.$touched">Password required</span>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-4 control-label"></label>
-            <div class="col-sm-8">
-                <input id="showPasswordCheckbox" name="showPasswordCheckbox" type="checkbox" ng-model="showPasswordModel.value" ng-true-value="'text'" ng-false-value="'password'"><span> Show Password</span>
+            <div class="form-group">
+                <label class="control-label sr-only" for="showPasswordCheckbox">Show Password</label>
+                <div class="col-sm-8 col-sm-offset-2">
+                    <input id="showPasswordCheckbox" name="showPasswordCheckbox" type="checkbox" ng-model="showPasswordModel.value" ng-true-value="'text'" ng-false-value="'password'"><span> Show Password</span>
+                </div>
             </div>
-        </div>
-        <div class="form-group has-feedback">
-            <label class="col-sm-4 control-label"></label>
-            <div class="col-sm-8">
-                <p class="text-danger">{{errorDesc}}</p>
+            <div class="form-group has-feedback">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <p class="text-danger">{{errorObj.detail}}. <a ng-click="openLogin()" ng-if="errorObj.code == 1000"> Login?</a></p>
+                </div>
             </div>
-        </div>
-    </form>
-</div>
-<div ng-if="action=='login'" class="modal-footer">
-    <button class="btn btn-primary" ng-click="login(loginForm)">{{title}}</button>
-    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-</div>
-<div ng-if="action=='signup'" class="modal-footer">
-    <button class="btn btn-primary" ng-click="signup()">{{title}}</button>
+        </form>
+    </div>
+    <div ng-if="action=='login'" class="modal-footer">
+        <button class="btn btn-primary" ng-click="login(authForm)">Login</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+    <div ng-if="action=='signup'" class="modal-footer">
+        <button class="btn btn-primary" ng-click="signup(authForm)">Sign Up</button>
+    </div>
 </div>

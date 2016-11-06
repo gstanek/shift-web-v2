@@ -9,11 +9,7 @@
   <title>Shift</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!--<link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
-  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
-  <link rel="stylesheet" href="app.css">-->
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
-  <!--<link rel="stylesheet" href="bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css"/>-->
   <link rel="stylesheet" href="css/app.min.css" />
 </head>
 <body ng-app="myApp" ng-controller="AppCtrl">
@@ -40,23 +36,16 @@
           <ul class="nav navbar-nav navbar-right">
             <li ng-if="isActiveUser"><a ui-sref="user">{{ displayName }}</a></li>
             <li ng-if="isActiveUser"><a ui-sref="home" ng-click="logout();">Sign out</a></li>
-            <!--<li ng-if="isActiveUser == false"><a ui-sref="login">Log In</a></li>-->
-            <li ng-if="isActiveUser == false"><button class="btn btn-primary" type="button" ng-click="openLogin()">Login</button></li>
+            <li ng-if="isActiveUser == false"><a type="button" ng-click="openLogin()">Login</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
 
-    <!--<div ng-if="isActiveRealm"><a ui-sref="persona">{{companyName}}</a></div>-->
-
     <!--[if lt IE 7]>
         <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <div ui-view ></div>
-
-    <!--<add-shift-directive on-save="ok()" on-cancel="cancel()"></add-shift-directive>-->
-    <!--<create-realm-directive on-save="ok()" on-cancel="cancel()"></create-realm-directive>-->
-
     <div>Shift on Tap: alpha v<span app-version></span></div>
   </div>
   <!-- In production use:
