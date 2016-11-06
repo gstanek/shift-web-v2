@@ -1,5 +1,6 @@
 angular.module('myApp.addShiftDirective', [])
-.directive('addShiftDirective', ['realmService', 'userService', 'shiftService', function(realmService, userService, shiftService) {
+.directive('addShiftDirective', ['realmService', 'userService', 'shiftService', 'commonService',
+    function(realmService, userService, shiftService, commonService) {
     "ngInject";
     return {
         restrict: 'E',
@@ -65,9 +66,9 @@ angular.module('myApp.addShiftDirective', [])
             };
             scope.shiftDetails = {
                 startDate : null,
-                startTime : new Date(),
+                startTime : commonService.roundMinutes(new Date()),
                 endDate : null,
-                endTime : new Date(),
+                endTime : commonService.roundMinutes(new Date()),
                 comment : ''
             }
             // Set max date to 5 years out

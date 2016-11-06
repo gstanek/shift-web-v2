@@ -3,9 +3,6 @@ angular.module('myApp.personaService', ['LocalStorageModule', 'myApp.userService
 
 
 .service('personaService', ['$rootScope', 'localStorageService', 'userService', function($rootScope, localStorageService, userService) {
-
-
-
     /**
      * Service to access the PersonaID of the current active user/realm combination
      *

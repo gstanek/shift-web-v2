@@ -18,7 +18,7 @@
                                 </div>
                                 <div class="row">
                                     <p class="input-group">
-                                      <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="shiftDetails.startDate" is-open="popup1.opened" datepicker-options="startDateOptions" ng-required="true" close-text="Close" />
+                                      <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="shiftDetails.startDate" is-open="popup1.opened" datepicker-options="startDateOptions" ng-required="true" close-text="Close"/>
                                       <span class="input-group-btn">
                                         <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
                                       </span>
@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="row">
                                     <p class="input-group">
-                                        <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="shiftDetails.endDate" is-open="popup2.opened" datepicker-options="endDateOptions" ng-required="true" close-text="Close" />
+                                        <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="shiftDetails.endDate" is-open="popup2.opened" datepicker-options="endDateOptions" ng-required="true" close-text="Close"/>
                                   <span class="input-group-btn">
                                     <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
                                   </span>
@@ -59,7 +59,7 @@
                                     <h5>{{startTimeHeader}}</h5>
                                 </div>
                                 <div class="row">
-                                    <uib-timepicker ng-model="shiftDetails.startTime" hour-step="1" minute-step="1" show-meridian="true"></uib-timepicker>
+                                    <uib-timepicker ng-model="shiftDetails.startTime" hour-step="1" minute-step="15" show-meridian="true"></uib-timepicker>
                                 </div>
                             </div>
                         </div>
@@ -69,7 +69,7 @@
                                     <h5>{{endTimeHeader}}</h5>
                                 </div>
                                 <div class="row">
-                                    <uib-timepicker ng-model="shiftDetails.endTime" hour-step="1" minute-step="1" show-meridian="true"></uib-timepicker>
+                                    <uib-timepicker ng-model="shiftDetails.endTime" hour-step="1" minute-step="15" show-meridian="true"></uib-timepicker>
                                 </div>
                             </div>
                         </div>

@@ -33,7 +33,7 @@ angular.module('myApp.addUsersDirective', [])
 
             scope.companyName = realmService.getRealmName();
             scope.formData = {
-                users : [{},{},{},{},{}]
+                users : [{},{},{}]
             };
             scope.addUsers = function() {
                 var realm = realmService.getLocalRealm();

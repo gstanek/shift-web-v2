@@ -2,42 +2,36 @@ angular.module('myApp.commonService', [])//['myApp.userService','myApp.realmServ
 .service('commonService', ['localStorageService', '$rootScope',
     function(localStorageService, $rootScope) {
 
-
         // <!-- NO_REALM -->
         // <!-- REALM_NO_USER -->
-        // <!-- REALM_USER_NO_COWORKERS -->
-        // <!-- REALM_USER_COWORKERS_NO_SHIFTS -->
-        // <!-- REALM_USER_COWORKERS_SHIFTS -->
+        // <!-- REALM_USER_NO_SHIFTS -->
+        // <!-- REALM_USER_SHIFTS_NO_COWORKERS -->
+        // <!-- REALM_USER_SHIFTS_COWORKERS -->
 
         this.setPersonaDisplayState = function() {
             var activeRealm = this.getLocalRealm();
             if(activeRealm) {
                 var activeUser = this.getLocalUser();
                 if(activeUser) {
-                    var coworkers = this.getLocalCoworkers();
-                    if(coworkers  && coworkers.length > 0) {
-                        var shifts = this.getLocalShifts();
-                        if(shifts) {
-                            console.log('returning REALM_USER_COWORKERS_SHIFTS');
-                            this.setLocalPersonaDisplayState('REALM_USER_COWORKERS_SHIFTS');
+                    var shifts = this.getLocalShifts();
+                    if(shifts) {
+                        var coworkers = this.getLocalCoworkers();
+                        if(coworkers  && coworkers.length > 0) {
+                            this.setLocalPersonaDisplayState('REALM_USER_SHIFTS_COWORKERS');
                         }
                         else {
-                            console.log('returning REALM_USER_COWORKERS_NO_SHIFTS');
-                            this.setLocalPersonaDisplayState('REALM_USER_COWORKERS_NO_SHIFTS');
+                            this.setLocalPersonaDisplayState('REALM_USER_SHIFTS_NO_COWORKERS');
                         }
                     }
                     else {
-                        console.log('returning REALM_USER_NO_COWORKERS');
-                        this.setLocalPersonaDisplayState('REALM_USER_NO_COWORKERS');
+                        this.setLocalPersonaDisplayState('REALM_USER_NO_SHIFTS');
                     }
                 }
                 else {
-                    console.log('returning REALM_NO_USER');
                     this.setLocalPersonaDisplayState('REALM_NO_USER');
                 }
             }
             else {
-                console.log('returning NO_REALM');
                 this.setLocalPersonaDisplayState('NO_REALM');
             }
         }
@@ -74,5 +68,12 @@ angular.module('myApp.commonService', [])//['myApp.userService','myApp.realmServ
         this.getLocalUser = function() {
             return localStorageService.get('user');
         };
+
+        this.roundMinutes = function(date) {
+            date.setHours(date.getHours() + Math.round(date.getMinutes()/60));
+            date.setMinutes(0);
+
+            return date;
+        }
 
     }]);
