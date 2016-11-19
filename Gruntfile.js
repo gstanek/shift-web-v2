@@ -46,6 +46,7 @@ module.exports = function (grunt) {
             'bower_components/angular-simple-logger/*.js',
             'bower_components/angular-google-maps/*.js',
             'bower_components/angular-websocket/dist/*.js',
+            '/components/add-users/add-users-modal-directive.js',
             'bower_components/angular-websocket/dist/*.js.map']
         }
       },
@@ -69,9 +70,9 @@ module.exports = function (grunt) {
           '<%= yeoman.dist %>/components/create-realm-directive/create-realm-directive.js': ['<%= yeoman.dist %>/components/create-realm-directive/create-realm-directive.js'],
           '<%= yeoman.dist %>/components/add-shift-directive/add-shift-directive.js': ['<%= yeoman.dist %>/components/add-shift-directive/add-shift-directive.js'],
           '<%= yeoman.dist %>/components/add-users/add-users-directive.js': ['<%= yeoman.dist %>/components/add-users/add-users-directive.js'],
-          '<%= yeoman.dist %>/components/add-users/add-users-modal-directive.js': ['<%= yeoman.dist %>/components/add-users/add-users-modal-directive.js'],
           '<%= yeoman.dist %>/components/user-shift-list-directive/user-shift-list-directive.js': ['<%= yeoman.dist %>/components/user-shift-list-directive/user-shift-list-directive.js'],
-          '<%= yeoman.dist %>/components/realm-available-shift-list-directive/realm-available-shift-list-directive.js': ['<%= yeoman.dist %>/components/realm-available-shift-list-directive/realm-available-shift-list-directive.js']
+          '<%= yeoman.dist %>/components/realm-available-shift-list-directive/realm-available-shift-list-directive.js': ['<%= yeoman.dist %>/components/realm-available-shift-list-directive/realm-available-shift-list-directive.js'],
+          '<%= yeoman.dist %>/components/directives/shift-block/shift-block.js': ['<%= yeoman.dist %>/components/directives/shift-block/shift-block.js']
         }
       }
     },
@@ -353,6 +354,8 @@ module.exports = function (grunt) {
             'views/{,*/}*.js',
             '!views/{,*/}*test.js',
             'components/{,*/}*.js',
+            'components/directives/{,*/}*.js',
+            'components/directives/{,*/}*.html',
             'components/*/dist/*min.js',
             '!components/jsTimezoneDetect/dist/jstz.js',
             'components/{,*/}*.html',

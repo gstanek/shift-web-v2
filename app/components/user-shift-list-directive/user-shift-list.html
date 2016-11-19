@@ -1,38 +1,26 @@
 <div class="row">
     <h3>Your Shifts</h3>
 </div>
-<div class="row" class="table-responsive">
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Start Date</th>
-            <th>Start Time</th>
-            <th>End Date</th>
-            <th>End Time</th>
-            <th>Comments</th>
-            <th></th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="shift in availableShifts">
-            <td>{{shift.start_datetime | date: 'mediumDate'}}</td>
-            <td>{{shift.start_datetime | date: 'shortTime'}}</td>
-            <td>{{shift.end_datetime | date: 'mediumDate'}}</td>
-            <td>{{shift.end_datetime | date: 'shortTime'}}</td>
-            <td>{{shift.comment}}</td>
-            <td><button class="btn btn-primary" type="submit" ng-click="markAvailable(shift.id)">Mark Available</button></td>
-            <td><button class="btn btn-danger" type="submit" ng-click="delete(shift.id)">Delete</button></td>
-        </tr>
-        <!--<tr ng-repeat="shift in socketShifts">-->
-            <!--<td>{{shift.start_datetime | date: 'mediumDate'}}</td>-->
-            <!--<td>{{shift.start_datetime | date: 'shortTime'}}</td>-->
-            <!--<td>{{shift.end_datetime | date: 'mediumDate'}}</td>-->
-            <!--<td>{{shift.end_datetime | date: 'shortTime'}}</td>-->
-            <!--<td>{{shift.comment}}</td>-->
-            <!--<td><button class="btn btn-primary" type="submit" ng-click="markAvailable(shift.id)">Mark Available</button></td>-->
-            <!--<td><button class="btn btn-danger" type="submit" ng-click="delete(shift.id)">Delete</button></td>-->
-        <!--</tr>-->
-        </tbody>
-    </table>
-</div>
+<!--<shift-block ng-repeat="shift in availableShifts" shift="shift"></shift-block>-->
+<uib-accordion close-others="true">
+    <div uib-accordion-group panel-class="{{getShiftDisplayMode(shift)}}" ng-repeat="shift in availableShifts">
+        <uib-accordion-heading>
+            <div class="row">
+                <span class="col-sm-6 col-md-6 col-lg-6 text-align-left">{{shift.start_datetime | date: 'shortTime'}} - {{shift.end_datetime | date: 'shortTime'}}<span style="font-style: italic;" ng-if="shift.available">  |  Available</span></span><span class="col-sm-6 col-md-6 col-lg-6 text-align-right">{{shift.start_datetime | date: 'mediumDate'}}</span>
+            </div>
+        </uib-accordion-heading>
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <span class="helper"></span>
+            <button class="btn btn-primary" ng-if="shift.available==true" type="submit" ng-click="reclaim(shift.id)">Reclaim</button>
+            <button class="btn btn-primary" ng-if="shift.available==false" type="submit" ng-click="markAvailable(shift.id)">Mark Available</button>
+            <button class="btn btn-danger" type="submit" ng-click="delete(shift.id)">Delete</button>
+            <div class="pull-right">
+                <span class="helper"></span>
+                <img class="thumbnail-unique" src="images/GabeStanekThumbnail.jpeg" alt="Gabe Stanek Thumbnail" />
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12">{{shift.comment}}</div>
+            </div>
+        </div>
+    </div>
+</uib-accordion>

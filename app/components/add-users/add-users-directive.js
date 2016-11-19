@@ -1,11 +1,9 @@
-angular.module('myApp.addUsersDirective', [])
-.directive('addUsersDirective', ['userService', 'realmService', 'shiftService', 'commonService',
-    function(userService, realmService, shiftService, commonService) {
+angular.module('myApp')
+.directive('addUsersDirective', ['userService', 'realmService', 'shiftService',
+    function(userService, realmService, shiftService) {
     return {
         restrict: 'E',
-        // transclude: true,
         scope: {
-            modal: '=',
             'save': '&onSave',
             'cancel': '&onCancel'
         },
@@ -33,8 +31,21 @@ angular.module('myApp.addUsersDirective', [])
 
             scope.companyName = realmService.getRealmName();
             scope.formData = {
-                users : [{},{},{}]
+                users : [{}],
+                index : 0
             };
+            scope.addAnother = function() {
+                scope.formData.users.push({});
+
+            }
+            scope.removeIndex = function(index) {
+                console.log('index=' + index);
+                if (index > -1) {
+                    scope.formData.users.splice(index, 1);
+                }
+            }
+
+
             scope.addUsers = function() {
                 var realm = realmService.getLocalRealm();
                 var realm_id = realm.id;

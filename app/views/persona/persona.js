@@ -9,8 +9,8 @@ angular.module('myApp')
         controller: 'PersonaCtrl'
       });
 }])
-.controller('PersonaCtrl', ['$scope', '$uibModal', 'commonService', 'shiftService',
-    function($scope, $uibModal, commonService, shiftService) {
+.controller('PersonaCtrl', ['$scope', '$uibModal', 'commonService', 'shiftService', 'userService',
+    function($scope, $uibModal, commonService, shiftService, userService) {
     "ngInject";
     $scope.personaDisplayState = commonService.getLocalPersonaDisplayState();
     $scope.$on('PERSONA_DISPLAY_STATE_CHANGE_EVENT', function(personaState) {
@@ -27,10 +27,22 @@ angular.module('myApp')
     $scope.modal = {
         instance: null
     };
-    $scope.open = function () {
+
+    $scope.openAddShiftModal = function () {
         $scope.modal.instance = $uibModal.open({
             animation: true,
-            template: '<my-modal modal="modal"></my-modal>',
+            template: '<shift-modal modal="modal"></shift-modal>',
+            scope : $scope
+        });
+    };
+
+    $scope.modal2 = {
+        instance: null
+    };
+    $scope.openAddUsersModal = function () {
+        $scope.modal2.instance = $uibModal.open(/*@ngInject*/{
+            animation: true,
+            template: '<add-users-modal modal2="modal2"></add-users-modal>',
             scope : $scope
         });
     };

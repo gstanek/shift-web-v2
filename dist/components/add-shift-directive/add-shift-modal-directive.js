@@ -1,5 +1,5 @@
 angular.module('myApp')
-.directive('myModal', ['$log', 'realmService',
+.directive('shiftModal', ['$log', 'realmService',
     function($log, realmService) {
     "ngInject";
     return {

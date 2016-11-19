@@ -10,18 +10,30 @@
         <div class="col-md-12">
             <div class="modal-body">
                 <div class="form-group" ng-repeat="user in formData.users">
-                    <div class="col-md-4">
-                        <label>First Name</label>
-                        <input type="text" class="form-control" name="first_name" ng-model="user.first_name" required>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>First Name</label>
+                            <input type="text" class="form-control" name="first_name" ng-model="user.first_name" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Last Name</label>
+                            <input type="text" class="form-control" name="last_name" ng-model="user.last_name" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Email</label>
+                            <input type="text" class="form-control" name="email" ng-model="user.email" required>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="label-spacer"></div>
+                            <div ng-if="formData.users.length > 1" class="push-left" ng-click="removeIndex($index)">
+                                <div class="glyphicon glyphicon-remove has-error" style="color:darkred" ng-click="removeIndex($index)"></div>
+                                <span class="push-left-8">Remove</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-4">
-                        <label>Last Name</label>
-                        <input type="text" class="form-control" name="last_name" ng-model="user.last_name" required>
-                    </div>
-                    <div class="col-md-4">
-                        <label>Email</label>
-                        <input type="text" class="form-control" name="email" ng-model="user.email" required>
-                    </div>
+                </div>
+                <div>
+                    <span class="glyphicon glyphicon-plus" style="color:darkgreen" ng-click="addAnother()"></span><span ng-click="addAnother()">Add Another</span>
                 </div>
             </div>
         </div>
@@ -30,7 +42,8 @@
         <div class="col-md-12">
             <div class="modal-footer">
                 <div class="form-group">
-                    <button class="btn btn-primary" ng-click="addUsers()">Save Co-worker Data</button>
+                    <button ng-if="formData.users.length > 1" class="btn btn-primary" ng-click="addUsers()">Invite Co-Workers</button>
+                    <button ng-if="formData.users.length == 1" class="btn btn-primary" ng-click="addUsers()">Invite Co-Worker</button>
                     <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
                 </div>
             </div>

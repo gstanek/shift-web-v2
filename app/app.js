@@ -19,8 +19,8 @@ angular.module('myApp', [
     'myApp.ngAutocomplete',
 
     'myApp.createRealmDirective',
-    'myApp.addShiftDirective',
-    'myApp.addUsersDirective',
+    // 'myApp.addShiftDirective',
+    // 'myApp.addUsersDirective',
     //'myApp.userShiftListDirective',
     'myApp.realmAvailableShiftListDirective',
 

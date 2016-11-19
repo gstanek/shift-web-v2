@@ -1,28 +1,16 @@
-
-//angular.module('myApp.userShiftListDirective', [])
 angular.module('myApp')
-.directive('userShiftListDirective', ['realmService', 'userService', 'shiftService','RealmWebSocket',//
-    function(realmService, userService, shiftService, RealmWebSocket) { //
+.directive('userShiftListDirective', ['realmService', 'userService', 'shiftService','RealmWebSocket',
+    function(realmService, userService, shiftService, RealmWebSocket) {
     return {
         scope: {
             userShiftListInfo: '=userShiftListModel'
         },
         templateUrl: 'components/user-shift-list-directive/user-shift-list.html',
         link: function (scope) {
-            scope.$on('SHIFT_CHANGE_EVENT', function() {
-                // scope.isShiftPresent = function() {
-                //     return isShiftPresent();
-                // };
-                scope.availableShifts = shiftService.getLocalShifts();
-            });
-
-            //scope.socketShifts = RealmWebSocket.collection;
-
             scope.reclaim = function(shiftID) {
                 updateShift(shiftID, false);
             };
             scope.markAvailable = function(shiftID) {
-                console.log('ShiftID: ' + JSON.stringify(shiftID))
                 updateShift(shiftID, true);
             };
 
@@ -33,7 +21,6 @@ angular.module('myApp')
                 shiftService.updateShift(id, shift)
                     .then(function successCallback(response) {
                         console.log('Success:' + JSON.stringify(response));
-                        // shiftService.setLocalShift(response.data, true);
                     }, function errorCallback(response) {
                         console.log('Failure:' + JSON.stringify(response));
                     });
@@ -50,12 +37,22 @@ angular.module('myApp')
                         console.log('Failure:' + JSON.stringify(response));
                     });
             };
-            var init = function () {
-                scope.isShiftPresent = function() {
-                    return isShiftPresent();
+
+            scope.getShiftDisplayMode = function(shift) {
+                if(shift.available) {
+                    return 'panel-warning';
                 }
+                else return 'panel-default';
+            }
+
+
+
+
+            scope.$on('SHIFT_CHANGE_EVENT', function() {
                 scope.availableShifts = shiftService.getLocalShifts();
-                //var timezone = jstz.determine();
+            });
+            var init = function () {
+                scope.availableShifts = shiftService.getLocalShifts();
             };
             init();
         }

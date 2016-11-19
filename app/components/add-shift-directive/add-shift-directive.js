@@ -1,11 +1,10 @@
-angular.module('myApp.addShiftDirective', [])
+angular.module('myApp')
 .directive('addShiftDirective', ['realmService', 'userService', 'shiftService', 'commonService',
     function(realmService, userService, shiftService, commonService) {
     "ngInject";
     return {
         restrict: 'E',
         scope: {
-            modal: '=',
             'save': '&onSave',
             'cancel': '&onCancel'
         },
