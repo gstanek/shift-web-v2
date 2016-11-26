@@ -1,6 +1,6 @@
 angular.module('myApp')
-.directive('userShiftListDirective', ['realmService', 'userService', 'shiftService','RealmWebSocket',
-    function(realmService, userService, shiftService, RealmWebSocket) {
+.directive('userShiftListDirective', ['realmService', 'userService', 'shiftService','RealmWebSocket', '$uibModal',
+    function(realmService, userService, shiftService, RealmWebSocket, $uibModal) {
     return {
         scope: {
             userShiftListInfo: '=userShiftListModel'
@@ -10,31 +10,39 @@ angular.module('myApp')
             scope.reclaim = function(shiftID) {
                 updateShift(shiftID, false);
             };
+
             scope.markAvailable = function(shiftID) {
-                updateShift(shiftID, true);
+                var coworkers = userService.getLocalCoworkers();
+                if(!coworkers || coworkers.length == 0) {
+                    scope.openAddUsersModalAndMarkAvailable(shiftID, true);
+                }
+                else {
+                    updateShift(shiftID, true);
+                }
             };
 
+            scope.coworkers = userService.getLocalCoworkers();
+
             var updateShift = function(id, bAvailable) {
+                console.log('in userShiftListDirective.updateShift id=' + id + ', bAvailable=' + bAvailable);
                 var shift = {
                     available: bAvailable
                 }
                 shiftService.updateShift(id, shift)
                     .then(function successCallback(response) {
-                        console.log('Success:' + JSON.stringify(response));
+                        shiftService.setLocalShift(response.data, true);
                     }, function errorCallback(response) {
-                        console.log('Failure:' + JSON.stringify(response));
+                        //TODO handle this
                     });
             };
             scope.delete = function(shiftID) {
                 shiftService.deleteShift(shiftID)
                     .then(function successCallback(response) {
-                        console.log('Success:' + JSON.stringify(response));
                         shiftService.removeLocalShift(shiftID, true);
                     }, function errorCallback(response) {
                         if(response.status == 404) {
                             shiftService.removeLocalShift(shiftID, true);
                         }
-                        console.log('Failure:' + JSON.stringify(response));
                     });
             };
 
@@ -44,6 +52,28 @@ angular.module('myApp')
                 }
                 else return 'panel-default';
             }
+
+            scope.modal2 = {
+                instance: null,
+                closeAction: ''
+            };
+            scope.openAddUsersModalAndMarkAvailable = function (shiftID, markAvailable) {
+                scope.modal2.instance = $uibModal.open(/*@ngInject*/{
+                    animation: true,
+                    template: '<add-users-modal modal2="modal2"></add-users-modal>',
+                    scope : scope
+                });
+
+                scope.modal2.instance.result.then(
+                    function successCallback(result) {
+                        if(markAvailable) {
+                            updateShift(shiftID, true);
+                        }
+                    }, function errorCallback(result) {
+                        //TODO Handle this
+                    }
+                );
+            };
 
 
 

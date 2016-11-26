@@ -5,7 +5,8 @@ angular.module('myApp')
         restrict: 'E',
         scope: {
             'save': '&onSave',
-            'cancel': '&onCancel'
+            'cancel': '&onCancel',
+            'errorObj' : '='
         },
         templateUrl: 'components/add-users/add-users.html',
         link: function (scope, element, attrs, ngModel) {
@@ -46,28 +47,39 @@ angular.module('myApp')
             }
 
 
-            scope.addUsers = function() {
-                var realm = realmService.getLocalRealm();
-                var realm_id = realm.id;
-                var cleanedUsers = [];
-                for(var i = 0; i < scope.formData.users.length; i++) {
-                    console.log('formUser:' + JSON.stringify(scope.formData.users[i]));
-                    if(scope.formData.users[i].email && scope.formData.users[i].first_name) {
-                        cleanedUsers.push(scope.formData.users[i]);
+            scope.addUsers = function(form) {
+                if(form.$valid) {
+                    var realm = realmService.getLocalRealm();
+                    var realm_id = realm.id;
+                    var cleanedUsers = [];
+                    for(var i = 0; i < scope.formData.users.length; i++) {
+                        console.log('formUser:' + JSON.stringify(scope.formData.users[i]));
+                        if(scope.formData.users[i].email && scope.formData.users[i].first_name) {
+                            cleanedUsers.push(scope.formData.users[i]);
+                        }
                     }
+                    var usersDAO = {
+                        realm_id : realm_id,
+                        users : cleanedUsers
+                    };
+                    userService.createUsers(usersDAO)
+                        .then(function successCallback(response) {
+                            console.log('Add Users Success:' + JSON.stringify(response));
+                            userService.setLocalCoworkers(usersDAO.users, true);
+                            scope.save();
+                        }, function errorCallback(response) {
+                            console.log('Add Users Failure:' + JSON.stringify(response));
+                        });
                 }
-                var usersDAO = {
-                    realm_id : realm_id,
-                    users : cleanedUsers
-                };
-                userService.createUsers(usersDAO)
-                    .then(function successCallback(response) {
-                        console.log('Add Users Success:' + JSON.stringify(response));
-                        userService.setLocalCoworkers(usersDAO.users, true);
-                        scope.save();
-                    }, function errorCallback(response) {
-                        console.log('Add Users Failure:' + JSON.stringify(response));
+                else {
+                    angular.forEach(form.$error, function (field) {
+                        angular.forEach(field, function(errorField){
+                            errorField.$setTouched();
+                        })
                     });
+                    scope.errorObj.detail='Please correct errors indicated above and resubmit';
+                }
+
             };
         }
     };

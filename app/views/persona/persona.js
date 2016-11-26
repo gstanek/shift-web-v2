@@ -28,10 +28,16 @@ angular.module('myApp')
         instance: null
     };
 
+    $scope.errorObj = {
+        detail: '',
+        code: 0
+    }
     $scope.openAddShiftModal = function () {
+        $scope.errorObj.detail='';
+        $scope.errorObj.code=0;
         $scope.modal.instance = $uibModal.open({
             animation: true,
-            template: '<shift-modal modal="modal"></shift-modal>',
+            template: '<shift-modal modal="modal" error-obj="errorObj"></shift-modal>',
             scope : $scope
         });
     };
@@ -40,9 +46,11 @@ angular.module('myApp')
         instance: null
     };
     $scope.openAddUsersModal = function () {
+        $scope.errorObj.detail='';
+        $scope.errorObj.code=0;
         $scope.modal2.instance = $uibModal.open(/*@ngInject*/{
             animation: true,
-            template: '<add-users-modal modal2="modal2"></add-users-modal>',
+            template: '<add-users-modal modal2="modal2" error-obj="errorObj"></add-users-modal>',
             scope : $scope
         });
     };

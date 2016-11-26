@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="modal-header">
-                <h3 class="modal-title">Add a Shift for {{companyName}}</h3>
+                <h3 class="modal-title">Add a shift for {{companyName}}</h3>
             </div>
         </div>
     </div>
@@ -12,11 +12,13 @@
                 <form class="row" name="newShiftForm">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="col-md-12"> <!-- This extra column adds proper spacing -->
-                                <div class="row">
+                            <div class="row">
+                                <div class="col-md-12">
                                     <h5>{{startDateHeader}}</h5>
                                 </div>
-                                <div class="row">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
                                     <p class="input-group">
                                       <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="shiftDetails.startDate" is-open="popup1.opened" datepicker-options="startDateOptions" ng-required="true" close-text="Close"/>
                                       <span class="input-group-btn">
@@ -24,54 +26,64 @@
                                       </span>
                                     </p>
                                 </div>
-                                <div class="row">
-                                    <button type="button" class="btn btn-sm btn-info" ng-click="startDateToday()">Today</button>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="button" class="btn btn-sm btn-primary" ng-click="startDateToday()">Today</button>
                                     <button type="button" class="btn btn-sm btn-danger" ng-click="startDateClear()">Clear</button>
-                                    <button type="button" class="btn btn-sm btn-info" ng-click="toggleShowEndDate()">Different Shift End Date</button>
+                                    <input type="checkbox" ng-click="toggleShowEndDate()"><span class="font-size-checkbox"> Different End Date</span>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6" ng-if="showEndDateEntry">
-                            <div class="col-md-12">
-                                <div class="row">
+                            <div class="row">
+                                <div class="col-md-12">
                                     <h5>{{endDateHeader}}</h5>
                                 </div>
-                                <div class="row">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
                                     <p class="input-group">
                                         <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="shiftDetails.endDate" is-open="popup2.opened" datepicker-options="endDateOptions" ng-required="true" close-text="Close"/>
-                                  <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
-                                  </span>
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
                                     </p>
                                 </div>
-                                <div class="row">
-                                    <button type="button" class="btn btn-sm btn-info" ng-click="endDateToday()">Today</button>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="button" class="btn btn-sm btn-primary" ng-click="endDateToday()">Today</button>
                                     <button type="button" class="btn btn-sm btn-danger" ng-click="endDateClear()">Clear</button>
                                 </div>
                             </div>
-
                         </div>
                     </div>
+                    <!--<br />-->
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="col-md-12">
                                 <div class="row">
-                                    <h5>{{startTimeHeader}}</h5>
+                                    <div class="col-md-12">
+                                        <h5>{{startTimeHeader}}</h5>
+                                    </div>
                                 </div>
                                 <div class="row">
-                                    <uib-timepicker ng-model="shiftDetails.startTime" hour-step="1" minute-step="15" show-meridian="true"></uib-timepicker>
+                                    <div class="col-md-12">
+                                        <uib-timepicker ng-model="shiftDetails.startTime" hour-step="1" minute-step="15" show-meridian="true"></uib-timepicker>
+                                    </div>
                                 </div>
-                            </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="col-md-12">
                                 <div class="row">
-                                    <h5>{{endTimeHeader}}</h5>
+                                    <div class="col-md-12">
+                                        <h5>{{endTimeHeader}}</h5>
+                                    </div>
                                 </div>
                                 <div class="row">
-                                    <uib-timepicker ng-model="shiftDetails.endTime" hour-step="1" minute-step="15" show-meridian="true"></uib-timepicker>
+                                    <div class="col-md-12">
+                                        <uib-timepicker ng-model="shiftDetails.endTime" hour-step="1" minute-step="15" show-meridian="true" min="endTime.min" datepicker-options="endTimeOptions"></uib-timepicker>
+                                    </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -82,6 +94,31 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row form-group has-feedback" ng-if="!user.first_name || !user.last_name">
+                        <div class="col-md-6">
+                            <label class="control-label" for="first_name">Your First Name</label>
+                            <div ng-class="{'has-error': newShiftForm.first_name.$touched && newShiftForm.first_name.$error.required, 'has-success': newShiftForm.first_name.$touched && !newShiftForm.first_name.$error.required}">
+                                <input class="form-control" type="text" id="first_name" name="first_name" ng-model="newShiftModel.first_name" data-ng-required="true">
+                                <!--<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="newShiftForm.first_name.$touched && !newShiftForm.first_name.$error.required"></span>-->
+                                <!--<span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="newShiftForm.first_name.$touched && newShiftForm.first_name.$error.required"></span>-->
+                                <span class="shift-help-block font-size-input-error" ng-if="newShiftForm.first_name.$error.required && newShiftForm.first_name.$touched">First name required</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label" for="last_name">Your Last Name</label>
+                            <div ng-class="{'has-error': newShiftForm.last_name.$touched && newShiftForm.last_name.$error.required, 'has-success': newShiftForm.last_name.$touched && !newShiftForm.last_name.$error.required}">
+                                <input class="form-control" type="text" id="last_name" name="last_name" ng-model="newShiftModel.last_name" data-ng-required="true">
+                                <!--<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="newShiftForm.last_name.$touched && !newShiftForm.last_name.$error.required"></span>-->
+                                <!--<span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="newShiftForm.last_name.$touched && newShiftForm.last_name.$error.required"></span>-->
+                                <span class="shift-help-block font-size-input-error" ng-if="newShiftForm.last_name.$error.required && newShiftForm.last_name.$touched">Last name required</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group has-feedback" ng-if="errorObj != null && errorObj.detail">
+                        <div class="col-sm-12">
+                            <p class="text-danger">{{errorObj.detail}}</p>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -90,7 +127,7 @@
         <div class="col-md-12">
             <div class="modal-footer">
                 <div class="form-group">
-                    <button class="btn btn-primary" ng-click="createShift()">Save Shift</button>
+                    <button class="btn btn-primary" ng-click="createShift(newShiftForm)">Save Shift</button>
                     <button ng-if="isShiftPresent()" class="btn btn-warning" ng-click="cancel()">Cancel</button>
                 </div>
             </div>

@@ -7,6 +7,7 @@ angular.module('myApp.realmAvailableShiftListDirective', [])
         },
         templateUrl: 'components/realm-available-shift-list-directive/realm-available-shift-list.html',
         link: function (scope) {
+            var user = userService.getLocalUser();
             scope.reclaim = function(shiftID) {
                 updateShift(shiftID, false);
             };
@@ -20,6 +21,7 @@ angular.module('myApp.realmAvailableShiftListDirective', [])
                 }
                 shiftService.updateShift(id, shift)
                     .then(function successCallback(response) {
+                        shiftService.setLocalShift(response.data, true);
                         console.log('Success:' + JSON.stringify(response));
                     }, function errorCallback(response) {
                         console.log('Failure:' + JSON.stringify(response));
@@ -37,6 +39,13 @@ angular.module('myApp.realmAvailableShiftListDirective', [])
                         console.log('Failure:' + JSON.stringify(response));
                     });
             };
+
+            scope.getShiftDisplayMode = function(shift) {
+                if(shift.available && shift.user == user.id) {
+                    return 'panel-warning';
+                }
+                else return 'panel-default';
+            }
 
 
 

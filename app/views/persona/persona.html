@@ -13,9 +13,9 @@
         <!--<add-users-directive></add-users-directive>-->
     <!--</div>-->
     <div ng-if="personaDisplayState=='REALM_USER_NO_SHIFTS'">
-        <add-shift-directive on-save="ok()" on-cancel="cancel()"></add-shift-directive>
+        <add-shift-directive on-save="ok()" on-cancel="cancel()" error-obj="errorObj"></add-shift-directive>
     </div>
-    <div ng-if="personaDisplayState=='REALM_USER_SHIFTS_COWORKERS'">
+    <div ng-if="personaDisplayState=='REALM_USER_SHIFTS_COWORKERS' || personaDisplayState=='REALM_USER_SHIFTS_NO_COWORKERS'">
         <div class="row">
             <h3 col-md-12>{{companyName}} Shift Board</h3>
         </div>

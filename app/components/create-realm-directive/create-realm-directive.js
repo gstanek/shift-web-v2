@@ -19,25 +19,27 @@ angular.module('myApp.createRealmDirective', [])
                 realmService.createRealm(realm)
                     .then(function successCallback(response) {
                         realm.id = response.data.id;
-                        console.log('Realm to Store in Local Storage' + JSON.stringify(realm))
-                        realmService.setLocalRealm(realm, true);
+                        realmService.setLocalRealm(response.data, true);
                         commonService.setPersonaDisplayState();
 
                     }, function errorCallback(response) {
-                        console.log('Error creating realm in backend')
+                        //TODO Handle this
                     });
 
             };
+
             // Employee/Manager/Owner Picker Logic
-            scope.$watchCollection('checkModel', function () {
-                scope.checkResults = [];
-                angular.forEach(scope.checkModel, function (value, key) {
-                    if (value) {
-                        scope.checkResults.push(key);
-                    }
-                });
-            });
+            // scope.$watchCollection('checkModel', function () {
+            //     scope.checkResults = [];
+            //     angular.forEach(scope.checkModel, function (value, key) {
+            //         if (value) {
+            //             scope.checkResults.push(key);
+            //         }
+            //     });
+            // });
             // End Picker logic
+
+
             scope.newRealmFormModel = {
                 name : '',
                 address : '',

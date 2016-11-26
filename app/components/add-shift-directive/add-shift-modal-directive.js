@@ -6,7 +6,8 @@ angular.module('myApp')
         restrict: 'E',
         templateUrl: 'components/add-shift-directive/add-shift-modal.html',
         scope: {
-            modal: '='
+            modal: '=',
+            errorObj : '='
         },
         controller: function ($scope) {
             $scope.companyName = realmService.getRealmName();

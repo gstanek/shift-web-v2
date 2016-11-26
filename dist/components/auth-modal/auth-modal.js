@@ -23,7 +23,12 @@ angular.module('myApp')
                         }
                     }
                     else {
-                        $scope.errorObj.detail='Please correct errors listed above and re-submit';
+                        angular.forEach(form.$error, function (field) {
+                            angular.forEach(field, function(errorField){
+                                errorField.$setTouched();
+                            })
+                        });
+                        $scope.errorObj.detail='Please correct errors indicated above and resubmit';
                     }
                 };
 
@@ -40,9 +45,7 @@ angular.module('myApp')
                                 errorField.$setTouched();
                             })
                         });
-                        // form.$setDirty;
-                        // form.$setTouched();
-                        $scope.errorObj.detail='Please correct errors listed above and re-submit';
+                        $scope.errorObj.detail='Please correct errors indicated above and resubmit';
                     }
 
                 };

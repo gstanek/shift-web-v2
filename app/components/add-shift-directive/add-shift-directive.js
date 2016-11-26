@@ -6,14 +6,15 @@ angular.module('myApp')
         restrict: 'E',
         scope: {
             'save': '&onSave',
-            'cancel': '&onCancel'
+            'cancel': '&onCancel',
+            'errorObj': '='
         },
         templateUrl: 'components/add-shift-directive/add-shift.html',
         link: function (scope, element, attrs, ngModel) {
             scope.isActiveRealm = realmService.isActiveRealm();
+            scope.user = userService.getLocalUser();
             var isShiftPresent = function() {
-                var user = userService.getLocalUser();
-                if(user) {
+                if(scope.user) {
                     var shifts = shiftService.getLocalShifts();
                     if(shifts) {
                         return true;
@@ -31,29 +32,60 @@ angular.module('myApp')
             }
 
             scope.companyName = realmService.getRealmName();
+
             scope.newShiftModel = {
                 id : '',
                 dateRangeStart : '',
                 dateRangeEnd : '',
-                comment : ''
+                comment : '',
+                first_name : scope.user.first_name,
+                last_name : scope.user.last_name
             };
-            scope.createShift = function() {
-                var shiftDAO = {
-                    startDate : scope.shiftDetails.startDate,
-                    startTime : scope.shiftDetails.startTime,
-                    endDate : scope.shiftDetails.endDate,
-                    endTime : scope.shiftDetails.endTime,
-                    comment : scope.newShiftModel.comment
-                };
-                shiftService.storeShift(shiftDAO)
+            scope.createShift = function(form) {
+                if(form.$valid) {
+                    if (scope.newShiftModel.first_name || scope.newShiftModel.lastName) {
+                        if (scope.newShiftModel.first_name) {
+                            scope.user.first_name = scope.newShiftModel.first_name;
+                        }
+                        if (scope.newShiftModel.last_name) {
+                            scope.user.last_name = scope.newShiftModel.last_name;
+                        }
+                        scope.updateUser();
+
+                    }
+                    var shiftDAO = {
+                        startDate: scope.shiftDetails.startDate,
+                        startTime: scope.shiftDetails.startTime,
+                        endDate: scope.shiftDetails.endDate,
+                        endTime: scope.shiftDetails.endTime,
+                        comment: scope.newShiftModel.comment
+                    };
+                    shiftService.storeShift(shiftDAO)
+                        .then(function successCallback(response) {
+                            shiftService.setLocalShift(response.data, true);
+                            scope.save();
+                        }, function errorCallback(response) {
+                            console.log('Failure:' + JSON.stringify(response));
+                        });
+                }
+                else {
+                    angular.forEach(form.$error, function (field) {
+                        angular.forEach(field, function(errorField){
+                            errorField.$setTouched();
+                        })
+                    });
+                    scope.errorObj.detail='Please correct errors indicated above and resubmit';
+                }
+            };
+
+            scope.updateUser = function() {
+                userService.updateUser(scope.user)
                     .then(function successCallback(response) {
-                        console.log('Success:' + JSON.stringify(response));
-                        shiftService.setLocalShift(response.data, true);
-                        scope.save();
+                        userService.setLocalUser(response.data, true);
                     }, function errorCallback(response) {
                         console.log('Failure:' + JSON.stringify(response));
                     });
-            };
+            }
 
             /** Date Selection Initial Configuration */
             scope.format = 'shortDate';
@@ -62,12 +94,14 @@ angular.module('myApp')
             };
             scope.popup2 = {
                 opened: false
+
             };
+            var initDate = new Date();
             scope.shiftDetails = {
-                startDate : null,
-                startTime : commonService.roundMinutes(new Date()),
-                endDate : null,
-                endTime : commonService.roundMinutes(new Date()),
+                startDate : initDate,
+                startTime : commonService.roundMinutes(initDate),
+                endDate : initDate,
+                endTime : commonService.roundMinutes(initDate),
                 comment : ''
             }
             // Set max date to 5 years out
@@ -82,9 +116,17 @@ angular.module('myApp')
             scope.endDateOptions = {
                 formatYear: 'yy',
                 maxDate: maxDate,
-                minDate: new Date(),
+                minDate: scope.shiftDetails.startDate,
                 startingDay: 0
             };
+
+            scope.endTimeOptions = {
+                formatYear: 'yy',
+                maxDate: maxDate,
+                minDate: new Date(scope.shiftDetails.startTime.getTime() + 15*60000),
+                startingDay: 0
+            };
+
 
             /** Date selection methods */
             scope.today = function() {
@@ -122,6 +164,20 @@ angular.module('myApp')
                 }
             });
 
+            scope.endTime = {
+                min: new Date(scope.shiftDetails.startTime.getTime() + 15*60000)
+            };
+            // Update minimum shift end time when start time is selected
+            scope.$watch('shiftDetails.startTime',function(value){
+                if(scope.shiftDetails.endDate.getDate() == scope.shiftDetails.startDate.getDate()) {
+                    scope.endTime.min = new Date(scope.shiftDetails.startTime.getTime() + 15*60000);
+                    if(scope.shiftDetails.endTime <= scope.shiftDetails.startTime) {
+                        scope.shiftDetails.endTime = new Date(scope.shiftDetails.startTime.getTime() + 15*60000);
+                    }
+                }
+            });
+
+
             // By default, assume shift ends on same date it starts, so initially hiding the end date selection
             scope.showEndDateEntry = false;
             scope.startDateHeader = 'Shift Date';
@@ -130,9 +186,27 @@ angular.module('myApp')
                 scope.showEndDateEntry = !scope.showEndDateEntry;
                 if(scope.showEndDateEntry) {
                     scope.startDateHeader = 'Shift Start Date';
+
+                    var resetMinEnd = new Date()
+                    resetMinEnd.setHours(0);
+                    resetMinEnd.setMinutes(0);
+                    resetMinEnd.setMilliseconds(0);
+                    scope.endTime.min = resetMinEnd;
+
+                    var tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    scope.shiftDetails.endDate = tomorrow;
                 }
                 else {
                     scope.startDateHeader = 'Shift Date';
+
+                    if((scope.shiftDetails.startTime.getTime() + 15*60000) > scope.shiftDetails.endTime.getTime()) {
+                        scope.shiftDetails.endTime = new Date(scope.shiftDetails.startTime.getTime() + 15*60000);
+                    }
+                    scope.endTime.min = new Date(scope.shiftDetails.startTime.getTime() + 15*60000);
+
+                    scope.shiftDetails.endDate = scope.shiftDetails.startDate;
+
                 }
             }
 
