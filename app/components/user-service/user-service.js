@@ -47,6 +47,24 @@ angular.module('myApp.userService', ['LocalStorageModule'])
         }
     };
 
+    this.addLocalCoworkers = function(coworkers, updatePersonaDisplayState) {
+        var existingCoworkers = localStorageService.get('coworkers');
+        if(existingCoworkers != null) {
+            var arrayLength = coworkers.length;
+            for (var i = 0; i < arrayLength; i++) {
+                existingCoworkers.push(coworkers[i]);
+            }
+            localStorageService.set('coworkers', existingCoworkers);
+        }
+        else {
+            localStorageService.set('coworkers', coworkers);
+        }
+        $rootScope.$broadcast('USER_CHANGE_EVENT', coworkers);
+        if(updatePersonaDisplayState) {
+            commonService.setPersonaDisplayState();
+        }
+    };
+
     this.setLocalCoworkers = function(coworkers, updatePersonaDisplayState) {
         localStorageService.set('coworkers', coworkers);
         $rootScope.$broadcast('USER_CHANGE_EVENT', coworkers);

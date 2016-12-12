@@ -22,6 +22,13 @@ angular.module('myApp')
         $scope.availableShifts = shiftService.getLocalShifts();
     });
 
+    $scope.$on('USER_CHANGE_EVENT', function() {
+        $scope.coworkers = userService.getLocalCoworkers();
+    });
+
+
+
+    $scope.coworkers = userService.getLocalCoworkers();
 
     // Start Modal Logic
     $scope.modal = {

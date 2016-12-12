@@ -30,6 +30,17 @@ angular.module('myApp')
                 return isShiftPresent();
             }
 
+            scope.userAttributes = [{
+                "Name": "firstName",
+                "Required": true
+            }, {
+                "Name": "lastName",
+                "Required": true
+            }, {
+                "Name": "email",
+                "Required": true
+            }];
+
             scope.companyName = realmService.getRealmName();
             scope.formData = {
                 users : [{}],
@@ -48,35 +59,26 @@ angular.module('myApp')
 
 
             scope.addUsers = function(form) {
+                console.log('scope.formData=' + JSON.stringify(scope.formData))
                 if(form.$valid) {
                     var realm = realmService.getLocalRealm();
                     var realm_id = realm.id;
-                    var cleanedUsers = [];
-                    for(var i = 0; i < scope.formData.users.length; i++) {
-                        console.log('formUser:' + JSON.stringify(scope.formData.users[i]));
-                        if(scope.formData.users[i].email && scope.formData.users[i].first_name) {
-                            cleanedUsers.push(scope.formData.users[i]);
-                        }
-                    }
+                    console.log('users to add: ' + JSON.stringify(scope.formData.users))
                     var usersDAO = {
                         realm_id : realm_id,
-                        users : cleanedUsers
+                        users : scope.formData.users //cleanedUsers
                     };
                     userService.createUsers(usersDAO)
                         .then(function successCallback(response) {
                             console.log('Add Users Success:' + JSON.stringify(response));
-                            userService.setLocalCoworkers(usersDAO.users, true);
+                            userService.addLocalCoworkers(usersDAO.users, true);
                             scope.save();
                         }, function errorCallback(response) {
                             console.log('Add Users Failure:' + JSON.stringify(response));
                         });
                 }
                 else {
-                    angular.forEach(form.$error, function (field) {
-                        angular.forEach(field, function(errorField){
-                            errorField.$setTouched();
-                        })
-                    });
+                    form.$setSubmitted();
                     scope.errorObj.detail='Please correct errors indicated above and resubmit';
                 }
 

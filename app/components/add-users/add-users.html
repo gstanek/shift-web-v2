@@ -10,45 +10,48 @@
         <div class="col-md-12">
             <div class="modal-body">
                 <form class="row" name="addUsersForm">
+
                     <div class="form-group" ng-repeat="user in formData.users">
                         <div class="row">
-                            <div class="col-md-3">
-                                <label class="control-label" for="first_name_{{$index}}">First Name</label>
-                                <div ng-class="{'has-error': addUsersForm['first_name_' + $index].$touched && addUsersForm['first_name_' + $index].$error, 'has-success': addUsersForm['first_name_' + $index].$touched && !addUsersForm['first_name_' + $index].$error}">
-                                    <input class="form-control" type="text" id="first_name_{{$index}}" name="first_name_{{$index}}" ng-model="newShiftModel.first_name" data-ng-required="true">
-                                    <!--<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="addUsersForm.first_name.$touched && !addUsersForm.first_name.$error.required"></span>-->
-                                    <!--<span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="addUsersForm.first_name.$touched && addUsersForm.first_name.$error.required"></span>-->
-                                    <span class="shift-help-block font-size-input-error" ng-if="addUsersForm['first_name_' + $index].$error.required && addUsersForm['first_name_' + $index].$touched">First name required</span>
+                            <ng-form name="userForm">
+                                <div class="col-md-3">
+                                    <label class="control-label" for="first_name_{{$index}}">First Name<span class="required-star"> *</span></label>
+                                    <div ng-class="{'has-error': (userForm['first_name'].$touched || addUsersForm.$submitted) && userForm['first_name'].$error.required, 'has-success': (userForm['first_name'].$touched || addUsersForm.$submitted) && !userForm['first_name'].$error.required}">
+                                        <input class="form-control" type="text" id="first_name_{{$index}}" name="first_name" ng-model="user.first_name" data-ng-required="true">
+                                        <!--<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="userForm.first_name.$touched && !userForm.first_name.$error.required"></span>-->
+                                        <!--<span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="userForm.first_name.$touched && userForm.first_name.$error.required"></span>-->
+                                        <span class="shift-help-block font-size-input-error" ng-if="userForm['first_name'].$error.required && (userForm['first_name'].$touched || addUsersForm.$submitted)">First name required</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="control-label" for="last_name_{{$index}}">Last Name</label>
-                                <div ng-class="{'has-error': addUsersForm['last_name_' + $index].$touched && addUsersForm['last_name_' + $index].$error, 'has-success': addUsersForm['last_name_' + $index].$touched && !addUsersForm['last_name_' + $index].$error}">
-                                    <input class="form-control" type="text" id="last_name_{{$index}}" name="last_name_{{$index}}" ng-model="newShiftModel.last_name" data-ng-required="true">
-                                    <!--<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="addUsersForm.last_name.$touched && !addUsersForm.last_name.$error.required"></span>-->
-                                    <!--<span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="addUsersForm.last_name.$touched && addUsersForm.last_name.$error.required"></span>-->
-                                    <span class="shift-help-block font-size-input-error" ng-if="addUsersForm['last_name_' + $index].$error.required && addUsersForm['last_name_' + $index].$touched">Last name required</span>
+                                <div class="col-md-3">
+                                    <label class="control-label" for="last_name_{{$index}}">Last Name</label>
+                                    <div ng-class="{'has-success': userForm['last_name'].$touched || addUsersForm.$submitted}">
+                                        <input class="form-control" type="text" id="last_name_{{$index}}" name="last_name" ng-model="user.last_name" data-ng-required="false">
+                                        <!--<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="userForm.last_name.$touched && !userForm.last_name.$error.required"></span>-->
+                                        <!--<span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="userForm.last_name.$touched && userForm.last_name.$error.required"></span>-->
+                                        <!--<span class="shift-help-block font-size-input-error" ng-if="userForm['last_name_' + $index].$error.required && userForm['last_name_' + $index].$touched">Last name required</span>-->
+                                    </div>
                                 </div>
-                            </div>
-                            <div ng-class="{'col-md-6' : formData.users.length <= 1, 'col-md-4' : formData.users.length > 1 }">
-                                <label for="email_{{$index}}">Email</label>
-                                <div ng-class="{'has-error': addUsersForm['email_' + $index].$touched && addUsersForm['email_' + $index].$error, 'has-success': addUsersForm['email_' + $index].$touched && !addUsersForm['email_' + $index].$error}">
-                                    <input type="text" class="form-control" id="email_{{$index}}" name="email_{{$index}}"
-                                       ng-model="user.email"
-                                       ng-pattern="/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/" data-ng-required="true">
-                                    <!--<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="addUsersForm['email_' + $index].$touched && !addUsersForm['email_' + $index].$error.pattern && !addUsersForm['email_' + $index].$error.required"></span>-->
-                                    <!--<span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="(addUsersForm['email_' + $index].$touched && addUsersForm['email_' + $index].$error.pattern) || (addUsersForm['email_' + $index].$touched && addUsersForm['email_' + $index].$error.required)"></span>-->
-                                    <span class="shift-help-block font-size-input-error" ng-if="addUsersForm['email_' + $index].$error.required && addUsersForm['email_' + $index].$touched">Email address required</span>
-                                    <span class="shift-help-block font-size-input-error" ng-if="addUsersForm['email_' + $index].$touched && addUsersForm['email_' + $index].$error.pattern">Email address not valid</span>
+                                <div ng-class="{'col-md-6' : formData.users.length <= 1, 'col-md-4' : formData.users.length > 1 }">
+                                    <label for="email_{{$index}}">Email<span class="required-star"> *</span></label>
+                                    <div ng-class="{'has-error': (userForm['email'].$touched || addUsersForm.$submitted) && (userForm['email'].$error.required || userForm['email'].$error.pattern), 'has-success': (userForm['email'].$touched || addUsersForm.$submitted) && !userForm['email'].$error.required && !userForm['email'].$error.pattern}">
+                                        <input type="text" class="form-control" id="email_{{$index}}" name="email"
+                                           ng-model="user.email"
+                                           ng-pattern="/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/" data-ng-required="true">
+                                        <!--<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="userForm['email_' + $index].$touched && !userForm['email_' + $index].$error.pattern && !userForm['email_' + $index].$error.required"></span>-->
+                                        <!--<span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="(userForm['email_' + $index].$touched && userForm['email_' + $index].$error.pattern) || (userForm['email_' + $index].$touched && userForm['email_' + $index].$error.required)"></span>-->
+                                        <span class="shift-help-block font-size-input-error" ng-if="userForm['email'].$error.required && (userForm['email'].$touched || addUsersForm.$submitted)">Email address required</span>
+                                        <span class="shift-help-block font-size-input-error" ng-if="(userForm['email'].$touched || addUsersForm.$submitted) && userForm['email'].$error.pattern">Email address not valid</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div ng-if="formData.users.length > 1" class="col-md-2">
-                                <div class="label-spacer"></div>
-                                <div class="push-left" ng-click="removeIndex($index)">
-                                    <div class="glyphicon glyphicon-remove has-error" style="color:darkred" ng-click="removeIndex($index)"></div>
-                                    <span class="push-left-8">Remove</span>
+                                <div ng-if="formData.users.length > 1" class="col-md-2">
+                                    <div class="label-spacer"></div>
+                                    <div class="push-left" ng-click="removeIndex($index)">
+                                        <div class="glyphicon glyphicon-remove has-error" style="color:darkred" ng-click="removeIndex($index)"></div>
+                                        <span class="push-left-8">Remove</span>
+                                    </div>
                                 </div>
-                            </div>
+                            </ng-form>
                         </div>
                     </div>
                     <div class="row">
@@ -71,6 +74,10 @@
                 <div class="form-group">
                     <button ng-if="formData.users.length > 1" class="btn btn-primary" ng-click="addUsers(addUsersForm)">Invite Co-Workers</button>
                     <button ng-if="formData.users.length == 1" class="btn btn-primary" ng-click="addUsers(addUsersForm)">Invite Co-Worker</button>
+
+                    <!--<ng-submit ng-if="formData.users.length > 1" class="btn btn-primary" ng-click="addUsers(addUsersForm)">Invite Co-Workers</ng-submit>-->
+                    <!--<ng-submit ng-if="formData.users.length == 1" class="btn btn-primary" ng-click="addUsers(addUsersForm)">Invite Co-Worker</ng-submit>-->
+
                     <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
                 </div>
             </div>

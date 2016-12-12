@@ -96,7 +96,7 @@
                     </div>
                     <div class="row form-group has-feedback" ng-if="!user.first_name || !user.last_name">
                         <div class="col-md-6">
-                            <label class="control-label" for="first_name">Your First Name</label>
+                            <label class="control-label" for="first_name">Your First Name<span class="required-star"> *</span></label>
                             <div ng-class="{'has-error': newShiftForm.first_name.$touched && newShiftForm.first_name.$error.required, 'has-success': newShiftForm.first_name.$touched && !newShiftForm.first_name.$error.required}">
                                 <input class="form-control" type="text" id="first_name" name="first_name" ng-model="newShiftModel.first_name" data-ng-required="true">
                                 <!--<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="newShiftForm.first_name.$touched && !newShiftForm.first_name.$error.required"></span>-->
@@ -105,7 +105,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <label class="control-label" for="last_name">Your Last Name</label>
+                            <label class="control-label" for="last_name">Your Last Name<span class="required-star"> *</span></label>
                             <div ng-class="{'has-error': newShiftForm.last_name.$touched && newShiftForm.last_name.$error.required, 'has-success': newShiftForm.last_name.$touched && !newShiftForm.last_name.$error.required}">
                                 <input class="form-control" type="text" id="last_name" name="last_name" ng-model="newShiftModel.last_name" data-ng-required="true">
                                 <!--<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="newShiftForm.last_name.$touched && !newShiftForm.last_name.$error.required"></span>-->
