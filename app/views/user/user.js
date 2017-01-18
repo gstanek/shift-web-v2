@@ -17,10 +17,11 @@ angular.module('myApp.user', ['ui.router', 'myApp.userService'])
     $scope.user = userService.getLocalUser();
     $scope.updateUser = function() {
         if($scope.updateUserForm.$valid) {
+            console.log('user object for update=' + JSON.stringify($scope.user))
             userService.updateUser($scope.user)
                 .then(function successCallback(response) {
-                    userService.setLocalUser(response.data, true);
 
+                    userService.setLocalUser(response.data.user, true);
                 }, function errorCallback(response) {
                     console.log('Failure:' + JSON.stringify(response));
                 });

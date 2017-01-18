@@ -5,18 +5,19 @@ angular.module('myApp.home', ['ui.router', 'myApp.authService'])
 .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state('home', {
-      url: '/',
+      url: '/home',
       templateUrl: 'views/home/home.html',
       controller: 'HomeCtrl'
   });
 }])
-.controller('HomeCtrl', ['$scope', 'authService',
-  function($scope, authService) {
+.controller('HomeCtrl', ['$scope', 'authService', '$location',
+  function($scope, authService, $location) {
   "ngInject";
   $scope.isActiveUser = authService.isAuthenticated();
   $scope.errorObj = {};
 
-  $scope.$on('USER_CHANGE_EVENT', function() {
+  $scope.$on('USER_CHANGE_EVENT', function(broadcastObj) {
+      // if(broadcastObj.type)
       $scope.isActiveUser = authService.isAuthenticated();
   });
   $scope.$on('BAD_REQUEST_EVENT', function(event, args) {
@@ -31,4 +32,14 @@ angular.module('myApp.home', ['ui.router', 'myApp.authService'])
           $scope.errorObj.detail='We\'re sorry, Something went wrong with the request, please try again';
       }
   });
+  var init = function() {
+      var invitedEmail  = $location.search().email
+      if(invitedEmail) {
+        $scope.email = invitedEmail;
+      }
+      else {
+          $scope.email = "Email";
+      }
+  }
+  init();
 }]);

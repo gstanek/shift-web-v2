@@ -24,7 +24,7 @@ angular.module('myApp.realmService', ['LocalStorageModule', 'myApp.personaServic
     this.getRealmsByUser = function() {
         return $http({
             method: 'GET',
-            url: 'http://127.0.0.1:8000/api/v1/realm',
+            url: 'http://127.0.0.1:8000/api/v1/realm/',
             headers: {
                 'Content-Type': 'application/json'
             }

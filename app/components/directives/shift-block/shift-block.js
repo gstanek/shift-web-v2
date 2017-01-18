@@ -9,8 +9,9 @@ angular.module('myApp')
                 },
                 templateUrl: 'components/directives/shift-block/shift-block.html',
                 link: function (scope) {
-                    scope.$on('SHIFT_CHANGE_EVENT', function() {
-                        scope.availableShifts = shiftService.getLocalShifts();
+                    scope.$on('SHIFT_CHANGE_EVENT', function(event, shifts) {
+                        // scope.availableShifts = shiftService.getLocalShifts();
+                        scope.availableShifts = shifts;
                     });
 
                     scope.reclaim = function(shiftID) {

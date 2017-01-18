@@ -8,7 +8,7 @@
                 <div ng-class="{'col-sm-8': true, 'col-sm-offset-2': true, 'has-error': authForm.email.$touched && (authForm.email.$error.pattern || authForm.email.$error.required), 'has-success': authForm.email.$touched && !authForm.email.$error.pattern && !authForm.email.$error.required}">
                     <label class="control-label sr-only" for="email">Email</label>
                     <input type="text" class="form-control" id="email" name="email" placeholder="Email"
-                           ng-model="credentials.email"
+                           ng-model="credentials.email" ng-readonly="action=='accept'"
                            ng-pattern="/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/" data-ng-required="true">
                     <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="authForm.email.$touched && !authForm.email.$error.pattern && !authForm.email.$error.required"></span>
                     <span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="(authForm.email.$touched && authForm.email.$error.pattern) || (authForm.email.$touched && authForm.email.$error.required)"></span>
@@ -19,7 +19,7 @@
             <div class="row form-group has-feedback">
                 <label class="control-label sr-only" for="password">Password</label>
                 <div ng-class="{'col-sm-8': true, 'col-sm-offset-2': true, 'has-error': authForm.password.$touched && authForm.password.$error.required, 'has-success': authForm.password.$touched && !authForm.password.$error.required}">
-                    <input class="form-control" type="{{showPasswordModel.value}}" id="password" name="password" placeholder="Password" ng-model="credentials.password" data-ng-required="true">
+                    <input class="form-control" type="{{showPasswordModel.value}}" id="password" name="password" placeholder="{{showPasswordModel.placeholder}}" ng-model="credentials.password" data-ng-required="true">
                     <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="authForm.password.$touched && !authForm.password.$error.required"></span>
                     <span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="authForm.password.$touched && authForm.password.$error.required"></span>
                     <span class="shift-help-block" ng-if="authForm.password.$error.required && authForm.password.$touched">Password required</span>
@@ -37,6 +37,9 @@
                 </div>
             </div>
         </form>
+    </div>
+    <div ng-if="action=='accept'" class="modal-footer">
+        <button class="btn btn-primary" ng-click="acceptInvite(authForm)">Sign Up</button>
     </div>
     <div ng-if="action=='login'" class="modal-footer">
         <button class="btn btn-primary" ng-click="login(authForm)">Login</button>

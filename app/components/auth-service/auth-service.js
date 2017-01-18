@@ -4,7 +4,6 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
 .service('authService', ['$rootScope', 'localStorageService', 'userService', '$auth', '$http', '$state', 'realmService', 'commonService', 'shiftService', 'RealmWebSocket',
     function($rootScope, localStorageService, userService, $auth, $http, $state, realmService, commonService, shiftService, RealmWebSocket) {
 
-
     var self = this;
 
     this.validateAuthenticated = function() {
@@ -22,10 +21,6 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
         var token_exipiration_time = this.getTokenExpirationTime();
 
         var current = new Date();
-        // console.log("Token Expiration Time=" + token_exipiration_time);
-        // console.log("Current=" + current.getTime());
-        // var compare = token_exipiration_time > current.getTime();
-        // console.log("compare=" + compare);
 
         if(token && token_exipiration_time) {
             var parsedDate = Date.parse(token_exipiration_time);
@@ -33,12 +28,12 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
                 return true;
             }
             else {
+                // self.clearUserContext();
                 return false;
             }
         }
-
-
         else {
+            // self.clearUserContext();
             return false;
         }
     };
@@ -57,40 +52,83 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
     };
 
     this.clearUserContext = function() {
-
         //TODO: Ensure disconnect happens on server side
         //RealmWebSocket.disconnect();
         $auth.removeToken();
         userService.removeLocalUser(false);
         userService.removeLocalCoworkers(false);
-        shiftService.removeLocalShift(false);
         shiftService.removeLocalShifts(false);
-        commonService.removeLocalPersonaDisplayState();
         realmService.removeLocalRealm(false);
         localStorageService.remove('token_expiration_time');
+        commonService.removeLocalPersonaDisplayState(false);
     };
 
-    this.signup = function(credentials) {
+    this.accept_invite = function(credentials, invite_code) {
+        var acceptInviteUrl = 'http://127.0.0.1:8000/api/v1/security/accept/';
+        var invitePayload = {
+            email : credentials.email,
+            new_password: credentials.password,
+            invite_code: invite_code
+        }
         $http({
-            method: 'POST',
-            url: 'http://127.0.0.1:8000/api/v1/user/',
+            method: 'PATCH',
+            url: acceptInviteUrl,
             headers: {
                 'Content-Type': 'application/json'
             },
-            data: credentials
+            data: invitePayload
         })
             .then(function successCallback(response) {
-                console.log('signup response:' + JSON.stringify(response))
+                console.log('Accept Invite Response:' + JSON.stringify(response))
+
                 self.setToken(response.data.access_token);
                 self.setTokenExpirationTime(response.data.token_expiration_time);
-                userService.setLocalUser(response.data.user, false);
-                realmService.removeLocalRealm(false);
-                shiftService.removeLocalShifts(false);
-                $state.go('persona');
-                commonService.setPersonaDisplayState();
+                var user = response.data.user;
+                userService.setLocalUser(user, false);
+
+                // TODO Return realm id of invited and set that one to active
+                var realm = user.realms[0];
+                realmService.setLocalRealm(realm, false);
+                if(realm) {
+                    RealmWebSocket.connect();
+                    userService.setLocalCoworkers(realm.users, false);
+                    shiftService.getShifts(true);
+                    $state.go('persona');
+                }
             }, function errorCallback(response) {
+
                 self.clearUserContext();
             });
+    }
+
+    this.signup = function(credentials, channel) {
+        console.log('channel=' + channel)
+        if(channel == 'invite') {
+
+        }
+        else {
+            var signupUrl = 'http://127.0.0.1:8000/api/v1/user/';
+            $http({
+                method: 'POST',
+                url: signupUrl,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: credentials
+            })
+                .then(function successCallback(response) {
+                    console.log('signup response:' + JSON.stringify(response))
+                    self.setToken(response.data.access_token);
+                    self.setTokenExpirationTime(response.data.token_expiration_time);
+                    userService.setLocalUser(response.data.user, false);
+                    realmService.removeLocalRealm(false);
+                    shiftService.removeLocalShifts(false);
+                    $state.go('persona');
+                    commonService.setPersonaDisplayState();
+                }, function errorCallback(response) {
+                    self.clearUserContext();
+                });
+        }
     };
 
     this.login = function(credentials) {
@@ -110,6 +148,14 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
         })
 
         .then(function successCallback(loginResponse) {
+            //TODO Make this a broadcast of the AUTH_SUCCESS_EVENT
+            var responseObj = {
+                status: 'success'
+            };
+            $rootScope.$broadcast('AUTH_SUCCESS_EVENT', responseObj);
+            // $scope.$on('AUTH_SUCCESS_EVENT', function(event, args) {
+
+            // });
             console.log("Login Success: " + JSON.stringify(loginResponse));
 
             self.setToken(loginResponse.data.access_token);
@@ -130,11 +176,14 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
             commonService.setPersonaDisplayState();
         }, function errorCallback(loginResponse) {
             console.log("Login Error: " + JSON.stringify(loginResponse));
-            var errorObject = {
-                httpStatusCode : loginResponse,
-                message : loginResponse.data
-            }
-            return errorObject;
+            var responseObj = {
+                status: 'failure',
+                httpStatusCode : loginResponse.status,
+                code: loginResponse.code,
+                message : loginResponse.detail
+            };
+            $rootScope.$broadcast('AUTH_FAILURE_EVENT', responseObj);
+            return responseObj;
         });
     };
 
@@ -166,17 +215,9 @@ angular.module('myApp.authService', ['LocalStorageModule', 'myApp.userService'])
             data: revokeData
         }).then(function successCallback(response) {
             console.log('Success:' + JSON.stringify(response));
-            //TODO: Ensure disconnect happens on server side
+            // TODO: Ensure disconnect happens on server side
             //RealmWebSocket.disconnect();
-            $auth.removeToken();
-            userService.removeLocalUser(false);
-            userService.removeLocalCoworkers();
-            shiftService.removeLocalShift();
-            shiftService.removeLocalShifts();
-            commonService.removeLocalPersonaDisplayState();
-            realmService.removeLocalRealm();
-            localStorageService.remove('token_expiration_time');
-
+            self.clearUserContext();
         }, function errorCallback(response) {
             console.log('Failure:' + JSON.stringify(response));
         });

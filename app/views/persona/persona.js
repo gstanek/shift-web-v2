@@ -13,22 +13,36 @@ angular.module('myApp')
     function($scope, $uibModal, commonService, shiftService, userService) {
     "ngInject";
     $scope.personaDisplayState = commonService.getLocalPersonaDisplayState();
-    $scope.$on('PERSONA_DISPLAY_STATE_CHANGE_EVENT', function(personaState) {
-        $scope.personaDisplayState = commonService.getLocalPersonaDisplayState();
+    $scope.$on('PERSONA_DISPLAY_STATE_CHANGE_EVENT', function(event, personaState) {
+        $scope.personaDisplayState = personaState;
+        // $scope.personaDisplayState = commonService.getLocalPersonaDisplayState();
     });
 
     $scope.availableShifts = shiftService.getLocalShifts();
-    $scope.$on('SHIFT_CHANGE_EVENT', function() {
-        $scope.availableShifts = shiftService.getLocalShifts();
+    $scope.$on('SHIFT_CHANGE_EVENT', function(event, shifts) {
+        // $scope.availableShifts = shiftService.getLocalShifts();
+        $scope.availableShifts = shifts;
+    });
+    $scope.$on('COWORKER_CHANGE_EVENT', function(event, coworkers) {
+        $scope.coworkers = coworkers;
     });
 
-    $scope.$on('USER_CHANGE_EVENT', function() {
-        $scope.coworkers = userService.getLocalCoworkers();
-    });
-
-
+    $scope.getBestDisplayName = function(coworker) {
+        if(coworker.preferred_name) {
+            return coworker.preferred_name + ' ' + coworker.last_name;
+        }
+        else {
+            return coworker.first_name + ' ' + coworker.last_name;
+        }
+    };
 
     $scope.coworkers = userService.getLocalCoworkers();
+    $scope.activeUser = userService.getLocalUser();
+
+    var init = function(){
+        $scope.coworkers = userService.getLocalCoworkers();
+    }
+    init();
 
     // Start Modal Logic
     $scope.modal = {

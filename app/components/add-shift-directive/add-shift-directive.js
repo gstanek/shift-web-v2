@@ -50,7 +50,7 @@ angular.module('myApp')
                         if (scope.newShiftModel.last_name) {
                             scope.user.last_name = scope.newShiftModel.last_name;
                         }
-                        scope.updateUser();
+                        // scope.updateUser();
 
                     }
                     var shiftDAO = {
@@ -78,14 +78,14 @@ angular.module('myApp')
                 }
             };
 
-            scope.updateUser = function() {
-                userService.updateUser(scope.user)
-                    .then(function successCallback(response) {
-                        userService.setLocalUser(response.data, true);
-                    }, function errorCallback(response) {
-                        console.log('Failure:' + JSON.stringify(response));
-                    });
-            }
+            // scope.updateUser = function() {
+            //     userService.updateUser(scope.user)
+            //         .then(function successCallback(response) {
+            //             userService.setLocalUser(response.data.user, true);
+            //         }, function errorCallback(response) {
+            //             console.log('Failure:' + JSON.stringify(response));
+            //         });
+            // }
 
             /** Date Selection Initial Configuration */
             scope.format = 'shortDate';

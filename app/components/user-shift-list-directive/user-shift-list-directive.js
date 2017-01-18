@@ -22,6 +22,7 @@ angular.module('myApp')
             };
 
             scope.coworkers = userService.getLocalCoworkers();
+            scope.activeUser = userService.getLocalUser();
 
             var updateShift = function(id, bAvailable) {
                 console.log('in userShiftListDirective.updateShift id=' + id + ', bAvailable=' + bAvailable);
@@ -75,14 +76,35 @@ angular.module('myApp')
                 );
             };
 
+            // Start Modal Logic
+            scope.modal = {
+                instance: null
+            };
+            scope.errorObj = {
+                detail: '',
+                code: 0
+            }
+            scope.openAddShiftModal = function () {
+                scope.errorObj.detail='';
+                scope.errorObj.code=0;
+                scope.modal.instance = $uibModal.open({
+                    animation: true,
+                    template: '<shift-modal modal="modal" error-obj="errorObj"></shift-modal>',
+                    scope : scope
+                });
+            };
+            // End Modal Logic
 
 
 
-            scope.$on('SHIFT_CHANGE_EVENT', function() {
-                scope.availableShifts = shiftService.getLocalShifts();
+
+            scope.$on('SHIFT_CHANGE_EVENT', function(event, shifts) {
+                // scope.shifts = shiftService.getLocalShifts();
+                scope.shifts = shifts;
             });
             var init = function () {
-                scope.availableShifts = shiftService.getLocalShifts();
+                scope.activeUser = userService.getLocalUser()
+                scope.shifts = shiftService.getLocalShifts();
             };
             init();
         }

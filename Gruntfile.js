@@ -59,6 +59,7 @@ module.exports = function (grunt) {
           '<%= yeoman.dist %>/views/persona/persona.js': ['<%= yeoman.dist %>/views/persona/persona.js'],
           '<%= yeoman.dist %>/views/login/login.js': ['<%= yeoman.dist %>/views/login/login.js'],
           '<%= yeoman.dist %>/views/user/user.js': ['<%= yeoman.dist %>/views/user/user.js'],
+          '<%= yeoman.dist %>/views/invite/invite.js': ['<%= yeoman.dist %>/views/invite/invite.js'],
           '<%= yeoman.dist %>/components/auth-service/auth-service.js': ['<%= yeoman.dist %>/components/auth-service/auth-service.js'],
           '<%= yeoman.dist %>/components/common-service/common-service.js': ['<%= yeoman.dist %>/components/common-service/common-service.js'],
           '<%= yeoman.dist %>/components/user-service/user-service.js': ['<%= yeoman.dist %>/components/user-service/user-service.js'],

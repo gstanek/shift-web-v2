@@ -49,8 +49,9 @@ angular.module('myApp.realmAvailableShiftListDirective', [])
 
 
 
-            scope.$on('SHIFT_CHANGE_EVENT', function() {
-                scope.availableShifts = shiftService.getLocalShifts();
+            scope.$on('SHIFT_CHANGE_EVENT', function(event, shifts) {
+                // scope.availableShifts = shiftService.getLocalShifts();
+                scope.availableShifts = shifts;
             });
             var init = function () {
                 scope.availableShifts = shiftService.getLocalShifts();

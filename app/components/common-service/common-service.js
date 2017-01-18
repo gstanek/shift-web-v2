@@ -43,10 +43,31 @@ angular.module('myApp.commonService', [])//['myApp.userService','myApp.realmServ
             localStorageService.set('persona_display_state', personaDisplayState)
             $rootScope.$broadcast('PERSONA_DISPLAY_STATE_CHANGE_EVENT', personaDisplayState);
         };
-        this.removeLocalPersonaDisplayState = function() {
+        this.removeLocalPersonaDisplayState = function(broadcastChange) {
             localStorageService.remove('persona_display_state');
-            $rootScope.$broadcast('PERSONA_DISPLAY_STATE_CHANGE_EVENT');
+            if(broadcastChange) {
+                $rootScope.$broadcast('PERSONA_DISPLAY_STATE_CHANGE_EVENT', null);
+            }
         };
+
+        this.generateErrorResponseObject = function(response) {
+            var errorResponseObject = {
+                httpStatusCode : response.status,
+                error : {
+                    code : response.data.code,
+                    message : response.data.detail
+                }
+            };
+            return errorResponseObject;
+        }
+
+        this.generateResponseObject = function(response) {
+            var responseObject = {
+                httpStatusCode : response.status,
+                data : response.data
+            };
+            return responseObject;
+        }
 
 
         // TODO: These are added to avoid circular dependencies.  Look into avoiding the need for duplication.

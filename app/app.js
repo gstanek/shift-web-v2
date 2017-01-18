@@ -45,6 +45,9 @@ angular.module('myApp', [
         authorizationEndpoint: 'http://localhost:8000/o/token/',
     });
 }])
+.config(['$locationProvider', function($locationProvider) {
+    $locationProvider.html5Mode(true);
+}])
 .config(['uiGmapGoogleMapApiProvider', function(uiGmapGoogleMapApiProvider) {
     uiGmapGoogleMapApiProvider.configure({
         key: 'AIzaSyCGl2NzP-CIA_V5UXoaC96FwzN26JOiSrc',
@@ -70,10 +73,10 @@ angular.module('myApp', [
     };
     // $scope.errorDesc='';
     $scope.openLogin = function () {
-        $scope.errorObj={};
+        $scope.responseObj={};
         $scope.modal.instance = $uibModal.open({
             animation: true,
-            template: '<auth-modal modal="modal" error-obj="errorObj" action="\'login\'" title="\'Login\'"></auth-modal>',
+            template: '<auth-modal modal="modal" error-obj="responseObj" action="\'login\'" title="\'Login\'"></auth-modal>',
             scope : $scope
         });
     };
@@ -91,6 +94,12 @@ angular.module('myApp', [
         $scope.companyName = realmService.getRealmName();
     });
 
+    $scope.$on('AUTH_SUCCESS_EVENT', function(event, args) {
+        $scope.responseObj = {
+            status: 'success'
+        };
+    });
+
     $scope.$on('UNAUTHORIZED_EVENT', function(event, args) {
         userService.removeLocalUser(true);
         $scope.displayName = userService.getBestDisplayName();
@@ -102,11 +111,17 @@ angular.module('myApp', [
         $scope.companyName = realmService.getRealmName();
 
         if(args && args.rejection) {
-            $scope.errorObj.detail=args.rejection.data.detail;
-            $scope.errorObj.code= args.rejection.data.code;
+            $scope.responseObj = {
+                status: 'failure',
+                detail: args.rejection.data.message,
+                code: args.rejection.data.code
+            }
         }
         else {
-            $scope.errorObj.detail='Invalid credentials';
+            $scope.errorObj = {
+                detail: 'Invalid credentials',
+                code: '99999'
+            }
         }
     });
 

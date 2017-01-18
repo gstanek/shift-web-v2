@@ -23,8 +23,10 @@
                         <h5>Co-Workers</h5>
                     </div>
                 </div>
-                <div ng-if="coworkers != null && coworkers.length > 0" class="row" ng-repeat="employee in coworkers">
-                    <div class="col-md-12">{{employee.first_name}} {{employee.last_name}}</div>
+                <div ng-if="coworkers != null && coworkers.length > 0" class="row" ng-repeat="employee in coworkers | orderBy: getBestDisplayName | filter: { id : '!' + activeUser.id }">
+                    <div class="col-md-12">{{getBestDisplayName}}</div>
+                    <div class="col-md-12" ng-if="employee.preferred_name">{{employee.preferred_name}} {{employee.last_name}}</div>
+                    <div class="col-md-12" ng-if="!employee.preferred_name">{{employee.first_name}} {{employee.last_name}}</div>
                 </div>
                 <div ng-if="coworkers == null || coworkers.length==0">
                     <div class="col-md-12"><p>No co-workers currently registered</p><a ng-click="openAddUsersModal()">Invite co-workers</a></div>

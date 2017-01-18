@@ -71,7 +71,7 @@ angular.module('myApp')
                     userService.createUsers(usersDAO)
                         .then(function successCallback(response) {
                             console.log('Add Users Success:' + JSON.stringify(response));
-                            userService.addLocalCoworkers(usersDAO.users, true);
+                            userService.addLocalCoworkers(response.data, true);
                             scope.save();
                         }, function errorCallback(response) {
                             console.log('Add Users Failure:' + JSON.stringify(response));

@@ -136,7 +136,7 @@ angular.module('myApp.shiftService', ['LocalStorageModule'])
     };
     this.removeLocalShifts = function(updatePersonaDisplayState) {
         localStorageService.remove('shifts');
-        $rootScope.$broadcast('SHIFT_CHANGE_EVENT');
+        $rootScope.$broadcast('SHIFT_CHANGE_EVENT', null);
         if(updatePersonaDisplayState) {
             commonService.setPersonaDisplayState();
         }
