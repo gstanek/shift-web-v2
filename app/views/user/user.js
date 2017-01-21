@@ -11,7 +11,8 @@ angular.module('ShiftOnTapApp')
       });
 }])
 
-.controller('UserCtrl', ['$scope', 'userService', 'Notification', function($scope, userService, Notification) {
+.controller('UserCtrl', ['$scope', 'userService', 'Notification',
+    function($scope, userService, Notification) {
     "ngInject";
     $scope.user = {};
     $scope.user = userService.getLocalUser();
