@@ -1,8 +1,8 @@
 'use strict';
 
-describe('myApp.user module', function() {
+describe('ShiftOnTapApp module', function() {
   // Load the module that contains the directive
-  beforeEach(module('myApp.user'));
+  beforeEach(module('ShiftOnTapApp'));
 
   var $controller, $rootScope;
 
@@ -13,22 +13,31 @@ describe('myApp.user module', function() {
   }));
 
   describe('user controller', function(){
-    var $scope, controller, userServiceMock;
+    var $scope, controller, userServiceMock, notificationMock;
     beforeEach(function() {
       $scope = $rootScope.$new();
       userServiceMock = {
         getLocalUser : function() {
-          return '{"id":104,"first_name":"","last_name":"","preferred_name":"","email":"89@gmail.com","realms":[]}'},
-        updateUser : function(user) {}
+          return {"id":104,"first_name":"","last_name":"","preferred_name":"","email":"89@gmail.com","realms":[]}
+        },
+        updateUser : function(user) {
+          return {"id":104,"first_name":"","last_name":"","preferred_name":"","email":"89@gmail.com","realms":[]}
+        }
       };
 
-      controller = $controller('UserCtrl', { $scope: $scope, userService: userServiceMock});
+      notificationMock = {
+        error : function(){},
+        success: function(){}
+      }
+
+      controller = $controller('UserCtrl', { $scope: $scope, userService: userServiceMock, Notification: notificationMock});
+
     });
 
     // Individual tests...
-    it('should initialize home controller', function() {
+    it('should initialize user controller', function() {
       expect(controller).toBeDefined();
-      expect($scope.user).toEqual('{"id":104,"first_name":"","last_name":"","preferred_name":"","email":"89@gmail.com","realms":[]}');
+      expect($scope.user).toEqual({"id":104,"first_name":"","last_name":"","preferred_name":"","email":"89@gmail.com","realms":[]});
     });
 
   });

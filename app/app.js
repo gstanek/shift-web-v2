@@ -1,28 +1,28 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-angular.module('myApp', [
+angular.module('ShiftOnTapApp', [
 
-    'myApp.home',
-    'myApp.about',
-    'myApp.contact',
+    // 'myApp.home',
+    // 'myApp.about',
+    // 'myApp.contact',
     //'myApp.persona',
-    'myApp.user',
-    'myApp.version',
-
-    'myApp.authService',
-    'myApp.commonService',
-    'myApp.userService',
-    'myApp.realmService',
-    'myApp.personaService',
-    'myApp.shiftService',
-    'myApp.ngAutocomplete',
-
-    'myApp.createRealmDirective',
+    // 'myApp.user',
+    // 'myApp.version',
+    //
+    // 'myApp.authService',
+    // 'myApp.commonService',
+    // 'myApp.userService',
+    // 'myApp.realmService',
+    // 'myApp.personaService',
+    // 'myApp.shiftService',
+    // 'myApp.ngAutocomplete',
+    //
+    // 'myApp.createRealmDirective',
     // 'myApp.addShiftDirective',
     // 'myApp.addUsersDirective',
     //'myApp.userShiftListDirective',
-    'myApp.realmAvailableShiftListDirective',
+    // 'myApp.realmAvailableShiftListDirective',
 
     'LocalStorageModule',
     'ui.bootstrap',
@@ -32,6 +32,7 @@ angular.module('myApp', [
     'ui.router',
     'satellizer',
     'uiGmapgoogle-maps',
+    'ui-notification',
 
 ])
 .config(['$stateProvider', '$urlRouterProvider', 'localStorageServiceProvider', '$authProvider', function($stateProvider, $urlRouterProvider, localStorageServiceProvider, $authProvider) {
@@ -53,6 +54,17 @@ angular.module('myApp', [
         key: 'AIzaSyCGl2NzP-CIA_V5UXoaC96FwzN26JOiSrc',
         //v: '3.20', defaults to latest 3.X anyhow
         libraries: 'places'
+    });
+}])
+.config(['NotificationProvider', function(NotificationProvider) {
+    NotificationProvider.setOptions({
+        delay: 3000,
+        startTop: 20,
+        startRight: 10,
+        verticalSpacing: 20,
+        horizontalSpacing: 20,
+        positionX: 'center',
+        positionY: 'top'
     });
 }])
 .controller('AppCtrl', ['$scope', 'authService', 'userService', 'realmService', '$uibModal', function($scope, authService, userService, realmService, $uibModal) {

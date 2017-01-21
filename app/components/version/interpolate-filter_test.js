@@ -1,7 +1,7 @@
 'use strict';
 
-describe('myApp.version module', function() {
-  beforeEach(module('myApp.version'));
+describe('ShiftOnTapApp module', function() {
+  beforeEach(module('ShiftOnTapApp'));
 
   describe('interpolate filter', function() {
     beforeEach(module(function($provide) {

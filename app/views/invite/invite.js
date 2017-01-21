@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('myApp')
-.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+angular.module('ShiftOnTapApp')
+.config(['$stateProvider', '$urlRouterProvider', function($stateProvider) {
   $stateProvider
       .state('invite', {
         url: '/invite/{invite_email}/code/{invite_code}',
@@ -32,10 +32,9 @@ angular.module('myApp')
         instance: null
     };
     $scope.openLogin = function () {
-        $scope.errorObj={};
         $scope.loginModal.instance = $uibModal.open({
             animation: true,
-            template: '<auth-modal modal="loginModal" email="email" error-obj="errorObj" action="\'login\'" title="\'Login\'"></auth-modal>',
+            template: '<auth-modal modal="loginModal" email="email" action="\'login\'" title="\'Login\'"></auth-modal>',
             scope : $scope
         });
     };
@@ -44,10 +43,9 @@ angular.module('myApp')
         instance: null
     };
     $scope.openSignup = function () {
-        $scope.errorObj={};
         $scope.signupModal.instance = $uibModal.open({
             animation: true,
-            template: '<auth-modal modal="signupModal" error-obj="errorObj" action="\'login\'" title="\'Sign Up\'"></auth-modal>',
+            template: '<auth-modal modal="signupModal" action="\'login\'" title="\'Sign Up\'"></auth-modal>',
             scope : $scope
         });
     };
@@ -96,14 +94,5 @@ angular.module('myApp')
             }
         }
     });
-
-    var searchArray = function (idKey, myArray){
-        for (var i=0; i < myArray.length; i++) {
-            if (myArray[i].id === idKey) {
-                return myArray[i];
-            }
-        }
-        return null;
-    }
 
 }]);

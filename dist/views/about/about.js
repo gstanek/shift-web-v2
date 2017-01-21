@@ -1,1 +1,1 @@
-"use strict";angular.module("myApp.about",["ui.router"]).config(["$stateProvider","$urlRouterProvider",function(a,b){a.state("about",{url:"/about",templateUrl:"views/about/about.html",controller:"AboutCtrl"})}]).controller("AboutCtrl",[function(){"ngInject"}]);
+"use strict";angular.module("ShiftOnTapApp").config(["$stateProvider","$urlRouterProvider",function(a){a.state("about",{url:"/about",templateUrl:"views/about/about.html",controller:"AboutCtrl"})}]).controller("AboutCtrl",[function(){"ngInject"}]);

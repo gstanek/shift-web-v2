@@ -1,8 +1,8 @@
 'use strict';
 
-describe('myApp module', function() {
+describe('ShiftOnTapApp module', function() {
   // Load the module that contains the directive
-  beforeEach(module('myApp'));
+  beforeEach(module('ShiftOnTapApp'));
 
   var $controller, $rootScope;
 
@@ -12,7 +12,7 @@ describe('myApp module', function() {
     $rootScope = _$rootScope_;
   }));
 
-  describe('persona controller', function(){
+  describe('invite controller', function(){
     var $scope, controller;
     beforeEach(function() {
       $scope = $rootScope.$new();

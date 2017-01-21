@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<!--[if lt IE 7]>      <html lang="en" ng-app="ShiftOnTapApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="ShiftOnTapApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="ShiftOnTapApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="ShiftOnTapApp" class="no-js"> <!--<![endif]-->
 <head>
   <base href="/#/">
   <meta charset="utf-8">
@@ -11,9 +11,10 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="bower_components/angular-ui-notification/dist/angular-ui-notification.min.css">
   <link rel="stylesheet" href="css/app.min.css" />
 </head>
-<body ng-app="myApp" ng-controller="AppCtrl">
+<body ng-app="ShiftOnTapApp" ng-controller="AppCtrl">
   <div class="container">
     <nav class="navbar navbar-fixed-top navbar-default" ng-cloak>
       <div class="container">
@@ -75,6 +76,7 @@
   <script src='bower_components/angular-simple-logger/dist/angular-simple-logger.min.js'></script>
   <script src='bower_components/angular-google-maps/dist/angular-google-maps.min.js'></script>
   <script src="bower_components/angular-websocket/dist/angular-websocket.min.js"></script>
+  <script src="bower_components/angular-ui-notification/dist/angular-ui-notification.min.js"></script>
 
   <script src="components/auth-service/auth-service.js"></script>
   <script src="components/common-service/common-service.js"></script>

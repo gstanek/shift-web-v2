@@ -1,5 +1,5 @@
 
-angular.module('myApp.shiftService', ['LocalStorageModule'])
+angular.module('ShiftOnTapApp')
 
 
 .service('shiftService', ['$rootScope', 'localStorageService', '$http', 'realmService', 'commonService',

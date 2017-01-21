@@ -1,8 +1,8 @@
 'use strict';
 
-describe('myApp.about module', function() {
+describe('ShiftOnTapApp module', function() {
 
-  beforeEach(module('myApp.about'));
+  beforeEach(module('ShiftOnTapApp'));
 
   describe('about controller', function(){
 

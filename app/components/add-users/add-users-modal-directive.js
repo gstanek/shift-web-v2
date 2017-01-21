@@ -1,4 +1,4 @@
-angular.module('myApp')
+angular.module('ShiftOnTapApp')
 .directive('addUsersModal', ['$log', 'realmService',
     function($log, realmService) {
     return {

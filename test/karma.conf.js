@@ -16,6 +16,7 @@ module.exports = function(config){
 		'app/bower_components/angular-simple-logger/dist/angular-simple-logger.min.js',
 		'app/bower_components/angular-google-maps/dist/angular-google-maps.min.js',
 		'app/bower_components/angular-websocket/dist/angular-websocket.min.js',
+		'app/bower_components/angular-ui-notification/dist/angular-ui-notification.min.js',
 
 		'app/components/**/*.js',
 		'app/views/**/*.js',

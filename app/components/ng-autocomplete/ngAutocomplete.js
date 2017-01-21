@@ -15,7 +15,7 @@
  *
  **/
 
-angular.module( "myApp.ngAutocomplete", [])
+angular.module("ShiftOnTapApp")
     .directive('ngAutocomplete', function() {
       return {
         require: 'ngModel',

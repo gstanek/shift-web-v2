@@ -1,4 +1,4 @@
-angular.module('myApp.realmAvailableShiftListDirective', [])
+angular.module('ShiftOnTapApp')
 .directive('realmAvailableShiftListDirective', ['realmService', 'userService', 'shiftService',
     function(realmService, userService, shiftService) {
     return {

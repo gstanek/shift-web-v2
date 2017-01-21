@@ -1,6 +1,4 @@
-
-//angular.module('myApp.userShiftListDirective', [])
-angular.module('myApp')
+angular.module('ShiftOnTapApp')
     .directive('shiftBlock', ['realmService', 'userService', 'shiftService','RealmWebSocket',//
         function(realmService, userService, shiftService, RealmWebSocket) { //
             return {

@@ -1,5 +1,4 @@
-angular.module('myApp.createRealmDirective', [])
-//angular.module('myApp')
+angular.module('ShiftOnTapApp')
 .directive('createRealmDirective', ['realmService', 'userService', 'commonService',
     function(realmService, userService, commonService) {
     return {

@@ -1,4 +1,4 @@
-angular.module('myApp')
+angular.module('ShiftOnTapApp')
 
 // .factory('RealmWebSocket', ['$websocket', 'realmService', 'shiftService',
 //     function($websocket, realmService, shiftService) {

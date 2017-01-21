@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('myApp.user', ['ui.router', 'myApp.userService'])
+angular.module('ShiftOnTapApp')
 
-.config(['$stateProvider', '$urlRouterProvider',function($stateProvider, $urlRouterProvider) {
+.config(['$stateProvider', '$urlRouterProvider',function($stateProvider) {
   $stateProvider
       .state('user', {
         url: '/user',
@@ -11,23 +11,31 @@ angular.module('myApp.user', ['ui.router', 'myApp.userService'])
       });
 }])
 
-.controller('UserCtrl', ['$scope', 'userService', function($scope, userService) {
+.controller('UserCtrl', ['$scope', 'userService', 'Notification', function($scope, userService, Notification) {
     "ngInject";
     $scope.user = {};
     $scope.user = userService.getLocalUser();
-    $scope.updateUser = function() {
-        if($scope.updateUserForm.$valid) {
-            console.log('user object for update=' + JSON.stringify($scope.user))
-            userService.updateUser($scope.user)
-                .then(function successCallback(response) {
 
-                    userService.setLocalUser(response.data.user, true);
-                }, function errorCallback(response) {
-                    console.log('Failure:' + JSON.stringify(response));
+    $scope.updateUser = function(form) {
+        $scope.errorObj = {};
+        if($scope.updateUserForm.$valid) {
+            userService.updateUser($scope.user)
+                .then(function successCallback(user) {
+                    Notification.success('Information saved');
+                    console.log('user=' + JSON.stringify(user));
+                    $scope.user = user;
+                })
+                .catch(function errorCallback(errorResponseObject) {
+                    Notification.error(errorResponseObject.error.message);
                 });
         }
         else {
-            alert("A valid email address is required");
+            angular.forEach(form.$error, function (field) {
+                angular.forEach(field, function(errorField){
+                    errorField.$setTouched();
+                })
+            });
+            $scope.errorObj.detail='Please correct errors indicated above and resubmit';
         }
     }
 

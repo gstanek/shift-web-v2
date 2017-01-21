@@ -1,5 +1,5 @@
 
-angular.module('myApp.realmService', ['LocalStorageModule', 'myApp.personaService'])
+angular.module('ShiftOnTapApp')
 
 
 .service('realmService', ['$rootScope', 'localStorageService', 'personaService', '$http', 'commonService', '$websocket',

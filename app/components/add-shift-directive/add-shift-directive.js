@@ -1,4 +1,4 @@
-angular.module('myApp')
+angular.module('ShiftOnTapApp')
 .directive('addShiftDirective', ['realmService', 'userService', 'shiftService', 'commonService',
     function(realmService, userService, shiftService, commonService) {
     "ngInject";

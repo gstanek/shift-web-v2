@@ -1,4 +1,4 @@
-angular.module('myApp')
+angular.module('ShiftOnTapApp')
 .directive('addUsersDirective', ['userService', 'realmService', 'shiftService',
     function(userService, realmService, shiftService) {
     return {

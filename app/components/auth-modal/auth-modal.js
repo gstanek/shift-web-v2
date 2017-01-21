@@ -1,4 +1,4 @@
-angular.module('myApp')
+angular.module('ShiftOnTapApp')
     .directive('authModal', ['$log', 'authService', '$uibModal',
         function($log, authService, $uibModal) {
         return {
@@ -22,7 +22,8 @@ angular.module('myApp')
                 $scope.$on('AUTH_FAILURE_EVENT', function(event, responseObj) {
                     $scope.requestStatus = responseObj.status;
                     $scope.errorObj = {
-                        detail: responseObj.message
+                        detail: responseObj.message,
+                        code: responseObj.code
                     };
                 });
 

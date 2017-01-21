@@ -47,7 +47,8 @@ module.exports = function (grunt) {
             'bower_components/angular-google-maps/*.js',
             'bower_components/angular-websocket/dist/*.js',
             '/components/add-users/add-users-modal-directive.js',
-            'bower_components/angular-websocket/dist/*.js.map']
+            'bower_components/angular-websocket/dist/*.js.map',
+            'bower_components/angular-ui-notification/dist/*.js']
         }
       },
       dist: {
@@ -382,7 +383,9 @@ module.exports = function (grunt) {
             'bower_components/angular-google-maps/dist/angular-google-maps.min.js',
             'bower_components/angular-simple-logger/dist/angular-simple-logger.min.js',
             'bower_components/angular-websocket/dist/angular-websocket.min.js',
-            'bower_components/angular-websocket/dist/angular-websocket.min.js.map'
+            'bower_components/angular-websocket/dist/angular-websocket.min.js.map',
+            'bower_components/angular-ui-notification/dist/angular-ui-notification.min.js',
+            'bower_components/angular-ui-notification/dist/angular-ui-notification.min.css'
           ]
         }, {
           expand: true,

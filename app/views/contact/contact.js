@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('myApp.contact', ['ui.router'])
+angular.module('ShiftOnTapApp')
 
-.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+.config(['$stateProvider', '$urlRouterProvider', function($stateProvider) {
   $stateProvider
       .state('contact', {
         url: '/contact',

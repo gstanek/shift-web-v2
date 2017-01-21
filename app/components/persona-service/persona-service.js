@@ -1,5 +1,5 @@
 
-angular.module('myApp.personaService', ['LocalStorageModule', 'myApp.userService'])
+angular.module('ShiftOnTapApp')
 
 
 .service('personaService', ['$rootScope', 'localStorageService', 'userService', function($rootScope, localStorageService, userService) {

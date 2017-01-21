@@ -1,31 +1,35 @@
 
-angular.module('myApp.userService', ['LocalStorageModule'])
+angular.module('ShiftOnTapApp')
 
 
-.service('userService', ['$rootScope', 'localStorageService', '$http', 'commonService',
-    function($rootScope, localStorageService, $http, commonService) {
+.service('userService', ['$rootScope', 'localStorageService', '$http', 'commonService', 'Notification',
+    function($rootScope, localStorageService, $http, commonService, Notification) {
 
+    var self = this;
+
+        /**
+         * Update User will update the user object on the server side as well as in local storage
+         * @param user User object for update
+         * @returns { A promise that
+         *  for success case resolves to updated user object, or
+         *  for failure case resolves to standard Error Response Object}
+         */
     this.updateUser = function(user) {
-        //TODO align on realm objects vs realm ID stored as part of users.  Probably should be realm_id
-        if(user.realms && user.realms[0] && user.realms[0].id) {
-            var realms = [];
-            for(var i = 0; i<user.realms.length; i++) {
-
-                realms.push(user.realms[i].id);
-            }
-            user.realms = realms;
-        }
-
         return $http({
             method: 'PATCH',
-            url: 'http://127.0.0.1:8000/api/v1/user/' + user.email,
+            url: 'http://127.0.0.1:8000/api/v1/user/' + user.id,
             headers: {
                 'Content-Type': 'application/json'
             },
             data: user
+        }).then(function successCallback(response) {
+            self.setLocalUser(response.data, true);
+            return response.data;
+        }).catch(function errorCallback(response) {
+            var errorResponseObject = commonService.generateErrorResponseObject(response);
+            throw errorResponseObject;
         });
-
-    }
+    };
 
     this.createUsers = function(createUsersPayload) {
         return $http({
@@ -36,7 +40,7 @@ angular.module('myApp.userService', ['LocalStorageModule'])
             },
             data: createUsersPayload
         });
-    }
+    };
 
     this.verify_invitee = function(email, invite_code) {
 

@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('myApp.home', ['ui.router', 'myApp.authService'])
+angular.module('ShiftOnTapApp')
 
-.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+.config(['$stateProvider', '$urlRouterProvider', function($stateProvider) {
   $stateProvider
     .state('home', {
       url: '/home',
@@ -14,23 +14,10 @@ angular.module('myApp.home', ['ui.router', 'myApp.authService'])
   function($scope, authService, $location) {
   "ngInject";
   $scope.isActiveUser = authService.isAuthenticated();
-  $scope.errorObj = {};
 
   $scope.$on('USER_CHANGE_EVENT', function(broadcastObj) {
-      // if(broadcastObj.type)
+      // TODO Adjust this to use broadcast object instead of doing lookup
       $scope.isActiveUser = authService.isAuthenticated();
-  });
-  $scope.$on('BAD_REQUEST_EVENT', function(event, args) {
-      if(args && args.rejection) {
-          var errorResponse = args.rejection.data;
-          $scope.errorObj.code = errorResponse.code;
-          $scope.errorObj.detail = errorResponse.detail;
-          console.log('errorResponse.code=' + errorResponse.code);
-          console.log('errorResponse.detail=' + errorResponse.detail);
-      }
-      else {
-          $scope.errorObj.detail='We\'re sorry, Something went wrong with the request, please try again';
-      }
   });
   var init = function() {
       var invitedEmail  = $location.search().email

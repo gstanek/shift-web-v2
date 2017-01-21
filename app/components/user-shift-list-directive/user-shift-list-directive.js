@@ -1,4 +1,4 @@
-angular.module('myApp')
+angular.module('ShiftOnTapApp')
 .directive('userShiftListDirective', ['realmService', 'userService', 'shiftService','RealmWebSocket', '$uibModal',
     function(realmService, userService, shiftService, RealmWebSocket, $uibModal) {
     return {

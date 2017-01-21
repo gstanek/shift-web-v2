@@ -1,4 +1,4 @@
-angular.module('myApp.commonService', [])//['myApp.userService','myApp.realmService','myApp.shiftService']) //[])
+angular.module('ShiftOnTapApp')
 .service('commonService', ['localStorageService', '$rootScope',
     function(localStorageService, $rootScope) {
 
@@ -51,14 +51,30 @@ angular.module('myApp.commonService', [])//['myApp.userService','myApp.realmServ
         };
 
         this.generateErrorResponseObject = function(response) {
-            var errorResponseObject = {
-                httpStatusCode : response.status,
-                error : {
-                    code : response.data.code,
-                    message : response.data.detail
-                }
-            };
-            return errorResponseObject;
+            console.log('response=' + JSON.stringify(response));
+            if(response.status == -1) {
+                // If response status is -1, assume 503
+                return {
+                    httpStatusCode : 503,
+                    error : {
+                        code : 5030,
+                        message : 'Oh no! Something went wrong, please try again'
+                    }
+                };
+            }
+            else {
+                var errorResponseObject = {
+                    httpStatusCode : response.status,
+                    error : {
+                        code : response.code,
+                        message : response.detail
+                    }
+                };
+
+                console.log('errorResponseObject=' + JSON.stringify(errorResponseObject));
+                return errorResponseObject;
+            }
+
         }
 
         this.generateResponseObject = function(response) {
