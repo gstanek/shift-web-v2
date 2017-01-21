@@ -54,18 +54,18 @@ angular.module('ShiftOnTapApp')
                 else return 'panel-default';
             }
 
-            scope.modal2 = {
+            scope.addUsersModal = {
                 instance: null,
                 closeAction: ''
             };
             scope.openAddUsersModalAndMarkAvailable = function (shiftID, markAvailable) {
-                scope.modal2.instance = $uibModal.open(/*@ngInject*/{
+                scope.addUsersModal.instance = $uibModal.open(/*@ngInject*/{
                     animation: true,
-                    template: '<add-users-modal modal2="modal2"></add-users-modal>',
+                    template: '<add-users-modal addUsersModal="addUsersModal"></add-users-modal>',
                     scope : scope
                 });
 
-                scope.modal2.instance.result.then(
+                scope.addUsersModal.instance.result.then(
                     function successCallback(result) {
                         if(markAvailable) {
                             updateShift(shiftID, true);

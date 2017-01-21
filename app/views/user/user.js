@@ -23,7 +23,6 @@ angular.module('ShiftOnTapApp')
             userService.updateUser($scope.user)
                 .then(function successCallback(user) {
                     Notification.success('Information saved');
-                    console.log('user=' + JSON.stringify(user));
                     $scope.user = user;
                 })
                 .catch(function errorCallback(errorResponseObject) {

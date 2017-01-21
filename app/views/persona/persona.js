@@ -40,35 +40,33 @@ angular.module('ShiftOnTapApp')
     init();
 
     // Start Modal Logic
-    // $scope.addShiftModal = {
-    //     instance: null
-    // };
-    // $scope.errorObj = {
-    //     detail: '',
-    //     code: 0
-    // }
-    // $scope.openAddShiftModal = function () {
-    //     $scope.errorObj.detail='';
-    //     $scope.errorObj.code=0;
-    //     $scope.addShiftModal.instance = $uibModal.open({
-    //         animation: true,
-    //         template: '<shift-modal modal="addShiftModal" error-obj="errorObj"></shift-modal>',
-    //         scope : $scope
-    //     });
-    // };
-    //
-    // $scope.addUsersModal = {
-    //     instance: null
-    // };
-    // $scope.openAddUsersModal = function () {
-    //     $scope.errorObj.detail='';
-    //     $scope.errorObj.code=0;
-    //     $scope.addUsersModal.instance = $uibModal.open(/*@ngInject*/{
-    //         animation: true,
-    //         template: '<add-users-modal modal2="addUsersModal" error-obj="errorObj"></add-users-modal>',
-    //         scope : $scope
-    //     });
-    // };
+    $scope.addShiftModal = {
+        instance: null
+    };
+    $scope.errorObj = {
+        detail: '',
+        code: 0
+    }
+    $scope.openAddShiftModal = function () {
+        $scope.errorObj.detail='';
+        $scope.errorObj.code=0;
+        $scope.addShiftModal.instance = $uibModal.open({
+            animation: true,
+            template: '<shift-modal modal="addShiftModal" error-obj="errorObj"></shift-modal>',
+            scope : $scope
+        });
+    };
+
+    $scope.addUsersModal = {
+        instance: null
+    };
+    $scope.openAddUsersModal = function () {
+        $scope.addUsersModal.instance = $uibModal.open(/*@ngInject*/{
+            animation: true,
+            template: '<add-users-modal modal="addUsersModal"></add-users-modal>',
+            scope : $scope
+        });
+    };
     // End Modal Logic
 
 }]);

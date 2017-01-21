@@ -5,22 +5,21 @@ angular.module('ShiftOnTapApp')
         restrict: 'E',
         templateUrl: 'components/modals/add-users/add-users-modal.html',
         scope: {
-            modal2: '=',
-            errorObj: '='
+            modal: '='
         },
         controller: function ($scope) {
             $scope.companyName = realmService.getRealmName();
             console.log($scope);
 
             $scope.ok = function () {
-                $scope.modal2.instance.close('success');
+                $scope.modal.instance.close('success');
             };
 
             $scope.cancel = function () {
-                $scope.modal2.instance.dismiss('cancel');
+                $scope.modal.instance.dismiss('cancel');
             };
 
-            $scope.modal2.instance.result.then(function (result) {
+            $scope.modal.instance.result.then(function (result) {
                 $log.info('Modal closed at: ' + new Date() + 'result: ' + result);
             }, function (result) {
                 $log.info('Modal dismissed at: ' + new Date() + 'result: ' + result);

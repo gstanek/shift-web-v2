@@ -1,12 +1,11 @@
 angular.module('ShiftOnTapApp')
-.directive('addUsersDirective', ['userService', 'realmService', 'shiftService',
-    function(userService, realmService, shiftService) {
+.directive('addUsersDirective', ['userService', 'realmService', 'shiftService', 'Notification',
+    function(userService, realmService, shiftService, Notification) {
     return {
         restrict: 'E',
         scope: {
-            'save': '&onSave',
-            'cancel': '&onCancel',
-            'errorObj' : '='
+            'ok': '&onOk',
+            'cancel': '&onCancel'
         },
         templateUrl: 'components/directives/add-users/add-users.html',
         link: function (scope, element, attrs, ngModel) {
@@ -70,16 +69,19 @@ angular.module('ShiftOnTapApp')
                     };
                     userService.createUsers(usersDAO)
                         .then(function successCallback(response) {
-                            console.log('Add Users Success:' + JSON.stringify(response));
-                            userService.addLocalCoworkers(response.data, true);
-                            scope.save();
+                            Notification.success('Co-workers Invited');
+                            scope.ok();
                         }, function errorCallback(response) {
-                            console.log('Add Users Failure:' + JSON.stringify(response));
+                            scope.errorObj = {
+                                detail: response.error.message
+                            };
                         });
                 }
                 else {
                     form.$setSubmitted();
-                    scope.errorObj.detail='Please correct errors indicated above and resubmit';
+                    scope.errorObj = {
+                        detail:'Please correct errors indicated above and resubmit'
+                    };
                 }
 
             };

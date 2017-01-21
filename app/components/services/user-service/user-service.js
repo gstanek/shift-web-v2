@@ -1,19 +1,18 @@
 
 angular.module('ShiftOnTapApp')
 
-
-.service('userService', ['$rootScope', 'localStorageService', '$http', 'commonService', 'Notification',
-    function($rootScope, localStorageService, $http, commonService, Notification) {
+.service('userService', ['$rootScope', 'localStorageService', '$http', 'commonService',
+function($rootScope, localStorageService, $http, commonService) {
 
     var self = this;
 
-        /**
-         * Update User will update the user object on the server side as well as in local storage
-         * @param user User object for update
-         * @returns { A promise that
-         *  for success case resolves to updated user object, or
-         *  for failure case resolves to standard Error Response Object}
-         */
+    /**
+     * Update User will update the user object on the server side as well as in local storage
+     * @param user User object for update
+     * @returns { A promise that
+     *  for success case resolves to updated user object, or
+     *  for failure case resolves to standard Error Response Object}
+     */
     this.updateUser = function(user) {
         return $http({
             method: 'PATCH',
@@ -31,6 +30,14 @@ angular.module('ShiftOnTapApp')
         });
     };
 
+    /**
+     * Create new provisional users in backend, sending invites when appropriate.
+     * Add new coworkers to local coworker set.
+     * @param createUsersPayload
+     * @returns { A promise that
+     *  for success case returns users added
+     *  for failure case returns standard Error Response Object}
+     */
     this.createUsers = function(createUsersPayload) {
         return $http({
             method: 'POST',
@@ -39,7 +46,13 @@ angular.module('ShiftOnTapApp')
                 'Content-Type': 'application/json'
             },
             data: createUsersPayload
-        });
+        }).then(function successCallback(response) {
+            self.addLocalCoworkers(response.data, true);
+            return response.data;
+        }).catch(function errorCallback(response) {
+            var errorResponseObject = commonService.generateErrorResponseObject(response);
+            throw errorResponseObject;
+        });;
     };
 
     this.verify_invitee = function(email, invite_code) {
@@ -90,11 +103,13 @@ angular.module('ShiftOnTapApp')
                 existingCoworkers.push(coworkers[i]);
             }
             localStorageService.set('coworkers', existingCoworkers);
+            $rootScope.$broadcast('COWORKER_CHANGE_EVENT', existingCoworkers);
         }
         else {
             localStorageService.set('coworkers', coworkers);
+            $rootScope.$broadcast('COWORKER_CHANGE_EVENT', coworkers);
         }
-        $rootScope.$broadcast('COWORKER_CHANGE_EVENT', coworkers);
+
         if(updatePersonaDisplayState) {
             commonService.setPersonaDisplayState();
         }
