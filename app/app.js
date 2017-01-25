@@ -67,6 +67,19 @@ angular.module('ShiftOnTapApp', [
         positionY: 'top'
     });
 }])
+// .run('$http', function($http) {
+//     $http.defaults.headers.common.accept = 'application/json';
+// })
+// .config('$httpProvider', function($httpProvider) {
+//     $httpProvider.defaults.headers.common = {
+//         Accept: 'application/json'
+//     };
+//     $httpProvider.defaults.headers.patch['Content-Type'] = 'application/json';
+// })
+// .config(function ($httpProvider) {
+//     $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
+//     $httpProvider.defaults.headers.post['Content-Type'] =  'application/x-www-form-urlencoded';
+// })
 .controller('AppCtrl', ['$scope', 'authService', 'userService', 'realmService', '$uibModal', function($scope, authService, userService, realmService, $uibModal) {
     $scope.displayName = userService.getBestDisplayName();
     $scope.isActiveUser = authService.isAuthenticated();

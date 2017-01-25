@@ -1,8 +1,8 @@
 
 angular.module('ShiftOnTapApp')
 
-.service('userService', ['$rootScope', 'localStorageService', '$http', 'commonService',
-function($rootScope, localStorageService, $http, commonService) {
+.service('userService', ['$rootScope', 'localStorageService', '$http', 'commonService', '$q',
+function($rootScope, localStorageService, $http, commonService, $q) {
 
     var self = this;
 
@@ -11,7 +11,7 @@ function($rootScope, localStorageService, $http, commonService) {
      * @param user User object for update
      * @returns { A promise that
      *  for success case resolves to updated user object, or
-     *  for failure case resolves to standard Error Response Object}
+     *  for failure case rejects with a standard Error Response Object}
      */
     this.updateUser = function(user) {
         return $http({
@@ -25,8 +25,7 @@ function($rootScope, localStorageService, $http, commonService) {
             self.setLocalUser(response.data, true);
             return response.data;
         }).catch(function errorCallback(response) {
-            var errorResponseObject = commonService.generateErrorResponseObject(response);
-            throw errorResponseObject;
+            return $q.reject(response);
         });
     };
 
@@ -36,7 +35,7 @@ function($rootScope, localStorageService, $http, commonService) {
      * @param createUsersPayload
      * @returns { A promise that
      *  for success case returns users added
-     *  for failure case returns standard Error Response Object}
+     *  for failure case rejects with standard Error Response Object}
      */
     this.createUsers = function(createUsersPayload) {
         return $http({
@@ -50,32 +49,35 @@ function($rootScope, localStorageService, $http, commonService) {
             self.addLocalCoworkers(response.data, true);
             return response.data;
         }).catch(function errorCallback(response) {
-            var errorResponseObject = commonService.generateErrorResponseObject(response);
-            throw errorResponseObject;
-        });;
+            return $q.reject(response);
+        });
     };
 
+
+    /**
+     * Verify invite valid, and if valid, mark invite as activated so it can't be used again
+     * @param email
+     * @param invite_code
+     * @returns { A promise that
+     *  for success case returns response data
+     *  for failure case rejects with standard Error Response Object}
+     */
     this.verify_invitee = function(email, invite_code) {
-
         var verifyUrl = 'http://127.0.0.1:8000/api/v1/user/invite/email/' + email + '/code/' + invite_code;
-        $http({
+        return $http({
             method: 'GET',
-            url: verifyUrl,
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(function successCallback(response) {
-                console.log("Verify Invite Success: " + JSON.stringify(response));
-                var responseObject = commonService.generateResponseObject(response);
-                $rootScope.$broadcast('INVITE_EVENT', responseObject);
-            }, function errorCallback(response) {
-                console.log("Verify Invite Error: " + JSON.stringify(response));
-                var errorResponseObject = commonService.generateErrorResponseObject(response);
-                $rootScope.$broadcast('INVITE_EVENT', errorResponseObject);
-            });
+            url: verifyUrl
+        }).then(function successCallback(response) {
+            return response.data;
+        }).catch(function errorCallback(response) {
+            return $q.reject(response);
+        });
     };
 
+    /**
+     * Identifies best display name for user based on local storage
+     * @returns String representing best display name
+     */
     this.getBestDisplayName = function() {
         var user = this.getLocalUser();
         if(!user) {
@@ -95,6 +97,11 @@ function($rootScope, localStorageService, $http, commonService) {
         }
     };
 
+    /**
+     * Adds passed in coworkers to local coworker variable
+     * @param coworkers - coworkers array to add
+     * @param updatePersonaDisplayState - boolean whether or not to broadcast a notification
+     */
     this.addLocalCoworkers = function(coworkers, updatePersonaDisplayState) {
         var existingCoworkers = localStorageService.get('coworkers');
         if(existingCoworkers != null) {
@@ -115,6 +122,11 @@ function($rootScope, localStorageService, $http, commonService) {
         }
     };
 
+    /**
+     * Sets passed in coworkers to local coworker variable overwriting any previous value
+     * @param coworkers - coworkers array to set
+     * @param updatePersonaDisplayState - boolean whether or not to broadcast a notification
+     */
     this.setLocalCoworkers = function(coworkers, updatePersonaDisplayState) {
         localStorageService.set('coworkers', coworkers);
         $rootScope.$broadcast('COWORKER_CHANGE_EVENT', coworkers);
@@ -123,9 +135,18 @@ function($rootScope, localStorageService, $http, commonService) {
             commonService.setPersonaDisplayState();
         }
     };
+
+    /**
+     * Returns coworkers stored locally
+     */
     this.getLocalCoworkers = function() {
         return localStorageService.get('coworkers');
     };
+
+    /**
+     * Removes coworkers from local storage
+     * @param updatePersonaDisplayState - boolean whether or not to broadcast a notification
+     */
     this.removeLocalCoworkers = function(updatePersonaDisplayState) {
         localStorageService.remove('coworkers');
         // $rootScope.$broadcast('USER_CHANGE_EVENT', null);
@@ -133,6 +154,12 @@ function($rootScope, localStorageService, $http, commonService) {
             commonService.setPersonaDisplayState();
         }
     };
+
+    /**
+     * Sets user to local storage
+     * @param user - user to set
+     * @param updatePersonaDisplayState - boolean whether or not to broadcast a notification
+     */
     this.setLocalUser = function(user, updatePersonaDisplayState) {
         localStorageService.set('user', user)
         var broadcastObj = {
@@ -145,9 +172,18 @@ function($rootScope, localStorageService, $http, commonService) {
         }
 
     };
+
+    /**
+     * Returns user from local storage
+     */
     this.getLocalUser = function() {
         return localStorageService.get('user');
     };
+
+    /**
+     * Removes user from local storage
+     * @param updatePersonaDisplayState - boolean whether or not to broadcast a notification
+     */
     this.removeLocalUser = function(updatePersonaDisplayState) {
         localStorageService.remove('user');
         var broadcastObj = {

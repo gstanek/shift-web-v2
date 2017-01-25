@@ -16,14 +16,12 @@ describe('ShiftOnTapApp module', function() {
 
   }));
 
-  describe('user service tests', function(){
-    var $scope, $httpBackend;
+  describe('userService tests', function(){
     var userRequestHandler;
 
     beforeEach(inject(function (_userService_, $httpBackend) {
       userService = _userService_;
       httpBackend = $httpBackend;
-
 
       // Set up the mock http service responses
       // $httpBackend = $injector.get('$httpBackend');
@@ -39,22 +37,37 @@ describe('ShiftOnTapApp module', function() {
       httpBackend.verifyNoOutstandingRequest();
     });
 
-    // Individual tests...
-    it('should return updated user', function() {
-      var user = {"id":'123',"first_name":"Gabriel","last_name":"Stanek","preferred_name":"Gabe A","email":"115@gmail.com","is_active":true,"is_admin":false,"realms":[130]};
-      userService.updateUser(user).then(function(returnedUser) {
-        expect(returnedUser).toEqual({"id":'123',"first_name":"Gabriel","last_name":"Stanek","preferred_name":"Gabe A","email":"115@gmail.com","is_active":true,"is_admin":false,"realms":[130]});
+    describe('updateUser', function() {
+      it('should return updated user', function () {
+        var user = {
+          "id": '123',
+          "first_name": "Gabriel",
+          "last_name": "Stanek",
+          "preferred_name": "Gabe A",
+          "email": "115@gmail.com",
+          "is_active": true,
+          "is_admin": false,
+          "realms": [130]
+        };
+        userService.updateUser(user).then(function (returnedUser) {
+          expect(returnedUser).toEqual({
+            "id": '123',
+            "first_name": "Gabriel",
+            "last_name": "Stanek",
+            "preferred_name": "Gabe A",
+            "email": "115@gmail.com",
+            "is_active": true,
+            "is_admin": false,
+            "realms": [130]
+          });
+        });
+        httpBackend.flush();
       });
-      httpBackend.flush();
 
+      // Next test goes here for updateUser...
 
-
-      // $httpBackend.expectGET('/auth.py');
-
-
-      // expect(controller).toBeDefined();
-      // expect($scope.user).toEqual('{"id":104,"first_name":"","last_name":"","preferred_name":"","email":"89@gmail.com","realms":[]}');
     });
 
+    // next method test set goes her in another describe block
   });
 });

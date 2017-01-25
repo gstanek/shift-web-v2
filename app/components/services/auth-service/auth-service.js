@@ -277,21 +277,26 @@ angular.module('ShiftOnTapApp')
 
 
 }])
-.factory('authHttpInterceptor', ['$q', '$rootScope',
-    function($q, $rootScope) {
+.factory('httpInterceptor', ['$q', '$rootScope', 'commonService',
+    function($q, $rootScope, commonService) {
         return {
-
-            'responseError': function(rejection) {
-                if(rejection.status == 401) {
-                    $rootScope.$broadcast('UNAUTHORIZED_EVENT', { rejection : rejection });
-                    return $q.reject(rejection.data);
+            'request' : function (config) {
+                config.headers['Accept'] = 'application/json';
+                if(config.headers['Content-Type'] != 'application/x-www-form-urlencoded') {
+                    config.headers['Content-Type'] = 'application/json';
                 }
-                else if(rejection.status == 400) {
-                    $rootScope.$broadcast('BAD_REQUEST_EVENT', { rejection : rejection });
-                    return $q.reject(rejection.data);
+
+                return config;
+            },
+
+            'responseError': function(response) {
+                var errorResponseObject = commonService.generateErrorResponseObject(response);
+                if(response.status == 401) {
+                    $rootScope.$broadcast('UNAUTHORIZED_EVENT', { rejection : response });
+                    return $q.reject(errorResponseObject);
                 }
                 else {
-                    return $q.reject(rejection);
+                    return $q.reject(errorResponseObject);
                 }
             }
             // 'response': function(response) {
@@ -301,5 +306,5 @@ angular.module('ShiftOnTapApp')
         };
 }])
 .config(['$httpProvider', function($httpProvider) {
-    $httpProvider.interceptors.push('authHttpInterceptor');
+    $httpProvider.interceptors.push('httpInterceptor');
 }]);

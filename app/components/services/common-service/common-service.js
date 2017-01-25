@@ -51,7 +51,6 @@ angular.module('ShiftOnTapApp')
         };
 
         this.generateErrorResponseObject = function(response) {
-            console.log('response=' + JSON.stringify(response));
             if(response.status == -1) {
                 // If response status is -1, assume 503
                 return {
@@ -66,25 +65,14 @@ angular.module('ShiftOnTapApp')
                 var errorResponseObject = {
                     httpStatusCode : response.status,
                     error : {
-                        code : response.code,
-                        message : response.detail
+                        code : response.data.code,
+                        message : response.data.detail
                     }
                 };
 
-                console.log('errorResponseObject=' + JSON.stringify(errorResponseObject));
                 return errorResponseObject;
             }
-
         }
-
-        this.generateResponseObject = function(response) {
-            var responseObject = {
-                httpStatusCode : response.status,
-                data : response.data
-            };
-            return responseObject;
-        }
-
 
         // TODO: These are added to avoid circular dependencies.  Look into avoiding the need for duplication.
         this.getLocalRealm = function() {
