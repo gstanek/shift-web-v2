@@ -24,6 +24,8 @@ angular.module('ShiftOnTapApp')
                 .then(function successCallback(user) {
                     Notification.success('Information saved');
                     $scope.user = user;
+                    form.$setUntouched();
+                    form.$setPristine();
                 })
                 .catch(function errorCallback(errorResponseObject) {
                     Notification.error(errorResponseObject.error.message);

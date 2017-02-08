@@ -2,28 +2,6 @@
 
 // Declare app level module which depends on views, and components
 angular.module('ShiftOnTapApp', [
-
-    // 'myApp.home',
-    // 'myApp.about',
-    // 'myApp.contact',
-    //'myApp.persona',
-    // 'myApp.user',
-    // 'myApp.version',
-    //
-    // 'myApp.authService',
-    // 'myApp.commonService',
-    // 'myApp.userService',
-    // 'myApp.realmService',
-    // 'myApp.personaService',
-    // 'myApp.shiftService',
-    // 'myApp.ngAutocomplete',
-    //
-    // 'myApp.createRealmDirective',
-    // 'myApp.addShiftDirective',
-    // 'myApp.addUsersDirective',
-    //'myApp.userShiftListDirective',
-    // 'myApp.realmAvailableShiftListDirective',
-
     'LocalStorageModule',
     'ui.bootstrap',
     'ngAnimate',

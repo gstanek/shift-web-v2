@@ -51,7 +51,7 @@ angular.module('ShiftOnTapApp')
         };
 
         this.generateErrorResponseObject = function(response) {
-            if(response.status == -1) {
+            if(response.status <= 0) {
                 // If response status is -1, assume 503
                 return {
                     httpStatusCode : 503,

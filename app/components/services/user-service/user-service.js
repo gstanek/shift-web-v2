@@ -62,7 +62,7 @@ function($rootScope, localStorageService, $http, commonService, $q) {
      *  for success case returns response data
      *  for failure case rejects with standard Error Response Object}
      */
-    this.verify_invitee = function(email, invite_code) {
+    this.verifyInvitee = function(email, invite_code) {
         var verifyUrl = 'http://127.0.0.1:8000/api/v1/user/invite/email/' + email + '/code/' + invite_code;
         return $http({
             method: 'GET',
@@ -79,7 +79,7 @@ function($rootScope, localStorageService, $http, commonService, $q) {
      * @returns String representing best display name
      */
     this.getBestDisplayName = function() {
-        var user = this.getLocalUser();
+        var user = self.getLocalUser();
         if(!user) {
             return '';
         }
@@ -98,7 +98,7 @@ function($rootScope, localStorageService, $http, commonService, $q) {
     };
 
     /**
-     * Adds passed in coworkers to local coworker variable
+     * Adds array of passed in coworkers to local coworker storage
      * @param coworkers - coworkers array to add
      * @param updatePersonaDisplayState - boolean whether or not to broadcast a notification
      */
@@ -188,7 +188,7 @@ function($rootScope, localStorageService, $http, commonService, $q) {
         localStorageService.remove('user');
         var broadcastObj = {
             type: 'DELETE',
-            value: null
+            value: undefined
         }
         $rootScope.$broadcast('USER_CHANGE_EVENT', broadcastObj);
         if(updatePersonaDisplayState) {

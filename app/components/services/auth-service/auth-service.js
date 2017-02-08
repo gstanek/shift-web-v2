@@ -55,12 +55,22 @@ angular.module('ShiftOnTapApp')
         //TODO: Ensure disconnect happens on server side
         //RealmWebSocket.disconnect();
         $auth.removeToken();
-        userService.removeLocalUser(false);
-        userService.removeLocalCoworkers(false);
-        shiftService.removeLocalShifts(false);
-        realmService.removeLocalRealm(false);
-        localStorageService.remove('token_expiration_time');
-        commonService.removeLocalPersonaDisplayState(false);
+
+
+        // userService.removeLocalUser(false);
+        // userService.removeLocalCoworkers(false);
+        // shiftService.removeLocalShifts(false);
+        // realmService.removeLocalRealm(false);
+        // localStorageService.remove('token_expiration_time');
+        // commonService.removeLocalPersonaDisplayState(false);
+
+        localStorageService.clearAll();
+        var broadcastObj = {
+            type: 'DELETE',
+            value: undefined
+        }
+        $rootScope.$broadcast('USER_CHANGE_EVENT', broadcastObj);
+
     };
 
     this.accept_invite = function(credentials, invite_code) {
@@ -161,7 +171,6 @@ angular.module('ShiftOnTapApp')
                 'Content-Type': 'application/json'
             }
         })
-
         .then(function successCallback(loginResponse) {
             //TODO Make this a broadcast of the AUTH_SUCCESS_EVENT
             var responseObj = {
@@ -176,27 +185,35 @@ angular.module('ShiftOnTapApp')
             self.setToken(loginResponse.data.access_token);
             self.setTokenExpirationTime(loginResponse.data.token_expiration_time);
             var user = loginResponse.data.user;
-
-
-
-            // TODO Enable default preference for active realm instead of taking first
-            var realm = user.realms[0];
-            realmService.setLocalRealm(realm, false);
-            if(realm) {
-                RealmWebSocket.connect();
-                userService.setLocalCoworkers(realm.users, false);
-                shiftService.getShifts(true);
-            };
-
-            var realmIDs = [];
-            for(var i = 0; i<user.realms.length; i ++) {
-                realmIDs.push(user.realms[i].id);
-            }
-            user.realms = realmIDs;
             userService.setLocalUser(user, false);
 
-            commonService.setPersonaDisplayState();
-            $state.go('persona');
+            // Lookup Realm
+            var realmID = undefined;
+            if(user.default_realm) {
+                realmID = user.default_realm;
+            }
+            else {
+                realmID = user.realms[0];
+            }
+
+            realmService.getRealmByRealmID(realmID)
+                .then(function successCallback(realm) {
+                    realmService.setLocalRealm(realm, false);
+                    if(realm) {
+                        RealmWebSocket.connect();
+                        userService.setLocalCoworkers(realm.users, false);
+                        shiftService.getShifts(true);
+                    };
+
+                    commonService.setPersonaDisplayState();
+                    $state.go('persona');
+                })
+                .catch(function errorCallback(response) {
+                    console.log('TODO Handle Error Response');
+
+            });
+
+
 
 
 
@@ -307,4 +324,5 @@ angular.module('ShiftOnTapApp')
 }])
 .config(['$httpProvider', function($httpProvider) {
     $httpProvider.interceptors.push('httpInterceptor');
-}]);
+}])
+;

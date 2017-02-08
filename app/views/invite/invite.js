@@ -4,7 +4,7 @@ angular.module('ShiftOnTapApp')
 .config(['$stateProvider', '$urlRouterProvider', function($stateProvider) {
   $stateProvider
       .state('invite', {
-        url: '/invite/{invite_email}/code/{invite_code}',
+        url: '/invite/{inviteEmail}/code/{inviteCode}',
         templateUrl: 'views/invite/invite.html',
         controller: 'InviteCtrl'
       });
@@ -14,14 +14,14 @@ angular.module('ShiftOnTapApp')
 function($scope, $stateParams, userService, authService, $state, $uibModal, Notification) {
 "ngInject";
 
-    var invite_email = $stateParams.invite_email;
-    var invite_code = $stateParams.invite_code;
-    $scope.email = invite_email;
-    $scope.invite_code = invite_code;
+    var inviteEmail = $stateParams.inviteEmail;
+    var inviteCode = $stateParams.inviteCode;
+    $scope.email = inviteEmail;
+    $scope.inviteCode = inviteCode;
     $scope.inviteValid = true;
 
-    var validate_invitee = function() {
-        userService.verify_invitee(invite_email, invite_code)
+    var validateInvitee = function() {
+        userService.verifyInvitee(inviteEmail, inviteCode)
             .then(function successCallback(responseObject) {
                 if (authService.isAuthenticated()) {
                     $scope.inviteValid = true;
@@ -66,7 +66,7 @@ function($scope, $stateParams, userService, authService, $state, $uibModal, Noti
                 }
             });
     }
-    validate_invitee();
+    validateInvitee();
 
     // Start Modal Logic
     $scope.loginModal = {

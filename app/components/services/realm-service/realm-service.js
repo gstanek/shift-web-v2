@@ -21,6 +21,21 @@ angular.module('ShiftOnTapApp')
         });
     }
 
+    this.getRealmByRealmID = function(realmID) {
+        return $http({
+            method: 'GET',
+            url: 'http://127.0.0.1:8000/api/v1/realm/' + realmID,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(function successCallback(response) {
+            return response.data;
+        }).catch(function errorCallback(response) {
+            return $q.reject(response);
+        });
+    }
+
     this.getRealmsByUser = function() {
         return $http({
             method: 'GET',
