@@ -23,6 +23,9 @@ angular.module('ShiftOnTapApp')
 
             scope.coworkers = userService.getLocalCoworkers();
             scope.activeUser = userService.getLocalUser();
+            scope.compareStartDateToNow = function(shift) {
+                return moment().isBefore(shift.start_datetime);
+            }
 
             var updateShift = function(id, bAvailable) {
                 console.log('in userShiftListDirective.updateShift id=' + id + ', bAvailable=' + bAvailable);

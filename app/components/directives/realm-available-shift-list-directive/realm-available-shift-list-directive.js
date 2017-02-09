@@ -8,6 +8,10 @@ angular.module('ShiftOnTapApp')
         templateUrl: 'components/directives/realm-available-shift-list-directive/realm-available-shift-list.html',
         link: function (scope) {
             var user = userService.getLocalUser();
+            scope.compareStartDateToNow = function(shift) {
+                return moment().isBefore(shift.start_datetime);
+            }
+
             scope.reclaim = function(shiftID) {
                 updateShift(shiftID, false);
             };

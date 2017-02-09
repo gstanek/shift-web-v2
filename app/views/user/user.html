@@ -49,6 +49,13 @@
 
     <div class="row form-group">
       <div class="col-sm-offset-4 col-sm-8">
+        <p><time am-time-ago="dateObj.date"></time></p>
+        <p>Date: {{dateObj.date}}</p>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-sm-offset-4 col-sm-8">
         <button class="btn btn-primary" type="submit" id="updateUser" ng-click="updateUser(updateUserForm)">Update</button>
       </div>
     </div>

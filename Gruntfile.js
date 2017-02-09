@@ -40,6 +40,8 @@ module.exports = function (grunt) {
             'bower_components/angular-bootstrap/*.js',
             'bower_components/angular-loader/*.js',
             'bower_components/angular-mocks/*.js',
+            'bower_components/angular-moment/*.js',
+            'bower_components/moment-timezone/*.js',
             'bower_components/angular-ui-router/**/*.js',
             'bower_components/satellizer/*.js',
             'bower_components/lodash/*.js',
@@ -385,7 +387,11 @@ module.exports = function (grunt) {
             'bower_components/angular-websocket/dist/angular-websocket.min.js',
             'bower_components/angular-websocket/dist/angular-websocket.min.js.map',
             'bower_components/angular-ui-notification/dist/angular-ui-notification.min.js',
-            'bower_components/angular-ui-notification/dist/angular-ui-notification.min.css'
+            'bower_components/angular-ui-notification/dist/angular-ui-notification.min.css',
+            'bower_components/moment-timezone/builds/moment-timezone-with-data.min.js',
+            'bower_components/angular-moment/angular-moment.min.js',
+            // 'bower_components/angular-moment/angular-moment.min.js.map'
+
           ]
         }, {
           expand: true,

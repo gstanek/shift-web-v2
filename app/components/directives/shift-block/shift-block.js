@@ -12,18 +12,33 @@ angular.module('ShiftOnTapApp')
                         scope.availableShifts = shifts;
                     });
 
+                    // scope.user = {
+                    //     timezone : userService.getLocalTimezone();
+                    // };
+
+                    scope.user = userService.getLocalUser();
+                    scope.coworkers = userService.getLocalCoworkers();
+
+
+                    scope.claim = function(shiftID) {
+                        updateShift(shiftID, false, user.id);
+                    };
                     scope.reclaim = function(shiftID) {
-                        updateShift(shiftID, false);
+                        updateShift(shiftID, false, undefined);
                     };
                     scope.markAvailable = function(shiftID) {
                         updateShift(shiftID, true);
                     };
 
-                    var updateShift = function(id, bAvailable) {
+                    var updateShift = function(shiftID, bAvailable, userID) {
+
                         var shift = {
                             available: bAvailable
+                        };
+                        if(userID) {
+                            shift.userID = userID;
                         }
-                        shiftService.updateShift(id, shift)
+                        shiftService.updateShift(shiftID, shift)
                             .then(function successCallback(response) {
                                 console.log('Success:' + JSON.stringify(response));
                             }, function errorCallback(response) {

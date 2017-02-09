@@ -16,6 +16,9 @@ angular.module('ShiftOnTapApp')
     "ngInject";
     $scope.user = {};
     $scope.user = userService.getLocalUser();
+    $scope.dateObj = {
+        date : new Date()
+    };
 
     $scope.updateUser = function(form) {
         $scope.errorObj = {};

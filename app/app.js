@@ -1,5 +1,8 @@
 'use strict';
 
+
+// .constant('moment', require('moment-timezone'))
+
 // Declare app level module which depends on views, and components
 angular.module('ShiftOnTapApp', [
     'LocalStorageModule',
@@ -11,6 +14,7 @@ angular.module('ShiftOnTapApp', [
     'satellizer',
     'uiGmapgoogle-maps',
     'ui-notification',
+    'angularMoment',
 
 ])
 .config(['$stateProvider', '$urlRouterProvider', 'localStorageServiceProvider', '$authProvider', function($stateProvider, $urlRouterProvider, localStorageServiceProvider, $authProvider) {

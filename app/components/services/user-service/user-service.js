@@ -144,6 +144,13 @@ function($rootScope, localStorageService, $http, commonService, $q) {
     };
 
     /**
+     * Returns timezone stored locally
+     */
+    this.getLocalTimezone = function() {
+        return localStorageService.get('timezone');
+    };
+
+    /**
      * Removes coworkers from local storage
      * @param updatePersonaDisplayState - boolean whether or not to broadcast a notification
      */

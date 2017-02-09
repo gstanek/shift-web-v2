@@ -3,38 +3,15 @@
         <h3>Your Shifts</h3>
     </div>
 </div>
-<div class="row" ng-if="(shifts | filter:{ user : activeUser.id }).length > 0">
+<div class="row" ng-if="(shifts | filter:{ user : activeUser.id } | filter:compareStartDateToNow).length > 0">
     <div class="col-md-12">
         <uib-accordion close-others="true">
-            <div uib-accordion-group panel-class="{{getShiftDisplayMode(shift)}}" ng-repeat="shift in shifts | filter: { user : activeUser.id } | orderBy : 'start_datetime'">
-                <uib-accordion-heading>
-                    <div class="row">
-                        <span class="col-sm-6 col-md-6 col-lg-6 text-align-left">{{shift.start_datetime | date: 'shortTime'}} - {{shift.end_datetime | date: 'shortTime'}}<span style="font-style: italic;" ng-if="shift.available">  |  Available</span></span><span class="col-sm-6 col-md-6 col-lg-6 text-align-right">{{shift.start_datetime | date: 'mediumDate'}}</span>
-                    </div>
-                </uib-accordion-heading>
-                <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                        <div class="row">
-                            <span class="helper"></span>
-                            <button class="btn btn-primary" ng-if="shift.available==true" type="submit" ng-click="reclaim(shift.id)">Reclaim</button>
-                            <button class="btn btn-primary" ng-if="shift.available==false && (coworkers==null || coworkers.length==0)" type="submit" ng-click="markAvailable(shift.id)" uib-tooltip="Add co-workers first to ensure they're notified">Mark Available</button>
-                            <button class="btn btn-primary" ng-if="shift.available==false && (coworkers!=null && coworkers.length>0)" type="submit" ng-click="markAvailable(shift.id)">Mark Available</button>
-                            <button class="btn btn-danger" type="submit" ng-click="delete(shift.id)">Delete</button>
-                            <div class="pull-right">
-                                <span class="helper"></span>
-                                <img class="thumbnail-unique" src="images/GabeStanekThumbnail.jpeg" alt="Gabe Stanek Thumbnail" />
-                                <div class="thumbnail-unique"><span>GS</span></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12 col-md-12 col-lg-12"><span>{{shift.comment}}</span></div>
-                        </div>
-                    </div>
-                </div>
+            <div uib-accordion-group panel-class="{{getShiftDisplayMode(shift)}}" ng-repeat="shift in shifts | filter: { user : activeUser.id } | filter:compareStartDateToNow | orderBy : 'start_datetime'">
+                <shift-block shift="shift" />
             </div>
         </uib-accordion>
     </div>
 </div>
-<div class="row" ng-if="(shifts | filter:{ user : activeUser.id }).length == 0">
+<div class="row" ng-if="(shifts | filter:{ user : activeUser.id } | filter:compareStartDateToNow ).length == 0">
     <div class="col-sm-12 col-md-12 col-lg-12"><p>You do not have any shifts.  <a ng-click="openAddShiftModal()">Add one?</a></p></div>
 </div>
