@@ -19,6 +19,7 @@
     "angular-websocket": "^2.0.0",
     "angular-ui-notification": "^0.3.5",
     "moment-timezone": "^0.5.11",
-    "angular-moment": "^1.0.1"
+    "angular-moment": "^1.0.1",
+    "angular-google-maps": "^2.4.1"
   }
 }

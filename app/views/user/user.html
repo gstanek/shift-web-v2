@@ -3,7 +3,7 @@
   <form name="updateUserForm" class="form-horizontal" ng-controller="UserCtrl" novalidate>
     <div class="row form-group has-feedback">
       <label class="col-sm-4 control-label" for="firstName">First Name</label>
-      <div ng-class="{'col-sm-8': true, 'col-sm-8': true, 'has-error': updateUserForm.firstName.$touched && updateUserForm.firstName.$error.required, 'has-success': updateUserForm.firstName.$touched && !updateUserForm.firstName.$error.required}">
+      <div ng-class="{'col-sm-8': true, 'has-error': updateUserForm.firstName.$touched && updateUserForm.firstName.$error.required, 'has-success': updateUserForm.firstName.$touched && !updateUserForm.firstName.$error.required}">
         <input class="form-control" type="text" id="firstName" name="firstName" ng-model="user.first_name" data-ng-required="true"/>
         <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="updateUserForm.firstName.$touched && !updateUserForm.firstName.$error.required"></span>
         <span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="updateUserForm.firstName.$touched && updateUserForm.firstName.$error.required"></span>
@@ -13,7 +13,7 @@
 
     <div class="row form-group has-feedback">
       <label class="col-sm-4 control-label" for="lastName">Last Name</label>
-      <div ng-class="{'col-sm-8': true, 'col-sm-8': true, 'has-error': updateUserForm.lastName.$touched && updateUserForm.lastName.$error.required, 'has-success': updateUserForm.lastName.$touched && !updateUserForm.lastName.$error.required}">
+      <div ng-class="{'col-sm-8': true, 'has-error': updateUserForm.lastName.$touched && updateUserForm.lastName.$error.required, 'has-success': updateUserForm.lastName.$touched && !updateUserForm.lastName.$error.required}">
         <input class="form-control" type="text" id="lastName" name="lastName" ng-model="user.last_name" data-ng-required="true"/>
         <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="updateUserForm.lastName.$touched && !updateUserForm.lastName.$error.required"></span>
         <span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="updateUserForm.lastName.$touched && updateUserForm.lastName.$error.required"></span>
@@ -41,18 +41,21 @@
       </div>
     </div>
 
+    <div class="row form-group has-feedback">
+      <label class="col-sm-4 control-label" for="firstName">Timezone: </label>
+      <div class="col-sm-8">
+        <select class="form-control" id="timezone" name="timezone" ng-model="user.timezone"  data-ng-required="true">
+          <option ng-repeat="option in data.availableOptions" value="{{option.id}}">{{option.name}}</option>
+        </select>
+      </div>
+    </div>
+
     <div class="row form-group has-feedback" ng-if="errorObj != null && errorObj.detail">
       <div class="col-sm-offset-4 col-sm-8">
         <p class="text-danger">{{errorObj.detail}}</p>
       </div>
     </div>
 
-    <div class="row form-group">
-      <div class="col-sm-offset-4 col-sm-8">
-        <p><time am-time-ago="dateObj.date"></time></p>
-        <p>Date: {{dateObj.date}}</p>
-      </div>
-    </div>
 
     <div class="row form-group">
       <div class="col-sm-offset-4 col-sm-8">
