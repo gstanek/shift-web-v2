@@ -16,9 +16,13 @@ angular.module('ShiftOnTapApp')
     "ngInject";
     $scope.user = {};
     $scope.user = userService.getLocalUser();
+    if(!$scope.user.timezone) {
+        $scope.user.timezone = moment.tz.guess();
+    }
     $scope.dateObj = {
         date : new Date()
     };
+    $scope.timezones = moment.tz.names();
 
     $scope.updateUser = function(form) {
         $scope.errorObj = {};
@@ -46,5 +50,8 @@ angular.module('ShiftOnTapApp')
 
     $scope.$on('USER_CHANGE_EVENT', function() {
         $scope.user = userService.getLocalUser();
+        if(!$scope.user.timezone) {
+            $scope.user.timezone = moment.tz.guess();
+        }
     });
 }]);

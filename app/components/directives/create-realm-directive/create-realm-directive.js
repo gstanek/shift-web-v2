@@ -1,6 +1,6 @@
 angular.module('ShiftOnTapApp')
-.directive('createRealmDirective', ['realmService', 'userService', 'commonService',
-    function(realmService, userService, commonService) {
+.directive('createRealmDirective', ['realmService', 'userService', 'commonService', 'personaService',
+    function(realmService, userService, commonService, personaService) {
     return {
         scope: {
             realmInfo: '=createRealmModel'
@@ -17,27 +17,29 @@ angular.module('ShiftOnTapApp')
                 };
                 realmService.createRealm(realm)
                     .then(function successCallback(response) {
-                        realm.id = response.data.id;
-                        realmService.setLocalRealm(response.data, true);
-                        commonService.setPersonaDisplayState();
+                        var returnedRealm = response.data.realm;
+                        realm.id = returnedRealm.id;
+                        realmService.setLocalRealm(returnedRealm, true);
+                        personaService.setLocalPersona(response.data.persona, false);
+                        // There will only be one user when the realm is created, and it will be the active user that created the realm.
+                        userService.setLocalUser(returnedRealm.users[0], true);
+
+                        // Get All Realms for User
+                        realmService.getRealmsByUser()
+                            .then(function successCallback(response) {
+                                realmService.setLocalRealms(response.data);
+                                //Success
+                            }, function errorCallback(response) {
+                                // Failure
+                                //TODO Handle this
+                            });
+
 
                     }, function errorCallback(response) {
                         //TODO Handle this
                     });
 
             };
-
-            // Employee/Manager/Owner Picker Logic
-            // scope.$watchCollection('checkModel', function () {
-            //     scope.checkResults = [];
-            //     angular.forEach(scope.checkModel, function (value, key) {
-            //         if (value) {
-            //             scope.checkResults.push(key);
-            //         }
-            //     });
-            // });
-            // End Picker logic
-
 
             scope.newRealmFormModel = {
                 name : '',

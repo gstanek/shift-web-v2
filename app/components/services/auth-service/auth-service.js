@@ -1,8 +1,8 @@
 
 angular.module('ShiftOnTapApp')
 
-.service('authService', ['$rootScope', 'localStorageService', 'userService', '$auth', '$http', '$state', 'realmService', 'commonService', 'shiftService', 'RealmWebSocket',
-    function($rootScope, localStorageService, userService, $auth, $http, $state, realmService, commonService, shiftService, RealmWebSocket) {
+.service('authService', ['$rootScope', 'localStorageService', 'userService', '$auth', '$http', '$state', 'realmService', 'commonService', 'shiftService', 'personaService', 'RealmWebSocket',
+    function($rootScope, localStorageService, userService, $auth, $http, $state, realmService, commonService, shiftService, personaService, RealmWebSocket) {
 
     var self = this;
 
@@ -121,36 +121,34 @@ angular.module('ShiftOnTapApp')
             });
     }
 
-    this.signup = function(credentials, channel) {
+    this.signup = function(signUpRequest, channel) {
         var signupUrl = 'http://127.0.0.1:8000/api/v1/user/';
+
+        signUpRequest.timezone = moment.tz.guess();
+
         $http({
             method: 'POST',
             url: signupUrl,
             headers: {
                 'Content-Type': 'application/json'
             },
-            data: credentials
+            data: signUpRequest
         })
             .then(function successCallback(response) {
                 var responseObj = {
                     status: 'success'
                 };
+                // Reset Context
+                self.clearUserContext();
+
                 $rootScope.$broadcast('AUTH_SUCCESS_EVENT', responseObj);
-                console.log('signup response:' + JSON.stringify(response))
                 self.setToken(response.data.access_token);
                 self.setTokenExpirationTime(response.data.token_expiration_time);
                 userService.setLocalUser(response.data.user, false);
-                realmService.removeLocalRealm(false);
-                shiftService.removeLocalShifts(false);
                 $state.go('persona');
                 commonService.setPersonaDisplayState();
             }, function errorCallback(response) {
-                var responseObj = {
-                    httpStatusCode : response.status,
-                    code: response.code,
-                    message : response.detail
-                };
-                $rootScope.$broadcast('AUTH_FAILURE_EVENT', responseObj);
+                $rootScope.$broadcast('AUTH_FAILURE_EVENT', response);
                 self.clearUserContext();
             });
 
@@ -177,56 +175,28 @@ angular.module('ShiftOnTapApp')
                 status: 'success'
             };
             $rootScope.$broadcast('AUTH_SUCCESS_EVENT', responseObj);
-            // $scope.$on('AUTH_SUCCESS_EVENT', function(event, args) {
 
-            // });
-            console.log("Login Success: " + JSON.stringify(loginResponse));
+            var responseData = loginResponse.data;
 
-            self.setToken(loginResponse.data.access_token);
-            self.setTokenExpirationTime(loginResponse.data.token_expiration_time);
-            var user = loginResponse.data.user;
-            userService.setLocalUser(user, false);
-
-            // Lookup Realm
-            var realmID = undefined;
-            if(user.default_realm) {
-                realmID = user.default_realm;
-            }
-            else {
-                realmID = user.realms[0];
-            }
-
-            realmService.getRealmByRealmID(realmID)
-                .then(function successCallback(realm) {
-                    realmService.setLocalRealm(realm, false);
-                    if(realm) {
-                        RealmWebSocket.connect();
-                        userService.setLocalCoworkers(realm.users, false);
-                        shiftService.getShifts(true);
-                    };
-
-                    commonService.setPersonaDisplayState();
-                    $state.go('persona');
-                })
-                .catch(function errorCallback(response) {
-                    console.log('TODO Handle Error Response');
-
-            });
+            self.setToken(responseData.access_token);
+            self.setTokenExpirationTime(responseData.token_expiration_time);
+            userService.setLocalUser(responseData.user, false);
+            userService.setLocalCoworkers(responseData.realm.users, false);
 
 
+            realmService.setLocalRealm(responseData.realm, false);
+            RealmWebSocket.connect();
 
 
+            shiftService.setLocalShifts(responseData.shifts, true);
+            personaService.setLocalPersona(responseData.persona, false);
+            commonService.setPersonaDisplayState();
+            $state.go('persona');
 
 
-        }, function errorCallback(loginResponse) {
-            console.log("Login Error: " + JSON.stringify(loginResponse));
-            var responseObj = {
-                httpStatusCode : loginResponse.status,
-                code: loginResponse.code,
-                message : loginResponse.detail
-            };
-            $rootScope.$broadcast('AUTH_FAILURE_EVENT', responseObj);
-            return responseObj;
+        }, function errorCallback(response) {
+            $rootScope.$broadcast('AUTH_FAILURE_EVENT', response);
+            return response;
         });
     };
 

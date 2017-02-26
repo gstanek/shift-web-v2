@@ -20,10 +20,11 @@ angular.module('ShiftOnTapApp')
                     }
                 });
                 $scope.$on('AUTH_FAILURE_EVENT', function(event, responseObj) {
-                    $scope.requestStatus = responseObj.status;
+                    console.log('AUTH_FAILURE_EVENT. responseObj=' + JSON.stringify(responseObj));
+                    $scope.requestStatus = responseObj.httpStatusCode;
                     $scope.errorObj = {
-                        detail: responseObj.message,
-                        code: responseObj.code
+                        detail: responseObj.error.message,
+                        code: responseObj.error.code
                     };
                 });
 

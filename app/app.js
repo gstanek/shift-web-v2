@@ -33,7 +33,7 @@ angular.module('ShiftOnTapApp', [
 }])
 .config(['uiGmapGoogleMapApiProvider', function(uiGmapGoogleMapApiProvider) {
     uiGmapGoogleMapApiProvider.configure({
-        key: 'AIzaSyCGl2NzP-CIA_V5UXoaC96FwzN26JOiSrc',
+        key: 'AIzaSyCEKupw1W3yFK7VDTCNfTQS24HzgmXPiXc',
         //v: '3.20', defaults to latest 3.X anyhow
         libraries: 'places'
     });
@@ -108,7 +108,7 @@ angular.module('ShiftOnTapApp', [
     });
 
     $scope.$on('UNAUTHORIZED_EVENT', function(event, args) {
-        userService.removeLocalUser(true);
+        userService.clearUserContext();
         $scope.displayName = userService.getBestDisplayName();
         $scope.isActiveUser = authService.isAuthenticated();
         //TODO don't hard code the role

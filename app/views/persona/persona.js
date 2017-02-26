@@ -9,8 +9,8 @@ angular.module('ShiftOnTapApp')
         controller: 'PersonaCtrl'
       });
 }])
-.controller('PersonaCtrl', ['$scope', '$uibModal', 'commonService', 'shiftService', 'userService',
-    function($scope, $uibModal, commonService, shiftService, userService) {
+.controller('PersonaCtrl', ['$scope', '$uibModal', 'commonService', 'shiftService', 'userService', 'realmService',
+    function($scope, $uibModal, commonService, shiftService, userService, realmService) {
     "ngInject";
 
     $scope.$on('PERSONA_DISPLAY_STATE_CHANGE_EVENT', function(event, personaState) {
@@ -36,6 +36,8 @@ angular.module('ShiftOnTapApp')
             }
         };
         $scope.activeUser = userService.getLocalUser();
+        // TODO: Enable
+        // $scope.realms = realmService.getRealmsByUser();
     }
     init();
 

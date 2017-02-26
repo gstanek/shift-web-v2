@@ -2,8 +2,8 @@
 angular.module('ShiftOnTapApp')
 
 
-.service('realmService', ['$rootScope', 'localStorageService', 'personaService', '$http', 'commonService', '$websocket',
-    function($rootScope, localStorageService, personaService, $http, commonService, $websocket) {
+.service('realmService', ['$rootScope', 'localStorageService', 'personaService', '$http', 'commonService', '$websocket', '$q',
+    function($rootScope, localStorageService, personaService, $http, commonService, $websocket, $q) {
 
     /**
      * Create a new realm
@@ -43,6 +43,11 @@ angular.module('ShiftOnTapApp')
             headers: {
                 'Content-Type': 'application/json'
             }
+        })
+        .then(function successCallback(response) {
+            return response.data;
+        }).catch(function errorCallback(response) {
+            return $q.reject(response);
         });
     }
 
@@ -95,8 +100,19 @@ angular.module('ShiftOnTapApp')
         if(updatePersonaDisplayState) {
             commonService.setPersonaDisplayState();
         }
-
     };
+
+    this.getLocalRealms = function() {
+        return localStorageService.get('realms');
+    };
+    this.setLocalRealms = function(realms, updatePersonaDisplayState) {
+        localStorageService.set('realms', realms)
+        $rootScope.$broadcast('REALM_CHANGE_EVENT', realms);
+        if(updatePersonaDisplayState) {
+            commonService.setPersonaDisplayState();
+        }
+    };
+
     this.removeLocalRealm = function(updatePersonaDisplayState) {
         localStorageService.remove('realm');
         $rootScope.$broadcast('REALM_CHANGE_EVENT');

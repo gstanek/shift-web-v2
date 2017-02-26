@@ -44,12 +44,22 @@ angular.module('ShiftOnTapApp')
             scope.createShift = function(form) {
                 if(form.$valid) {
                     if (scope.newShiftModel.first_name || scope.newShiftModel.lastName) {
+                        var user = userService.getLocalUser();
                         if (scope.newShiftModel.first_name) {
-                            scope.user.first_name = scope.newShiftModel.first_name;
+                            user.first_name = scope.newShiftModel.first_name;
                         }
                         if (scope.newShiftModel.last_name) {
-                            scope.user.last_name = scope.newShiftModel.last_name;
+                            user.last_name = scope.newShiftModel.last_name;
                         }
+
+                        userService.updateUser(user)
+                            .then(function successCallback(response) {
+                                userService.setLocalUser(response.data);
+                                //Success
+                            }, function errorCallback(response) {
+                                // Failure
+                                //TODO Handle this
+                            });
                         // scope.updateUser();
 
                     }

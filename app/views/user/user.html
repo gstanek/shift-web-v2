@@ -1,69 +1,158 @@
 <div ng-controller='UserCtrl'>
-  <h3 class="text-center">Your Account</h3>
-  <form name="updateUserForm" class="form-horizontal" ng-controller="UserCtrl" novalidate>
-    <div class="row form-group has-feedback">
-      <label class="col-sm-4 control-label" for="firstName">First Name</label>
-      <div ng-class="{'col-sm-8': true, 'has-error': updateUserForm.firstName.$touched && updateUserForm.firstName.$error.required, 'has-success': updateUserForm.firstName.$touched && !updateUserForm.firstName.$error.required}">
-        <input class="form-control" type="text" id="firstName" name="firstName" ng-model="user.first_name" data-ng-required="true"/>
-        <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="updateUserForm.firstName.$touched && !updateUserForm.firstName.$error.required"></span>
-        <span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="updateUserForm.firstName.$touched && updateUserForm.firstName.$error.required"></span>
-        <span class="text-danger" ng-if="updateUserForm.firstName.$touched && updateUserForm.firstName.$error.required">First Name is required</span>
-      </div>
-    </div>
+    <h3 class="text-center">Your Account</h3>
+    <form name="updateUserForm" class="form-horizontal" ng-controller="UserCtrl" novalidate>
+        <div class="row form-group has-feedback">
+            <label class="col-sm-4 control-label" for="firstName">First Name</label>
+            <div ng-class="{'col-sm-8': true, 'has-error': updateUserForm.firstName.$touched && updateUserForm.firstName.$error.required, 'has-success': updateUserForm.firstName.$touched && !updateUserForm.firstName.$error.required}">
+                <input class="form-control" type="text" id="firstName" name="firstName" ng-model="user.first_name" data-ng-required="true"/>
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="updateUserForm.firstName.$touched && !updateUserForm.firstName.$error.required"></span>
+                <span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="updateUserForm.firstName.$touched && updateUserForm.firstName.$error.required"></span>
+                <span class="text-danger" ng-if="updateUserForm.firstName.$touched && updateUserForm.firstName.$error.required">First Name is required</span>
+            </div>
+        </div>
 
-    <div class="row form-group has-feedback">
-      <label class="col-sm-4 control-label" for="lastName">Last Name</label>
-      <div ng-class="{'col-sm-8': true, 'has-error': updateUserForm.lastName.$touched && updateUserForm.lastName.$error.required, 'has-success': updateUserForm.lastName.$touched && !updateUserForm.lastName.$error.required}">
-        <input class="form-control" type="text" id="lastName" name="lastName" ng-model="user.last_name" data-ng-required="true"/>
-        <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="updateUserForm.lastName.$touched && !updateUserForm.lastName.$error.required"></span>
-        <span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="updateUserForm.lastName.$touched && updateUserForm.lastName.$error.required"></span>
-        <span class="text-danger" ng-if="updateUserForm.lastName.$touched && updateUserForm.lastName.$error.required">Last Name is required</span>
-      </div>
-    </div>
+        <div class="row form-group has-feedback">
+            <label class="col-sm-4 control-label" for="lastName">Last Name</label>
+            <div ng-class="{'col-sm-8': true, 'has-error': updateUserForm.lastName.$touched && updateUserForm.lastName.$error.required, 'has-success': updateUserForm.lastName.$touched && !updateUserForm.lastName.$error.required}">
+                <input class="form-control" type="text" id="lastName" name="lastName" ng-model="user.last_name" data-ng-required="true"/>
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="updateUserForm.lastName.$touched && !updateUserForm.lastName.$error.required"></span>
+                <span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="updateUserForm.lastName.$touched && updateUserForm.lastName.$error.required"></span>
+                <span class="text-danger" ng-if="updateUserForm.lastName.$touched && updateUserForm.lastName.$error.required">Last Name is required</span>
+            </div>
+        </div>
 
-    <div class="row form-group has-feedback">
-      <label class="col-sm-4 control-label" for="preferredName">Preferred Name</label>
-      <div class="col-sm-8">
-        <input class="form-control" type="text" id="preferredName" ng-model="user.preferred_name" />
-      </div>
-    </div>
+        <div class="row form-group has-feedback">
+            <label class="col-sm-4 control-label" for="preferredName">Preferred Name</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" id="preferredName" ng-model="user.preferred_name" />
+            </div>
+        </div>
 
-    <div class="row form-group has-feedback" show-errors>
-      <label class="col-sm-4 control-label" for="email">Email:</label>
-      <div ng-class="{'col-sm-8': true, 'col-sm-8': true, 'has-error': updateUserForm.email.$touched && updateUserForm.email.$error.required, 'has-success': updateUserForm.email.$touched && !updateUserForm.email.$error.required}">
-        <input type="text" class="form-control" id="email" name="email"
-               ng-model="user.email"
-               ng-pattern="/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/" data-ng-required="true">
-        <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="updateUserForm.email.$touched && !updateUserForm.email.$error.pattern && !updateUserForm.email.$error.required"></span>
-        <span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="(updateUserForm.email.$touched && updateUserForm.email.$error.pattern) || (updateUserForm.email.$touched && updateUserForm.email.$error.required)"></span>
-        <span class="text-danger" ng-if="updateUserForm.email.$error.required && updateUserForm.email.$touched">Email is required</span>
-        <span class="text-danger" ng-if="updateUserForm.email.$touched && updateUserForm.email.$error.pattern">Email address entered is not valid</span>
-      </div>
-    </div>
+        <div class="row form-group has-feedback" show-errors>
+            <label class="col-sm-4 control-label" for="email">Email:</label>
+            <div ng-class="{'col-sm-8': true, 'col-sm-8': true, 'has-error': updateUserForm.email.$touched && updateUserForm.email.$error.required, 'has-success': updateUserForm.email.$touched && !updateUserForm.email.$error.required}">
+                <input type="text" class="form-control" id="email" name="email"
+                       ng-model="user.email"
+                       ng-pattern="/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/" data-ng-required="true">
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="updateUserForm.email.$touched && !updateUserForm.email.$error.pattern && !updateUserForm.email.$error.required"></span>
+                <span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="(updateUserForm.email.$touched && updateUserForm.email.$error.pattern) || (updateUserForm.email.$touched && updateUserForm.email.$error.required)"></span>
+                <span class="text-danger" ng-if="updateUserForm.email.$error.required && updateUserForm.email.$touched">Email is required</span>
+                <span class="text-danger" ng-if="updateUserForm.email.$touched && updateUserForm.email.$error.pattern">Email address entered is not valid</span>
+            </div>
+        </div>
 
-    <div class="row form-group has-feedback">
-      <label class="col-sm-4 control-label" for="firstName">Timezone: </label>
-      <div class="col-sm-8">
-        <select class="form-control" id="timezone" name="timezone" ng-model="user.timezone"  data-ng-required="true">
-          <option ng-repeat="option in data.availableOptions" value="{{option.id}}">{{option.name}}</option>
-        </select>
-      </div>
-    </div>
+        <div class="row form-group has-feedback">
+            <label class="col-sm-4 control-label" for="timezone">Timezone: </label>
+            <div class="col-sm-8">
+                <select class="form-control" id="timezone" name="timezone" ng-model="user.timezone"  data-ng-required="true">
+                    <option ng-repeat="timezone in timezones" value="{{timezone}}">{{timezone}}</option>
+                </select>
+            </div>
+        </div>
 
-    <div class="row form-group has-feedback" ng-if="errorObj != null && errorObj.detail">
-      <div class="col-sm-offset-4 col-sm-8">
-        <p class="text-danger">{{errorObj.detail}}</p>
-      </div>
-    </div>
+        <div class="row form-group has-feedback">
+            <label class="col-sm-4 control-label" for="defaultCompany">Default Company: </label>
+            <!--<div class="col-sm-8">-->
+                <!--<select class="form-control" id="defaultCompany" name="defaultCompany" ng-init="user.default_realm = user.default_realm || user.realms[0]" ng-model="user.default_realm"  data-ng-required="true">-->
+                    <!--<option ng-repeat="realm in user.realms" value="{{realm}}">{{realm}}</option>-->
+                <!--</select>-->
+            <!--</div>-->
+            <div class="col-sm-8">
+                <select class="form-control" id="defaultCompany" name="defaultCompany" ng-model="user.default_realm"
+                        ng-init="user.default_realm = user.default_realm || realms[0]"
+                        ng-options="realm as realm for realm in user.realms">
+                </select>
+            </div>
+        </div>
+
+        <div class="row form-group has-feedback" ng-if="errorObj != null && errorObj.detail">
+            <div class="col-sm-offset-4 col-sm-8">
+                <p class="text-danger">{{errorObj.detail}}</p>
+            </div>
+        </div>
 
 
-    <div class="row form-group">
-      <div class="col-sm-offset-4 col-sm-8">
-        <button class="btn btn-primary" type="submit" id="updateUser" ng-click="updateUser(updateUserForm)">Update</button>
-      </div>
-    </div>
+        <div class="row form-group">
+            <div class="col-sm-offset-4 col-sm-8">
+                <button class="btn btn-primary" type="submit" id="updateUser" ng-click="updateUser(updateUserForm)">Update</button>
+            </div>
+        </div>
 
-  </form>
+    </form>
 
+    <!--<h3 class="text-center">Company Profile</h3>-->
+    <!--<form name="updateUserForm" class="form-horizontal" ng-controller="UserCtrl" novalidate>-->
+        <!--<div class="row form-group has-feedback">-->
+            <!--<label class="col-sm-4 control-label" for="firstName">First Name</label>-->
+            <!--<div ng-class="{'col-sm-8': true, 'has-error': updateUserForm.firstName.$touched && updateUserForm.firstName.$error.required, 'has-success': updateUserForm.firstName.$touched && !updateUserForm.firstName.$error.required}">-->
+                <!--<input class="form-control" type="text" id="firstName" name="firstName" ng-model="user.first_name" data-ng-required="true"/>-->
+                <!--<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="updateUserForm.firstName.$touched && !updateUserForm.firstName.$error.required"></span>-->
+                <!--<span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="updateUserForm.firstName.$touched && updateUserForm.firstName.$error.required"></span>-->
+                <!--<span class="text-danger" ng-if="updateUserForm.firstName.$touched && updateUserForm.firstName.$error.required">First Name is required</span>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="row form-group has-feedback">-->
+            <!--<label class="col-sm-4 control-label" for="lastName">Last Name</label>-->
+            <!--<div ng-class="{'col-sm-8': true, 'has-error': updateUserForm.lastName.$touched && updateUserForm.lastName.$error.required, 'has-success': updateUserForm.lastName.$touched && !updateUserForm.lastName.$error.required}">-->
+                <!--<input class="form-control" type="text" id="lastName" name="lastName" ng-model="user.last_name" data-ng-required="true"/>-->
+                <!--<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="updateUserForm.lastName.$touched && !updateUserForm.lastName.$error.required"></span>-->
+                <!--<span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="updateUserForm.lastName.$touched && updateUserForm.lastName.$error.required"></span>-->
+                <!--<span class="text-danger" ng-if="updateUserForm.lastName.$touched && updateUserForm.lastName.$error.required">Last Name is required</span>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="row form-group has-feedback">-->
+            <!--<label class="col-sm-4 control-label" for="preferredName">Preferred Name</label>-->
+            <!--<div class="col-sm-8">-->
+                <!--<input class="form-control" type="text" id="preferredName" ng-model="user.preferred_name" />-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="row form-group has-feedback" show-errors>-->
+            <!--<label class="col-sm-4 control-label" for="email">Email:</label>-->
+            <!--<div ng-class="{'col-sm-8': true, 'col-sm-8': true, 'has-error': updateUserForm.email.$touched && updateUserForm.email.$error.required, 'has-success': updateUserForm.email.$touched && !updateUserForm.email.$error.required}">-->
+                <!--<input type="text" class="form-control" id="email" name="email"-->
+                       <!--ng-model="user.email"-->
+                       <!--ng-pattern="/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/" data-ng-required="true">-->
+                <!--<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true" ng-if="updateUserForm.email.$touched && !updateUserForm.email.$error.pattern && !updateUserForm.email.$error.required"></span>-->
+                <!--<span class="glyphicon glyphicon-alert form-control-feedback" aria-hidden="true" ng-if="(updateUserForm.email.$touched && updateUserForm.email.$error.pattern) || (updateUserForm.email.$touched && updateUserForm.email.$error.required)"></span>-->
+                <!--<span class="text-danger" ng-if="updateUserForm.email.$error.required && updateUserForm.email.$touched">Email is required</span>-->
+                <!--<span class="text-danger" ng-if="updateUserForm.email.$touched && updateUserForm.email.$error.pattern">Email address entered is not valid</span>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="row form-group has-feedback">-->
+            <!--<label class="col-sm-4 control-label" for="firstName">Timezone: </label>-->
+            <!--<div class="col-sm-8">-->
+                <!--<select class="form-control" id="timezone" name="timezone" ng-model="user.timezone"  data-ng-required="true">-->
+                    <!--<option ng-repeat="timezone in timezones" value="{{timezone}}">{{timezone}}</option>-->
+                <!--</select>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="row form-group has-feedback">-->
+            <!--<label class="col-sm-4 control-label" for="firstName">Timezone: </label>-->
+            <!--<div class="col-sm-8">-->
+                <!--<select class="form-control" id="defaultCompany" name="defaultCompany" ng-model="user.defaultCompany"  data-ng-required="true">-->
+                    <!--<option ng-repeat="timezone in timezones" value="{{timezone}}">{{timezone}}</option>-->
+                <!--</select>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="row form-group has-feedback" ng-if="errorObj != null && errorObj.detail">-->
+            <!--<div class="col-sm-offset-4 col-sm-8">-->
+                <!--<p class="text-danger">{{errorObj.detail}}</p>-->
+            <!--</div>-->
+        <!--</div>-->
+
+
+        <!--<div class="row form-group">-->
+            <!--<div class="col-sm-offset-4 col-sm-8">-->
+                <!--<button class="btn btn-primary" type="submit" id="updateUser" ng-click="updateUser(updateUserForm)">Update</button>-->
+            <!--</div>-->
+        <!--</div>-->
+
+    <!--</form>-->
 
 </div>
