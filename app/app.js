@@ -17,7 +17,8 @@ angular.module('ShiftOnTapApp', [
     'angularMoment',
 
 ])
-.config(['$stateProvider', '$urlRouterProvider', 'localStorageServiceProvider', '$authProvider', function($stateProvider, $urlRouterProvider, localStorageServiceProvider, $authProvider) {
+.config(['$stateProvider', '$urlRouterProvider', 'localStorageServiceProvider', '$authProvider',
+    function($stateProvider, $urlRouterProvider, localStorageServiceProvider, $authProvider) {
     $urlRouterProvider.otherwise("/home");
     localStorageServiceProvider.setPrefix('shift');
     $authProvider.oauth2({
@@ -62,7 +63,8 @@ angular.module('ShiftOnTapApp', [
 //     $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
 //     $httpProvider.defaults.headers.post['Content-Type'] =  'application/x-www-form-urlencoded';
 // })
-.controller('AppCtrl', ['$scope', 'authService', 'userService', 'realmService', '$uibModal', function($scope, authService, userService, realmService, $uibModal) {
+.controller('AppCtrl', ['$scope', 'authService', 'userService', 'realmService', '$uibModal', '$state',
+    function($scope, authService, userService, realmService, $uibModal, $state) {
     $scope.displayName = userService.getBestDisplayName();
     $scope.isActiveUser = authService.isAuthenticated();
     $scope.isAuthorized = authService.isAuthorized('admin');
@@ -108,29 +110,45 @@ angular.module('ShiftOnTapApp', [
     });
 
     $scope.$on('UNAUTHORIZED_EVENT', function(event, args) {
-        userService.clearUserContext();
-        $scope.displayName = userService.getBestDisplayName();
-        $scope.isActiveUser = authService.isAuthenticated();
+        authService.clearUserContext();
+        $state.go('home');
+        openLogin();
+
+        // $scope.displayName = userService.getBestDisplayName();
+        // $scope.isActiveUser = authService.isAuthenticated();
         //TODO don't hard code the role
-        $scope.isAuthorized = authService.isAuthorized('admin');
+        // $scope.isAuthorized = authService.isAuthorized('admin');
 
-        realmService.removeLocalRealm(true);
-        $scope.companyName = realmService.getRealmName();
+        // realmService.removeLocalRealm(true);
+        // $scope.companyName = realmService.getRealmName();
 
-        if(args && args.rejection) {
-            $scope.responseObj = {
-                status: 'failure',
-                detail: args.rejection.data.message,
-                code: args.rejection.data.code
-            }
-        }
-        else {
-            $scope.errorObj = {
-                detail: 'Invalid credentials',
-                code: '99999'
-            }
-        }
+        // if(args && args.rejection) {
+        //     $scope.responseObj = {
+        //         status: 'failure',
+        //         detail: args.rejection.data.message,
+        //         code: args.rejection.data.code
+        //     }
+        // }
+        // else {
+        //     $scope.errorObj = {
+        //         detail: 'Invalid credentials',
+        //         code: '99999'
+        //     }
+        // }
     });
+
+    // Start Modal Logic
+    $scope.loginModal = {
+        instance: null
+    };
+    var openLogin = function () {
+        $scope.loginModal.instance = $uibModal.open({
+            animation: true,
+            template: '<auth-modal modal="loginModal" action="\'login\'" email="email" title="\'Login\'"></auth-modal>',
+            scope : $scope
+        });
+    };
+    // End Modal Logic
 
     var init = function () {
         authService.validateAuthenticated();

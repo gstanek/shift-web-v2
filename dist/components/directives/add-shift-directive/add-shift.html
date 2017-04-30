@@ -69,7 +69,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <uib-timepicker ng-model="shiftDetails.startTime" hour-step="1" minute-step="15" show-meridian="true"></uib-timepicker>
+                                        <uib-timepicker ng-model="shiftDetails.startTime" hour-step="1" minute-step="15" show-meridian="true" min="startTimeOptions.minDate" datepicker-options="startTimeOptions"></uib-timepicker>
                                     </div>
                                 </div>
                         </div>
@@ -81,7 +81,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <uib-timepicker ng-model="shiftDetails.endTime" hour-step="1" minute-step="15" show-meridian="true" min="endTime.min" datepicker-options="endTimeOptions"></uib-timepicker>
+                                        <uib-timepicker ng-model="shiftDetails.endTime" hour-step="1" minute-step="15" show-meridian="true" min="endTimeOptions.minDate" datepicker-options="endTimeOptions"></uib-timepicker>
                                     </div>
                                 </div>
                         </div>
