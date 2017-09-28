@@ -45,7 +45,7 @@ angular.module('ShiftOnTapApp')
 
                 $scope.acceptInvite = function (form) {
                     if(form.$valid) {
-                        authService.accept_invite($scope.credentials, $scope.inviteCode);
+                        authService.acceptInvite($scope.credentials, $scope.inviteCode);
                         if($scope.modal) {
                             $scope.modal.instance.close();
                         }

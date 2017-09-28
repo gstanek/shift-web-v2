@@ -73,7 +73,7 @@ angular.module('ShiftOnTapApp')
 
     };
 
-    this.accept_invite = function(credentials, invite_code) {
+    this.acceptInvite = function(credentials, invite_code) {
         var acceptInviteUrl = 'http://127.0.0.1:8000/api/v1/security/accept/';
         var invitePayload = {
             email : credentials.email,
@@ -89,26 +89,30 @@ angular.module('ShiftOnTapApp')
             data: invitePayload
         })
             .then(function successCallback(response) {
-                console.log('Accept Invite Response:' + JSON.stringify(response))
-                var responseObj = {
-                    status: 'success'
-                };
-                $rootScope.$broadcast('AUTH_SUCCESS_EVENT', responseObj);
+                console.log('Accept Invite Response:' + JSON.stringify(response));
 
-                self.setToken(response.data.access_token);
-                self.setTokenExpirationTime(response.data.token_expiration_time);
-                var user = response.data.user;
-                userService.setLocalUser(user, false);
+                self._initUserState(response.data);
 
-                // TODO Return realm id of invited and set that one to active
-                var realm = user.realms[0];
-                realmService.setLocalRealm(realm, false);
-                if(realm) {
-                    RealmWebSocket.connect();
-                    userService.setLocalCoworkers(realm.users, false);
-                    shiftService.getShifts(true);
-                    $state.go('persona');
-                }
+                // var responseObj = {
+                //     status: 'success'
+                // };
+                // $rootScope.$broadcast('AUTH_SUCCESS_EVENT', responseObj);
+                //
+                // self.setToken(response.data.access_token);
+                // self.setTokenExpirationTime(response.data.token_expiration_time);
+                // var user = response.data.user;
+                // userService.setLocalUser(user, false);
+                //
+                // // TODO Return realm id of invited and set that one to active
+                // var realm = response.data.realm;
+                // console.log('Realm=' + JSON.stringify(realm));
+                // realmService.setLocalRealm(realm, false);
+                // if(realm) {
+                //     RealmWebSocket.connect();
+                //     userService.setLocalCoworkers(realm.users, false);
+                //     shiftService.getShifts(true);
+                //     $state.go('persona');
+                // }
             }, function errorCallback(response) {
                 var responseObj = {
                     httpStatusCode : response.status,
@@ -141,12 +145,17 @@ angular.module('ShiftOnTapApp')
                 // Reset Context
                 self.clearUserContext();
 
-                $rootScope.$broadcast('AUTH_SUCCESS_EVENT', responseObj);
-                self.setToken(response.data.access_token);
-                self.setTokenExpirationTime(response.data.token_expiration_time);
-                userService.setLocalUser(response.data.user, false);
-                $state.go('persona');
-                commonService.setPersonaDisplayState();
+
+                self._initUserState(response.data);
+
+
+                // $rootScope.$broadcast('AUTH_SUCCESS_EVENT', responseObj);
+                //
+                // self.setToken(response.data.access_token);
+                // self.setTokenExpirationTime(response.data.token_expiration_time);
+                // userService.setLocalUser(response.data.user, false);
+                // $state.go('persona');
+                // commonService.setPersonaDisplayState();
             }, function errorCallback(response) {
                 $rootScope.$broadcast('AUTH_FAILURE_EVENT', response);
                 self.clearUserContext();
@@ -171,27 +180,34 @@ angular.module('ShiftOnTapApp')
         })
         .then(function successCallback(loginResponse) {
             //TODO Make this a broadcast of the AUTH_SUCCESS_EVENT
-            var responseObj = {
-                status: 'success'
-            };
-            $rootScope.$broadcast('AUTH_SUCCESS_EVENT', responseObj);
+            // var responseObj = {
+            //     status: 'success'
+            // };
+            // $rootScope.$broadcast('AUTH_SUCCESS_EVENT', responseObj);
 
-            var responseData = loginResponse.data;
+            // var responseData = loginResponse.data;
 
-            self.setToken(responseData.access_token);
-            self.setTokenExpirationTime(responseData.token_expiration_time);
-            userService.setLocalUser(responseData.user, false);
-            userService.setLocalCoworkers(responseData.realm.users, false);
+            self._initUserState(loginResponse.data);
 
+            // self._initUserState(
+            //     responseData.access_token,
+            //     responseData.token_expiration_time,
+            //     responseData.user,
+            //     responseData.realm,
+            //     responseData.persona,
+            //     responseData.shifts);
 
-            realmService.setLocalRealm(responseData.realm, false);
-            RealmWebSocket.connect();
+            // self.setToken(responseData.access_token);
+            // self.setTokenExpirationTime(responseData.token_expiration_time);
+            // userService.setLocalUser(responseData.user, false);
+            // userService.setLocalCoworkers(responseData.realm.users, false);
+            // realmService.setLocalRealm(responseData.realm, false);
+            // RealmWebSocket.connect();
+            // shiftService.setLocalShifts(responseData.shifts, true);
+            // personaService.setLocalPersona(responseData.persona, false);
 
-
-            shiftService.setLocalShifts(responseData.shifts, true);
-            personaService.setLocalPersona(responseData.persona, false);
-            commonService.setPersonaDisplayState();
-            $state.go('persona');
+            // commonService.setPersonaDisplayState();
+            // $state.go('persona');
 
 
         }, function errorCallback(response) {
@@ -199,6 +215,29 @@ angular.module('ShiftOnTapApp')
             return response;
         });
     };
+
+    this._initUserState = function(responseData) {
+        var responseObj = {
+            status: 'success'
+        };
+        $rootScope.$broadcast('AUTH_SUCCESS_EVENT', responseObj);
+
+        self.setToken(responseData.access_token);
+        self.setTokenExpirationTime(responseData.token_expiration_time);
+        userService.setLocalUser(responseData.user, false);
+        console.log('User=' + JSON.stringify(localStorageService.get('user')));
+        if(responseData.realm) {
+            userService.setLocalCoworkers(responseData.realm.users, false);
+            realmService.setLocalRealm(responseData.realm, false);
+            RealmWebSocket.connect();
+            shiftService.setLocalShifts(responseData.shifts, true);
+            personaService.setLocalPersona(responseData.persona, false);
+        }
+
+        commonService.setPersonaDisplayState();
+        $state.go('persona');
+
+    }
 
     this.setToken = function(token) {
         $auth.setToken(token);

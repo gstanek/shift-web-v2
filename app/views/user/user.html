@@ -58,10 +58,11 @@
                 <!--</select>-->
             <!--</div>-->
             <div class="col-sm-8">
-                <select class="form-control" id="defaultCompany" name="defaultCompany" ng-model="user.default_realm"
-                        ng-init="user.default_realm = user.default_realm || realms[0]"
-                        ng-options="realm as realm for realm in user.realms">
+                <select class="form-control" id="defaultCompany" name="defaultCompany" ng-model="defaultRealm"
+
+                        ng-options="realm.name for realm in user.realms track by realm.id">
                 </select>
+                <!--ng-init="user.default_realm = realm || realms[0].name"-->
             </div>
         </div>
 

@@ -1,6 +1,6 @@
 angular.module('ShiftOnTapApp')
-.directive('createRealmDirective', ['realmService', 'userService', 'commonService', 'personaService',
-    function(realmService, userService, commonService, personaService) {
+.directive('createRealmDirective', ['realmService', 'userService', 'commonService', 'personaService', 'authService',
+    function(realmService, userService, commonService, personaService, authService) {
     return {
         scope: {
             realmInfo: '=createRealmModel'
@@ -17,6 +17,13 @@ angular.module('ShiftOnTapApp')
                 };
                 realmService.createRealm(realm)
                     .then(function successCallback(response) {
+                        if(response.data.access_token) {
+                            authService.setToken(response.data.access_token);
+                        }
+                        if(response.data.token_expiration_time){
+                            authService.setTokenExpirationTime(response.data.token_expiration_time);
+                        }
+
                         var returnedRealm = response.data.realm;
                         realm.id = returnedRealm.id;
                         realmService.setLocalRealm(returnedRealm, true);
