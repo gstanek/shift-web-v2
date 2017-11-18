@@ -1,6 +1,14 @@
 # shift-web-v2
 Shift v2 app
 
+### Common Local Development Commands
+Build the project: `grunt build`
+
+After the project is built, we use nginx to serve the content. See shift-nginx for nginx configuration.
+
+What follows below is the stock readme that came with a base Angular project I started with. I'll need to go through it, keep relevant parts and remove parts that don't apply.
+---
+
 ## Getting Started
 
 ### Install Dependencies
