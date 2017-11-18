@@ -41,6 +41,7 @@ angular.module('ShiftOnTapApp')
                         shiftService.updateShift(shiftID, shift)
                             .then(function successCallback(response) {
                                 console.log('Success:' + JSON.stringify(response));
+                                shiftService.setLocalShift(response.data, true);
                             }, function errorCallback(response) {
                                 console.log('Failure:' + JSON.stringify(response));
                             });
