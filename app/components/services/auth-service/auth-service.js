@@ -73,12 +73,12 @@ angular.module('ShiftOnTapApp')
 
     };
 
-    this.acceptInvite = function(credentials, invite_code) {
+    this.acceptInvite = function(credentials, inviteCode) {
         var acceptInviteUrl = 'http://127.0.0.1:8000/api/v1/security/accept/';
         var invitePayload = {
             email : credentials.email,
             new_password: credentials.password,
-            invite_code: invite_code
+            invite_code: inviteCode
         }
         $http({
             method: 'PATCH',

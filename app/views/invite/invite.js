@@ -17,7 +17,8 @@ function($scope, $stateParams, userService, authService, $state, $uibModal, Noti
     var inviteEmail = $stateParams.inviteEmail;
     var inviteCode = $stateParams.inviteCode;
     $scope.email = inviteEmail;
-    $scope.inviteCode = inviteCode;
+    $scope.code = inviteCode;
+
     $scope.inviteValid = true;
 
     var validateInvitee = function() {
@@ -90,50 +91,7 @@ function($scope, $stateParams, userService, authService, $state, $uibModal, Noti
             scope : $scope
         });
     };
-    // End Modal Logic
 
-    // $scope.$on('INVITE_EVENT', function(event, responseObject) {
-    //     var error = responseObject.error;
-    //     if(error) {
-    //         $scope.inviteValid = false;
-    //         if(error.code != 1004) {
-    //             if(authService.isAuthenticated()) {
-    //                 var localUser = userService.getLocalUser();
-    //                 if(localUser.email == $scope.email) {
-    //                     // TODO Display message stating you're already a member of the realm, so redirecting
-    //                     $state.go("persona");
-    //                 }
-    //                 else {
-    //                     authService.logout();
-    //                 }
-    //             }
-    //             else {
-    //                 authService.logout();
-    //             }
-    //         }
-    //         //TODO: Display generic try again message
-    //     }
-    //     else {
-    //         if(authService.isAuthenticated()) {
-    //             $scope.inviteValid = true;
-    //             var localUser = userService.getLocalUser();
-    //
-    //             var invitedUserID = responseObject.data.user;
-    //             // var users = responseObject.data.realm.users;
-    //             // var invitedUser = searchArray(invitedUserID, users);
-    //             if(invitedUserID == localUser.id) { // && (invitedUser.email == $scope.email)) {
-    //                 // The logged in user is the invited user
-    //                 $state.go("persona");
-    //             }
-    //             else {
-    //                 // The logged in user is not the invited user
-    //                 authService.logout();
-    //             }
-    //         }
-    //         else {
-    //             authService.logout();
-    //         }
-    //     }
-    // });
+    // End Modal Logic
 
 }]);

@@ -56,13 +56,11 @@ angular.module('ShiftOnTapApp')
                 }
             }
 
-
             scope.addUsers = function(form) {
                 console.log('scope.formData=' + JSON.stringify(scope.formData))
                 if(form.$valid) {
                     var realm = realmService.getLocalRealm();
                     var realm_id = realm.id;
-                    console.log('users to add: ' + JSON.stringify(scope.formData.users))
                     var usersDAO = {
                         realm_id : realm_id,
                         users : scope.formData.users //cleanedUsers

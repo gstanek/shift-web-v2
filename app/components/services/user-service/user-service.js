@@ -38,6 +38,13 @@ function($rootScope, localStorageService, $http, commonService, $q) {
      *  for failure case rejects with standard Error Response Object}
      */
     this.createUsers = function(createUsersPayload) {
+
+        // Populate each user with a default timezone
+        var timezone_guess = moment.tz.guess();
+        for (var i = 0; i < createUsersPayload.users.length; i++) {
+            createUsersPayload.users[i].timezone = timezone_guess;
+        }
+
         return $http({
             method: 'POST',
             url: 'http://127.0.0.1:8000/api/v1/user/bulk',
@@ -57,13 +64,13 @@ function($rootScope, localStorageService, $http, commonService, $q) {
     /**
      * Verify invite valid, and if valid, mark invite as activated so it can't be used again
      * @param email
-     * @param invite_code
+     * @param inviteCode
      * @returns { A promise that
      *  for success case returns response data
      *  for failure case rejects with standard Error Response Object}
      */
-    this.verifyInvitee = function(email, invite_code) {
-        var verifyUrl = 'http://127.0.0.1:8000/api/v1/user/invite/email/' + email + '/code/' + invite_code;
+    this.verifyInvitee = function(email, inviteCode) {
+        var verifyUrl = 'http://127.0.0.1:8000/api/v1/user/invite/email/' + email + '/code/' + inviteCode;
         return $http({
             method: 'GET',
             url: verifyUrl

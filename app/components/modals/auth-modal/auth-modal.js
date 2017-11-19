@@ -11,7 +11,8 @@ angular.module('ShiftOnTapApp')
                 action: '=',
                 inviteCode: '=?'
             },
-            controller: function ($scope) {
+            controller: ['$scope',
+                function ($scope) {
 
                 $scope.$on('AUTH_SUCCESS_EVENT', function(event, responseObj) {
                     $scope.requestStatus = responseObj.status;
@@ -22,10 +23,20 @@ angular.module('ShiftOnTapApp')
                 $scope.$on('AUTH_FAILURE_EVENT', function(event, responseObj) {
                     console.log('AUTH_FAILURE_EVENT. responseObj=' + JSON.stringify(responseObj));
                     $scope.requestStatus = responseObj.httpStatusCode;
-                    $scope.errorObj = {
-                        detail: responseObj.error.message,
-                        code: responseObj.error.code
-                    };
+                    if(responseObj.error) {
+                        $scope.errorObj = {
+                            detail: responseObj.error.message,
+                            code: responseObj.error.code
+                        };
+                    }
+                    else {
+                        //TODO: Ensure that errorObj is populated always from server side
+                        $scope.errorObj = {
+                            detail: "Unexpected error occurred",
+                            code: "0000"
+                        };
+                    }
+
                 });
 
                 $scope.credentials = {
@@ -110,6 +121,6 @@ angular.module('ShiftOnTapApp')
                 };
                 // End Modal Logic
 
-            }
+            }]
         };
     }]);
