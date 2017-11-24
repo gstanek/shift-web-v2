@@ -37,7 +37,7 @@ describe('ShiftOnTapApp module', function() {
     // Individual tests...
     it('should initialize user controller', function() {
       expect(controller).toBeDefined();
-      expect($scope.user).toEqual({"id":104,"first_name":"","last_name":"","preferred_name":"","email":"89@gmail.com","realms":[]});
+      expect($scope.user).toEqual({"id":104,"first_name":"","last_name":"","preferred_name":"","email":"89@gmail.com","realms":[], "timezone":"America/Chicago"});
     });
 
   });

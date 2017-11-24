@@ -17,6 +17,8 @@ module.exports = function(config){
 		'app/bower_components/angular-google-maps/dist/angular-google-maps.min.js',
 		'app/bower_components/angular-websocket/dist/angular-websocket.min.js',
 		'app/bower_components/angular-ui-notification/dist/angular-ui-notification.min.js',
+        'app/bower_components/moment-timezone/builds/moment-timezone-with-data.min.js',
+        'app/bower_components/angular-moment/angular-moment.min.js',
 
 		'app/components/**/*.js',
 		'app/views/**/*.js',

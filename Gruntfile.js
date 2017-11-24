@@ -469,6 +469,14 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('build', [
+    // Run unit tests during build
+    // 'clean:server',
+    // 'concurrent:test',
+    // 'postcss',
+    // 'connect:test',
+    // 'karma:unit',
+
+    // Build tasks
     'clean:dist',
     'wiredep',
     'useminPrepare',

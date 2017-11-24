@@ -1,8 +1,8 @@
 
 angular.module('ShiftOnTapApp')
 
-.service('userService', ['$rootScope', 'localStorageService', '$http', 'commonService', '$q',
-function($rootScope, localStorageService, $http, commonService, $q) {
+.service('userService', ['$rootScope', 'localStorageService', '$http', 'commonService', '$q', '$log',
+function($rootScope, localStorageService, $http, commonService, $q, $log) {
 
     var self = this;
 
@@ -39,10 +39,12 @@ function($rootScope, localStorageService, $http, commonService, $q) {
      */
     this.createUsers = function(createUsersPayload) {
 
+        var users = createUsersPayload.users;
+
         // Populate each user with a default timezone
-        var timezone_guess = moment.tz.guess();
-        for (var i = 0; i < createUsersPayload.users.length; i++) {
-            createUsersPayload.users[i].timezone = timezone_guess;
+        var timezoneGuess = moment.tz.guess();
+        for (var i = 0; i < users.length; i++) {
+            users[i].timezone = timezoneGuess;
         }
 
         return $http({
@@ -105,23 +107,44 @@ function($rootScope, localStorageService, $http, commonService, $q) {
     };
 
     /**
-     * Adds array of passed in coworkers to local coworker storage
-     * @param coworkers - coworkers array to add
+     * Adds array of passed in coworkersToAdd to local coworker storage
+     * @param coworkersToAdd - coworkersToAdd array to add
      * @param updatePersonaDisplayState - boolean whether or not to broadcast a notification
      */
-    this.addLocalCoworkers = function(coworkers, updatePersonaDisplayState) {
+    this.addLocalCoworkers = function(coworkersToAdd, updatePersonaDisplayState) {
         var existingCoworkers = localStorageService.get('coworkers');
+
+        coworkersToAdd.sort(
+            function(a, b) {
+                return parseFloat(a.id) - parseFloat(b.id);
+            }
+        );
+
         if(existingCoworkers != null) {
-            var arrayLength = coworkers.length;
-            for (var i = 0; i < arrayLength; i++) {
-                existingCoworkers.push(coworkers[i]);
+            // Insert new coworkersToAdd in order, only if they're new
+            var existingCoworkersLength = existingCoworkers.length
+            var newCoworkersLength = coworkersToAdd.length;
+            var existingCoworkerIndex = existingCoworkersLength - 1;
+            for (var newCoworkerIndex = 0; newCoworkerIndex<newCoworkersLength ; newCoworkerIndex++) {
+                while(existingCoworkerIndex>=0 && existingCoworkers[existingCoworkerIndex].id > coworkersToAdd[newCoworkerIndex].id ) {
+                    existingCoworkerIndex--;
+                }
+                if(existingCoworkers[existingCoworkerIndex].id == coworkersToAdd[newCoworkerIndex].id) {
+                    // Update coworker with latest given the coworker already exists
+                    existingCoworkers.splice(existingCoworkerIndex, 1, coworkersToAdd[newCoworkerIndex]);
+                }
+                else {
+                    // Insert new coworker
+                    existingCoworkers.splice(existingCoworkerIndex+1, 0, coworkersToAdd[newCoworkerIndex]);
+                    existingCoworkerIndex++;
+                }
             }
             localStorageService.set('coworkers', existingCoworkers);
             $rootScope.$broadcast('COWORKER_CHANGE_EVENT', existingCoworkers);
         }
         else {
-            localStorageService.set('coworkers', coworkers);
-            $rootScope.$broadcast('COWORKER_CHANGE_EVENT', coworkers);
+            localStorageService.set('coworkers', coworkersToAdd);
+            $rootScope.$broadcast('COWORKER_CHANGE_EVENT', coworkersToAdd);
         }
 
         if(updatePersonaDisplayState) {
@@ -129,16 +152,24 @@ function($rootScope, localStorageService, $http, commonService, $q) {
         }
     };
 
+
+
     /**
      * Sets passed in coworkers to local coworker variable overwriting any previous value
      * @param coworkers - coworkers array to set
      * @param updatePersonaDisplayState - boolean whether or not to broadcast a notification
      */
     this.setLocalCoworkers = function(coworkers, updatePersonaDisplayState) {
+        coworkers.sort(
+            function(a, b) {
+                return parseFloat(a.id) - parseFloat(b.id);
+            }
+        );
+
         localStorageService.set('coworkers', coworkers);
         $rootScope.$broadcast('COWORKER_CHANGE_EVENT', coworkers);
         if(updatePersonaDisplayState) {
-            console.log('Update Persona Display State persona state update');
+            $log.info('Update Persona Display State persona state update');
             commonService.setPersonaDisplayState();
         }
     };

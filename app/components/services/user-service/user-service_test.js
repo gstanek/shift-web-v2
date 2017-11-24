@@ -95,9 +95,14 @@ describe('ShiftOnTapApp module', function() {
 			  return [200, [{"id":"123","first_name":"Gabriel","last_name":"Stanek","preferred_name":"Gabe A","email":"115@gmail.com","is_active":true,"is_admin":false,"realms":[130]}]];
 			});
 
-          var userArray = [user];
+            //{"realm_id":170,"users":[{"$$hashKey":"object:114","first_name":"Gabriel","last_name":"Stanek","email":"gabe.stanek@gmail.com"}]}
+		    var userArray = [user];
+		    var userPayload = {
+		        "realm_id": 1234,
+                "users": userArray
+            }
 
-		userService.createUsers(userArray).then(function (returnedUser) {
+		userService.createUsers(userPayload).then(function (returnedUser) {
 		  expect(returnedUser[0].id).toEqual(user.id);
 		});
         httpBackend.flush();
@@ -110,7 +115,12 @@ describe('ShiftOnTapApp module', function() {
 			  return [503, { code : 5030, detail : 'Oh no! Something went wrong, please try again'}];
 			});
 
-		userService.createUsers([user,])
+        var userArray = [user,];
+        var userPayload = {
+              "realm_id": 1234,
+              "users": userArray
+        }
+        userService.createUsers(userPayload)
 			.then(function successCallback(response) {
 
 			}).catch(function errorCallback(response) {
@@ -216,7 +226,6 @@ describe('ShiftOnTapApp module', function() {
 
 	});
 
-    // next method test set goes here in another describe block
     describe('addLocalCoworkers', function() {
         it('should save a passed in array that contains a coworker', function () {
             var coworkerArray = [{"id":164,"first_name":"Gabriel","last_name":"Stanek","preferred_name":"Gabe A","email":"115@gmail.com","is_active":true,"is_admin":false,"realms":[130]}];
@@ -226,6 +235,35 @@ describe('ShiftOnTapApp module', function() {
             expect(localStorageService.get('coworkers')[0].id).toEqual(164);
             expect(localStorageService.get('coworkers').length).toEqual(1);
             expect(rootScope.$broadcast).toHaveBeenCalledWith('COWORKER_CHANGE_EVENT', coworkerArray);
+        });
+
+        it('should save a passed in array that contains multiple coworkers when none exist', function () {
+            var coworkerArray = [{"id":163,"first_name":"Gabriel","last_name":"Stanek","preferred_name":"Gabe A","email":"115@gmail.com","is_active":true,"is_admin":false,"realms":[130]},
+                {"id":164,"first_name":"Gabriel","last_name":"Stanek","preferred_name":"Gabe A","email":"115@gmail.com","is_active":true,"is_admin":false,"realms":[130]},
+                {"id":165,"first_name":"Gabriel","last_name":"Stanek","preferred_name":"Gabe A","email":"115@gmail.com","is_active":true,"is_admin":false,"realms":[130]}];
+
+            userService.addLocalCoworkers(coworkerArray, false);
+
+            expect(localStorageService.get('coworkers')[0].id).toEqual(163);
+            expect(localStorageService.get('coworkers').length).toEqual(3);
+            expect(rootScope.$broadcast).toHaveBeenCalledWith('COWORKER_CHANGE_EVENT', coworkerArray);
+        });
+
+        it('should reorder and save a passed in array that contains multiple coworkers when none exist', function () {
+            var coworkerArray = [{"id":165,"first_name":"Gabriel","last_name":"Stanek","preferred_name":"Gabe A","email":"115@gmail.com","is_active":true,"is_admin":false,"realms":[130]},
+                {"id":163,"first_name":"Gabriel","last_name":"Stanek","preferred_name":"Gabe A","email":"115@gmail.com","is_active":true,"is_admin":false,"realms":[130]},
+                {"id":164,"first_name":"Gabriel","last_name":"Stanek","preferred_name":"Gabe A","email":"115@gmail.com","is_active":true,"is_admin":false,"realms":[130]}];
+
+            var expectedCoWorkerArray = [{"id":163,"first_name":"Gabriel","last_name":"Stanek","preferred_name":"Gabe A","email":"115@gmail.com","is_active":true,"is_admin":false,"realms":[130]},
+                {"id":164,"first_name":"Gabriel","last_name":"Stanek","preferred_name":"Gabe A","email":"115@gmail.com","is_active":true,"is_admin":false,"realms":[130]},
+                {"id":165,"first_name":"Gabriel","last_name":"Stanek","preferred_name":"Gabe A","email":"115@gmail.com","is_active":true,"is_admin":false,"realms":[130]}];
+
+
+            userService.addLocalCoworkers(coworkerArray, false);
+
+            expect(localStorageService.get('coworkers')[0].id).toEqual(163);
+            expect(localStorageService.get('coworkers').length).toEqual(3);
+            expect(rootScope.$broadcast).toHaveBeenCalledWith('COWORKER_CHANGE_EVENT', expectedCoWorkerArray);
         });
 
         it('should save a passed in array that contains multiple coworkers to an existing set', function () {
@@ -241,8 +279,26 @@ describe('ShiftOnTapApp module', function() {
 
             userService.addLocalCoworkers(coworkerArray, false);
 
-            expect(localStorageService.get('coworkers')[1].id).toEqual(164);
             expect(localStorageService.get('coworkers').length).toEqual(3);
+            expect(localStorageService.get('coworkers')[1].id).toEqual(164);
+            expect(rootScope.$broadcast).toHaveBeenCalledWith('COWORKER_CHANGE_EVENT', expectedCoWorkerArray);
+        });
+
+        it('should save a passed in array that contains one coworker to an existing set as one instance when called multiple times', function () {
+            var firstCoworker = [{"id":163,"first_name":"Gabriel","last_name":"Stanek","preferred_name":"Gabe A","email":"115@gmail.com","is_active":true,"is_admin":false,"realms":[130]}];
+            localStorageService.set('coworkers', firstCoworker);
+
+            var coworkerArray = [{"id":164,"first_name":"Gabriel","last_name":"Stanek","preferred_name":"Gabe A","email":"115@gmail.com","is_active":true,"is_admin":false,"realms":[130]}];
+
+            var expectedCoWorkerArray = [{"id":163,"first_name":"Gabriel","last_name":"Stanek","preferred_name":"Gabe A","email":"115@gmail.com","is_active":true,"is_admin":false,"realms":[130]},
+                {"id":164,"first_name":"Gabriel","last_name":"Stanek","preferred_name":"Gabe A","email":"115@gmail.com","is_active":true,"is_admin":false,"realms":[130]}];
+
+            userService.addLocalCoworkers(coworkerArray, false);
+            userService.addLocalCoworkers(coworkerArray, false);
+            userService.addLocalCoworkers(coworkerArray, false);
+
+            expect(localStorageService.get('coworkers').length).toEqual(2);
+            expect(localStorageService.get('coworkers')[1].id).toEqual(164);
             expect(rootScope.$broadcast).toHaveBeenCalledWith('COWORKER_CHANGE_EVENT', expectedCoWorkerArray);
         });
 
@@ -274,7 +330,7 @@ describe('ShiftOnTapApp module', function() {
               expect(rootScope.$broadcast).toHaveBeenCalledWith('COWORKER_CHANGE_EVENT', coworkerArray);
           });
 
-          it('should save a passed in array that contains multiple coworkers and overwrie an existing set', function () {
+          it('should save a passed in array that contains multiple coworkers and overwrite an existing set', function () {
               var firstCoworker = [{"id":163,"first_name":"Gabriel","last_name":"Stanek","preferred_name":"Gabe A","email":"115@gmail.com","is_active":true,"is_admin":false,"realms":[130]}];
               localStorageService.set('coworkers', firstCoworker);
 
