@@ -34,8 +34,7 @@ angular.module('ShiftOnTapApp', [
 }])
 .config(['uiGmapGoogleMapApiProvider', function(uiGmapGoogleMapApiProvider) {
     uiGmapGoogleMapApiProvider.configure({
-        key: 'AIzaSyA6uPJDhI_4KqrTns-RYQGfX5-DWN-NdAw',
-        //key: 'AIzaSyCEKupw1W3yFK7VDTCNfTQS24HzgmXPiXc',
+        key: '',
         //v: '3.20', defaults to latest 3.X anyhow
         libraries: 'places'
     });
